@@ -1,0 +1,127 @@
+- if user_signed_in?
+  .he-unit
+    .row
+      .col-md-12
+        %h4
+          = todays_activity_blurb
+        %h5
+          Netsuite:
+          = ENV['NETSUITE_ENV'] || 'sandbox'
+          %small= ThNetsuite.configure.wsdl
+          %br          
+        %br
+  .he-unit
+    .row
+      - if can? :manage, Contract
+        .col-md-4
+          %h4 Support
+          %p
+            - if can? :manage, Contract
+              = link_to raw('<i class="fa fa-edit"></i> Contracts'), admin_contracts_path, class: 'btn btn-success btn-block'
+            - if can? :manage, Contract
+              = link_to raw('<i class="fa fa-edit"></i> Group Contracts'), admin_group_contracts_path, class: 'btn btn-success btn-block'
+            - if can? :manage, Ticket
+              = link_to raw('<i class="fa fa-edit"></i>New Support Ticket'), new_admin_ticket_path, class: 'btn btn-primary btn-block'
+
+      -if can? :manage, Invoice
+        .col-md-4
+          %h4 Invoicing
+          %p
+            - if can? :manage, Invoice
+              = link_to raw('<i class="fa fa-edit"></i> Invoices'), admin_invoices_path, class: 'btn btn-success btn-block'
+            - if can? :manage, Invoice
+              = link_to raw('<i class="fa fa-edit"></i> Payments'), admin_payments_path, class: 'btn btn-success btn-block'
+              = link_to raw('<i class="fa fa-ticket"></i> Netsuite Logs'), admin_netsuite_logs_path, class: 'btn btn-warning btn-block'
+
+      -if can? :read, User
+        .col-md-4
+          %h4 Accounts
+          %p
+            - if can? :read, User
+              = link_to raw('<i class="fa fa-user"></i> Users'), admin_users_url, class: 'btn btn-default btn-block'
+            - if can? :read, Business
+              = link_to raw('<i class="fa fa-user"></i> Businesses'), admin_businesses_url, class: 'btn btn-default btn-block'
+            - if current_user.has_role?(:accounting) || current_user.has_role?(:superuser)
+              = link_to raw('<i class="fa fa-user"></i> Direct Bill Businesses'), admin_direct_bill_businesses_url, class: 'btn btn-default btn-block'
+            - if can? :read, GroupPurchaseOrganization
+              = link_to raw('<i class="fa fa-user"></i> Group Partnerships'), admin_group_purchase_organizations_url, class: 'btn btn-default btn-block'
+            - if current_user.has_role?(:sales) || current_user.has_role?(:superuser)
+              = link_to raw('<i class="fa fa-user"></i> Import Businesses'), import_admin_businesses_url, class: 'btn btn-default btn-block'
+            = link_to raw('<i class="fa fa-rocket"></i> Salesforce'), admin_salesforce_index_url, class: 'btn btn-success btn-block'
+
+
+    .row
+      -if can? :read, Search or can? :manage, Business or current_user.has_role? :accounting
+        .col-md-4
+          %h4 Site Activity
+          %p
+            = link_to raw('<i class="fa fa-rocket"></i> Real-Time Site Metrics'), site_performance_admin_reports_url, class: 'btn btn-success btn-block'
+            - if can? :read, Search
+              = link_to raw('<i class="fa fa-tasks"></i> Searches'), admin_searches_path, class: 'btn btn-default btn-block'
+            - if current_user.has_role? :superuser
+              = link_to raw('<i class="fa fa-tasks"></i> Events'), admin_events_url, class: 'btn btn-default btn-block'
+            - if can? :manage, Business
+              = link_to raw('<i class="fa fa-line-chart"></i> Business Charts'), reports_admin_businesses_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-line-chart"></i> Check-In Charts'), checkin_admin_reports_url, class: 'btn btn-default btn-block'
+          %h4 Analytics and Usage
+          %p
+            - if can? :manage, Business
+              = link_to raw('<i class="fa fa-line-chart"></i> Business Retention'), admin_business_retention_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-line-chart"></i> Margin Analytics'), admin_margin_analytics_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Daily Bookings'), admin_daily_bookings_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> First Time Bookings'), admin_first_time_bookings_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Business Usage2'), usage2_admin_businesses_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Popular Properties'), activity_admin_properties_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Property Counts'), counts_admin_properties_url, class: 'btn btn-default btn-block'
+          %h4 Accounting
+          %p
+            - if current_user.has_role? :accounting
+              = link_to raw('<i class="fa fa-table"></i> Audit Report'), audit_admin_contracts_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Future Paid Stays'), future_paid_stays_admin_contracts_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Check Out Audit Report'), co_audit_admin_contracts_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Invoice Report'), report_admin_invoices_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Monthly Merged Invoices'), monthly_admin_invoices_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-table"></i> Business Margins Report'), business_margins_admin_contracts_url, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-star-o"></i> Contract Margins'), margins_admin_contracts_path, class: 'btn btn-info btn-block'
+              = link_to raw('<i class="fa fa-star-o"></i> Contract Commissions'), admin_commissions_path, class: 'btn btn-info btn-block'
+              = link_to raw('<i class="fa fa-star-o"></i> Expired Contract Commissions'), expired_admin_commissions_path, class: 'btn btn-info btn-block'
+              = link_to raw('<i class="fa fa-credit-card"></i> Cancellations'), cancellations_admin_accounting_reports_path, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-credit-card"></i> Wex Reconciliation Files'), wex_files_admin_reports_path, class: 'btn btn-default btn-block'
+              = link_to raw('<i class="fa fa-credit-card"></i> Amex Reconciliation Logs'), admin_amex_settlements_path, class: 'btn btn-default btn-block'
+          %h4 Sales
+          %p
+            - if can? :manage, Promo
+              = link_to raw('<i class="fa fa-globe"></i> Promos'), admin_promos_url, class: 'btn btn-primary btn-block'
+
+      - if can? :manage, City or can? :manage, HotelChain or can? :manage, Ownership or can? :read, Property or can? :manage, Supplier
+        .col-md-4
+          %h4 Hotels
+          %p
+            - if can? :manage, HotelChain
+              = link_to raw('<i class="fa fa-wrench"></i> Hotel Chains'), admin_hotel_chains_path, class: 'btn btn-info btn-block'
+            - if can? :manage, Ownership
+              = link_to raw('<i class="fa fa-coffee"></i> ' + t('ownerships')), admin_ownerships_path, class: 'btn btn-default btn-block'
+            - if can? :read, Property
+              = link_to raw('<i class="fa fa-building-o"></i> Properties'), admin_properties_url, class: 'btn btn-default btn-block'
+            - if can? :manage, Property
+              = link_to raw('<i class="fa fa-building-o"></i> LNR Report'), lnr_report_admin_properties_url, class: 'btn btn-default btn-block'
+            - if can? :manage, Supplier
+              = link_to raw('<i class="fa fa-gear"></i> Supplier Management'), admin_suppliers_url, class: 'btn btn-info btn-block'
+            - if can? :manage, VpaySupplier
+              = link_to raw('<i class="fa fa-gear"></i> VPay Supplier Management'), admin_vpay_suppliers_url, class: 'btn btn-info btn-block'
+
+      - if can? :read, Candidate or can? :manage, HotelChain
+        .col-md-4
+          %h4 Content Triage
+          %p
+            - if can? :read, Candidate
+              = link_to raw('<i class="fa fa-gears"></i> Supplier Candidates'), admin_candidates_url, class: 'btn btn-info btn-block'
+            - if can? :manage, HotelChain
+              = link_to raw('<i class="fa fa-chain-broken"></i> Unassigned Hotel Chains'), unassigned_admin_properties_url, class: 'btn btn-warning btn-block'
+            - if can? :manage, Property
+              = link_to raw('<i class="fa fa-gear"></i> Deposit Required Properties'), deposit_required_admin_properties_url, class: 'btn btn-info btn-block'
+
+- else
+  %h3
+    Please
+    = link_to 'Log In', new_user_session_path
