@@ -89,6 +89,7 @@ source $ZSH/oh-my-zsh.sh
 #alias vim='mvim -v'
 #alias nv="--no-verify"
 #alias gfs="git flow feature start"
+
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
 alias pg_he="psql he_api"
