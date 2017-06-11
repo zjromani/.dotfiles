@@ -10,10 +10,6 @@
       "rspec"
     ]
     telemetryConsent: "no"
-    themes: [
-      "one-dark-ui"
-      "monokai"
-    ]
   editor:
     fontSize: 10
   "exception-reporting":
