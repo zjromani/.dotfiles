@@ -91,7 +91,8 @@ source $ZSH/oh-my-zsh.sh
 #alias gfs="git flow feature start"
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
-alias pg_he="psql he_api"
+alias pghe="psql he_api"
+alias sourcez="source ~/.zshrc"
 
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
