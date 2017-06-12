@@ -89,7 +89,6 @@ source $ZSH/oh-my-zsh.sh
 #alias vim='mvim -v'
 #alias nv="--no-verify"
 #alias gfs="git flow feature start"
-
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
 alias pg_he="psql he_api"
@@ -102,5 +101,7 @@ export HE_DB_TEST=he_api_test
 
 
 path+=/Users/johnromani/bin
+path+=$PATH:/usr/local/bin:/usr/local/sbin
+
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
