@@ -8,6 +8,7 @@
     packagesWithKeymapsDisabled: [
       "last-cursor-position"
       "rspec"
+      "git-blame"
     ]
     telemetryConsent: "no"
   editor:
@@ -24,5 +25,7 @@
     rightEditorColor: "green"
     scrollSyncType: "Vertical + Horizontal"
   "todo-show": {}
+  "tree-view":
+    hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
