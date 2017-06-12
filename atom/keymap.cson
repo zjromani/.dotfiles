@@ -58,3 +58,9 @@
 'atom-workspace':
   'ctrl-h': 'last-cursor-position:previous'
   'ctrl-l': 'last-cursor-position:next'
+
+'atom-text-editor:not([mini])':
+  'cmd-alt-b': 'git-blame:toggle'
+
+'body':
+  'cmd-ctrl-w': 'tabs:close-all-tabs'
