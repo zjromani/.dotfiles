@@ -94,6 +94,7 @@ alias zshrc="vim ~/.zshrc"
 alias pghe="psql he_api"
 alias sourcez="source ~/.zshrc"
 alias rpid="lsof -wni tcp:3000"
+alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
 
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
