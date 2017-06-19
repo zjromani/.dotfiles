@@ -99,6 +99,7 @@ alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
 export HE_DB_TEST=he_api_test
+export EMAIL_ON_ACID_ADDRESS=yomikescar.runme@previews.emailonacid.com
 
 
 
