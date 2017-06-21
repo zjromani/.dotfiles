@@ -445,7 +445,7 @@ hr {
     padding: 50, 40, 50, 40;
     margin-top: 70px;
     margin-bottom: 20px;
-    width: 100% !important;
+    /*width: 100% !important;*/
   }
   table[class=body] .header {
     margin-bottom: 10px !important;
@@ -571,7 +571,7 @@ hr {
   Margin: 0 auto !important;
   margin-top: 70px;
   margin-bottom: 20px;
-  max-width: 550px;
+  max-width: 600px;
   padding: 20px 10px 20px 10px;
   width: auto !important;
   background: #f7f7f7;

@@ -2,7 +2,7 @@
 	name = John Romani
 	email = johnromani90@gmail.com
 [filter "lfs"]
-	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+	required = true
