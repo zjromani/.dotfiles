@@ -49,6 +49,8 @@
 
 'atom-text-editor.vim-mode-plus:not(.insert-mode)':
   'ctrl-e': 'recent-files-fuzzy-finder:toggle-finder'
+  'ctrl-,': 'vim-mode-plus:scroll-down'
+  'ctrl-.': 'vim-mode-plus:scroll-up'
 
 'atom-text-editor':
   'ctrl-k': 'pane:show-next-item'
