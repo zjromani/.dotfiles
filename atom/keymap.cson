@@ -33,7 +33,6 @@
 '.platform-darwin atom-text-editor':
   'ctrl-p': 'fuzzy-finder:toggle-file-finder'
   'ctrl-w m':  'pane:merge-all-panes'
-
 #vim
 'atom-text-editor.vim-mode-plus.insert-mode':
   'j k': 'vim-mode-plus:activate-normal-mode'
@@ -48,12 +47,12 @@
   'L': 'vim-mode-plus:move-to-last-character-of-line'
   'H': 'vim-mode-plus:move-to-first-character-of-line'
 
+'atom-text-editor.vim-mode-plus:not(.insert-mode)':
+  'ctrl-e': 'recent-files-fuzzy-finder:toggle-finder'
+
 'atom-text-editor':
   'ctrl-k': 'pane:show-next-item'
   'ctrl-j': 'pane:show-previous-item'
-  'cmd-alt-j': 'rspec:run'
-  'cmd-alt-k': 'rspec:run-for-line'
-  'cmd-alt-e': 'rspec:run-last'
 
 'atom-workspace':
   'ctrl-h': 'last-cursor-position:previous'
@@ -64,3 +63,4 @@
 
 'body':
   'cmd-ctrl-w': 'tabs:close-all-tabs'
+  'ctrl-p': 'fuzzy-finder:toggle-file-finder'
