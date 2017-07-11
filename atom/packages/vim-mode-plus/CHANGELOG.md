@@ -1,3 +1,16 @@
+# 0.93.0:
+- New: `count` support for `g t` to activate Nth pane item(= tab).
+  - `3 g t` activate 3rd pane item.
+  - `7 g t` activate 7th pane item.
+  - `g t` just activate next pane items as previous version.
+  - When specified pane items was not exist, do nothing.
+  - Limitation: vim-mode-plus's command only works on normal text-editor.
+    - You can not do `g t` on non editor pane Item such as `setting-view`.
+- Fix: #766 executing `maximize-pane` on single-pane workspace make screen blank.
+  - This was happening only when pane have not yet split once after atom launch.
+- Fix: #777 `J` at last buffer row no longer clear text.
+- Doc: mention ex-mode link on README.md since it's now support vim-mode-plus.
+
 # 0.92.1:
 - Improve: #782 Skip creating marker/decoration for empty range in hlsearch and incsearch.
   - E.g.
