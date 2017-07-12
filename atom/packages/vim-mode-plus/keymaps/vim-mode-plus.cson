@@ -6,6 +6,9 @@
   # 'ctrl-w z': 'vim-mode-plus:maximize-pane'
   'cmd-enter': 'vim-mode-plus:maximize-pane'
 
+'atom-workspace .tree-view':
+  'cmd-enter': 'abort!'
+
 # all
 # -------------------------
 'atom-text-editor.vim-mode-plus':
@@ -88,7 +91,10 @@
   # '(': 'vim-mode-plus:move-to-previous-sentence-skip-blank-row'
   '}': 'vim-mode-plus:move-to-next-paragraph'
   '{': 'vim-mode-plus:move-to-previous-paragraph'
+
   '0': 'vim-mode-plus:move-to-beginning-of-line'
+  'numpad0': 'vim-mode-plus:move-to-beginning-of-line'
+
   '|': 'vim-mode-plus:move-to-column'
   'home': 'vim-mode-plus:move-to-beginning-of-line'
   '^': 'vim-mode-plus:move-to-first-character-of-line'
@@ -231,6 +237,16 @@
   '8': 'vim-mode-plus:set-count-8'
   '9': 'vim-mode-plus:set-count-9'
 
+  'numpad1': 'vim-mode-plus:set-count-1'
+  'numpad2': 'vim-mode-plus:set-count-2'
+  'numpad3': 'vim-mode-plus:set-count-3'
+  'numpad4': 'vim-mode-plus:set-count-4'
+  'numpad5': 'vim-mode-plus:set-count-5'
+  'numpad6': 'vim-mode-plus:set-count-6'
+  'numpad7': 'vim-mode-plus:set-count-7'
+  'numpad8': 'vim-mode-plus:set-count-8'
+  'numpad9': 'vim-mode-plus:set-count-9'
+
   'm': 'vim-mode-plus:mark'
   '`': 'vim-mode-plus:move-to-mark'
   "'": 'vim-mode-plus:move-to-mark-line'
@@ -270,9 +286,12 @@
   'z s': 'vim-mode-plus:scroll-cursor-to-left'
   'z e': 'vim-mode-plus:scroll-cursor-to-right'
 
-  'z c': 'editor:fold-current-row'
-  'z o': 'editor:unfold-current-row'
+  'z c': 'vim-mode-plus:fold-current-row'
+  'z C': 'vim-mode-plus:fold-current-row-recursively'
+  'z o': 'vim-mode-plus:unfold-current-row'
+  'z O': 'vim-mode-plus:unfold-current-row-recursively'
   'z a': 'vim-mode-plus:toggle-fold'
+  'z A': 'vim-mode-plus:toggle-fold-recursively'
   'z M': 'vim-mode-plus:fold-all'
   'z R': 'vim-mode-plus:unfold-all'
   'z m': 'vim-mode-plus:fold-next-indent-level'
@@ -308,6 +327,16 @@
   '7': 'vim-mode-plus:set-input-char-7'
   '8': 'vim-mode-plus:set-input-char-8'
   '9': 'vim-mode-plus:set-input-char-9'
+  'numpad0': 'vim-mode-plus:set-input-char-0'
+  'numpad1': 'vim-mode-plus:set-input-char-1'
+  'numpad2': 'vim-mode-plus:set-input-char-2'
+  'numpad3': 'vim-mode-plus:set-input-char-3'
+  'numpad4': 'vim-mode-plus:set-input-char-4'
+  'numpad5': 'vim-mode-plus:set-input-char-5'
+  'numpad6': 'vim-mode-plus:set-input-char-6'
+  'numpad7': 'vim-mode-plus:set-input-char-7'
+  'numpad8': 'vim-mode-plus:set-input-char-8'
+  'numpad9': 'vim-mode-plus:set-input-char-9'
   ':': 'vim-mode-plus:set-input-char-:'
   ';': 'vim-mode-plus:set-input-char-;'
   '<': 'vim-mode-plus:set-input-char-<'
@@ -623,7 +652,7 @@
 # -------------------------
 'atom-text-editor.vim-mode-plus-search':
   'ctrl-r ctrl-w': 'vim-mode-plus:search-set-cursor-word'
-  'ctrl-v': 'vim-mode-plus:search-activate-literal-mode'
+  # 'ctrl-v': 'vim-mode-plus:search-activate-literal-mode'
   'ctrl-c': 'vim-mode-plus:search-cancel'
   'ctrl-[': 'vim-mode-plus:search-cancel'
   'shift-tab': 'vim-mode-plus:search-visit-prev'

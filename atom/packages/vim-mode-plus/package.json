@@ -2,40 +2,39 @@
   "_args": [
     [
       {
-        "raw": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
+        "raw": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
-        "spec": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
+        "rawSpec": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
+        "spec": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
         "type": "local"
       },
-      "/private/tmp/apm-install-dir-117529-28169-fz2028.qaqcnxw29"
+      "/private/tmp/apm-install-dir-117611-66566-g1n9b6.6a0tl0udi"
     ]
   ],
-  "_from": "../d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
-  "_id": "vim-mode-plus@0.93.0",
+  "_from": "../d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
+  "_id": "vim-mode-plus@0.94.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/vim-mode-plus",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
+    "raw": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
-    "spec": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
+    "rawSpec": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
+    "spec": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
     "type": "local"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "file:../d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
-  "_shasum": "e36af107c7f5da24f7fb74fc03c48e99e23485eb",
+  "_resolved": "file:../d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
+  "_shasum": "87da3d8eefe944ad056cddb259ba23eb887578c6",
   "_shrinkwrap": null,
-  "_spec": "/private/tmp/d-117529-28169-1kxwvhu.h6h2fvquxr/package.tgz",
-  "_where": "/private/tmp/apm-install-dir-117529-28169-fz2028.qaqcnxw29",
+  "_spec": "/private/tmp/d-117611-66566-uaz9pd.yvbrqw7b9/package.tgz",
+  "_where": "/private/tmp/apm-install-dir-117611-66566-g1n9b6.6a0tl0udi",
   "bugs": {
     "url": "https://github.com/t9md/atom-vim-mode-plus/issues"
   },
@@ -92,7 +91,7 @@
     "test": "apm test",
     "watch": "fswatch -0 spec lib | xargs -0 -n1 -I{} apm test"
   },
-  "version": "0.93.0",
+  "version": "0.94.0",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -148,7 +147,7 @@
       },
       {
         "name": "es5-ext",
-        "version": "0.10.23",
+        "version": "0.10.24",
         "path": "node_modules/es5-ext/index.js"
       },
       {

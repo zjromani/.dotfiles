@@ -701,7 +701,14 @@ class MoveToRelativeLine extends Motion
   moveSuccessOnLinewise: true
 
   moveCursor: (cursor) ->
-    setBufferRow(cursor, cursor.getBufferRow() + @getCount(-1))
+    row = @getFoldEndRowForRow(cursor.getBufferRow())
+
+    count = @getCount(-1)
+    while (count > 0)
+      row = @getFoldEndRowForRow(row + 1)
+      count--
+
+    setBufferRow(cursor, row)
 
 class MoveToRelativeLineMinimumOne extends MoveToRelativeLine
   @extend(false)
@@ -792,7 +799,11 @@ class Scroll extends Motion
     # [NOTE]
     # intentionally use `element.component.setScrollTop` instead of `element.setScrollTop`.
     # SInce element.setScrollTop will throw exception when element.component no longer exists.
-    step = (newTop) => @editor.element.component?.setScrollTop(newTop)
+    step = (newTop) =>
+      if @editor.element.component?
+        @editor.element.component.setScrollTop(newTop)
+        @editor.element.component.updateSync()
+
     duration = @getSmoothScrollDuation()
     @vimState.requestScrollAnimation(topPixelFrom, topPixelTo, {duration, step, done})
 
@@ -1105,7 +1116,7 @@ class MoveToPair extends Motion
   @extend()
   inclusive: true
   jump: true
-  member: ['Parenthesis', 'CurlyBracket', 'SquareBracket', 'AngleBracket']
+  member: ['Parenthesis', 'CurlyBracket', 'SquareBracket']
 
   moveCursor: (cursor) ->
     @setBufferPositionSafely(cursor, @getPoint(cursor))

@@ -2,40 +2,39 @@
   "_args": [
     [
       {
-        "raw": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
+        "raw": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
-        "spec": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
+        "rawSpec": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
+        "spec": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
         "type": "local"
       },
-      "/private/tmp/apm-install-dir-117529-28157-1dzba8d.kkxq8y3nmi"
+      "/private/tmp/apm-install-dir-117611-66536-5w8c6i.tk1fc4n29"
     ]
   ],
-  "_from": "../d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
-  "_id": "language-haml@0.24.6",
+  "_from": "../d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
+  "_id": "language-haml@0.25.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/language-haml",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
+    "raw": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
-    "spec": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
+    "rawSpec": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
+    "spec": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
     "type": "local"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "file:../d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
-  "_shasum": "28fc9bb7c608b31a28f42456052cca6f0ae2ed32",
+  "_resolved": "file:../d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
+  "_shasum": "68ad9dc88880ccd8a0746dd132914a4b3f7b1177",
   "_shrinkwrap": null,
-  "_spec": "/private/tmp/d-117529-28157-bb7r0g.e77gugzaor/package.tgz",
-  "_where": "/private/tmp/apm-install-dir-117529-28157-1dzba8d.kkxq8y3nmi",
+  "_spec": "/private/tmp/d-117611-66536-11gn1tm.fz3b10dx6r/package.tgz",
+  "_where": "/private/tmp/apm-install-dir-117611-66536-5w8c6i.tk1fc4n29",
   "bugs": {
     "url": "https://github.com/cannikin/language-haml/issues"
   },
@@ -60,7 +59,7 @@
     "type": "git",
     "url": "git+https://github.com/cannikin/language-haml.git"
   },
-  "version": "0.24.6",
+  "version": "0.25.0",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],
