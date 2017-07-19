@@ -9,6 +9,8 @@ tell application "iTerm"
   tell second session of current tab of current window
     write text "/Users/johnromani/projects/he-web/"
     write text "yarn"
+    write text "gco develop"
+    write text "git pull"
     write text "npm run develop"
   end tell
 
