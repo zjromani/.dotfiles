@@ -90,12 +90,13 @@ source $ZSH/oh-my-zsh.sh
 #alias nv="--no-verify"
 #alias gfs="git flow feature start"
 alias vimrc="vim ~/.vimrc"
-alias zshrc="vim ~/.zshrc"
+alias zrc="vim ~/.zshrc"
 alias pghe="psql he_api"
 alias sourcez="source ~/.zshrc"
 alias rpid="lsof -wni tcp:3000"
 alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
 alias dots="~/.dotfiles"
+alias t="rspec"
 
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
