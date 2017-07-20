@@ -1,0 +1,70 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+        "spec": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+        "type": "local"
+      },
+      "/private/tmp/apm-install-dir-117620-25352-178r8aq.22kelgzaor"
+    ]
+  ],
+  "_from": "../d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+  "_id": "one-dark-monokai@0.5.0",
+  "_inCache": true,
+  "_location": "/one-dark-monokai",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+    "spec": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+  "_shasum": "0f5c09041c9378da0d70e8d6212331b2794ca3d8",
+  "_shrinkwrap": null,
+  "_spec": "/private/tmp/d-117620-25352-uk2pn4.h1h9jgiudi/package.tgz",
+  "_where": "/private/tmp/apm-install-dir-117620-25352-178r8aq.22kelgzaor",
+  "bugs": {
+    "url": "https://github.com/ixkaito/one-dark-monokai/issues"
+  },
+  "dependencies": {},
+  "description": "A monokai theme",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">=1.13.0"
+  },
+  "homepage": "https://github.com/ixkaito/one-dark-monokai#readme",
+  "license": "MIT",
+  "name": "one-dark-monokai",
+  "optionalDependencies": {},
+  "private": true,
+  "readme": "# One Dark Monokai Syntax theme\n\nA monokai syntax theme for Atom.\n\nOriginally converted from the [TextMate](http://www.monokai.nl/blog/wp-content/asdev/Monokai.tmTheme) theme using the [TextMate bundle converter](http://atom.io/docs/latest/converting-a-text-mate-theme). Forked from [Monokai](https://github.com/kevinsawicki/monokai).\n\n![](https://cloud.githubusercontent.com/assets/5457539/18149986/ba0364d0-701e-11e6-9f39-3408c03583ac.png)\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ixkaito/one-dark-monokai.git"
+  },
+  "theme": "syntax",
+  "version": "0.5.0",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}
