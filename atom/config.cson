@@ -16,7 +16,7 @@
     telemetryConsent: "no"
     themes: [
       "seti-ui"
-      "monokai-seti"
+      "seti-syntax"
     ]
   editor:
     fontSize: 12
@@ -27,6 +27,10 @@
     tabSizing: "Minimum"
   rspec:
     command: "rspec"
+  "seti-ui":
+    compactView: true
+    disableAnimations: true
+    themeColor: "Green"
   "split-diff":
     diffWords: true
     ignoreWhitespace: true
