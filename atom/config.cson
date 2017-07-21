@@ -16,7 +16,7 @@
     telemetryConsent: "no"
     themes: [
       "seti-ui"
-      "seti-syntax"
+      "monokai-seti"
     ]
   editor:
     fontSize: 12
