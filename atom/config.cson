@@ -1,6 +1,7 @@
 "*":
   "advanced-open-file":
     createDirectories: true
+    createFileInstantly: true
   core:
     disabledPackages: [
       "language-hyperlink"
@@ -16,10 +17,10 @@
     telemetryConsent: "no"
     themes: [
       "seti-ui"
-      "monokai-seti"
+      "seti-syntax"
     ]
   editor:
-    fontSize: 12
+    fontSize: 11
   "exception-reporting":
     userId: "b52f92a7-7543-11a3-9f8b-0c16b527f4c8"
   "linter-ui-default": {}
@@ -27,10 +28,12 @@
     tabSizing: "Minimum"
   rspec:
     command: "rspec"
+  "ruby-block":
+    highlightLine: false
+  "seti-syntax": {}
   "seti-ui":
     compactView: true
     disableAnimations: true
-    themeColor: "Green"
   "split-diff":
     diffWords: true
     ignoreWhitespace: true
