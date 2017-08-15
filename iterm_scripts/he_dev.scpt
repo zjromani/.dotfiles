@@ -12,6 +12,13 @@ tell application "iTerm"
     write text "gco develop"
     write text "git pull"
     write text "npm run develop"
+
+    split horizontally with default profile
+  end tell
+
+  tell third session of current tab of current window
+    write text "/Users/johnromani/projects/he-api/"
+    write text "rabbitmq-server"
   end tell
 
   tell current window
