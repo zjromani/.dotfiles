@@ -33,6 +33,7 @@
 '.platform-darwin atom-text-editor':
   'ctrl-p': 'fuzzy-finder:toggle-file-finder'
   'ctrl-w m':  'pane:merge-all-panes'
+  'ctrl-w w': 'pane:close-other-items'
 #vim
 'atom-text-editor.vim-mode-plus.insert-mode':
   'j k': 'vim-mode-plus:activate-normal-mode'
