@@ -98,6 +98,7 @@ alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
 alias dots="~/.dotfiles"
 alias t="rspec"
 alias h="heroku"
+alias rprodsql="heroku pg:psql HEROKU_POSTGRESQL_AMBER -a he-api"
 
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
