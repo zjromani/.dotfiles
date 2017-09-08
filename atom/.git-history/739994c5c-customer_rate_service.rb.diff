@@ -1,0 +1,158 @@
+diff --git a/app/services/customer_rate_service.rb b/app/services/customer_rate_service.rb
+index a631163c1..e63894224 100644
+--- a/app/services/customer_rate_service.rb
++++ b/app/services/customer_rate_service.rb
+@@ -1,142 +1,68 @@
+ class CustomerRateService
+-  # This is only valid for SINGLE NIGHTS or averages, not aggregate, unless you pass in num_nights :)
+-  def self.calculate_customer_rate(user, best_rate, net_rate, dynamic_margin = 0.0, num_nights = 1, margin_breakdown = nil)
+-    return best_rate if user&.business.nil?
+-
+-    return 0.0 if net_rate.nil?
+-
+-    # Set defaults
+-    margin_percent_amount = 0.0
+-    margin_nightly_amount = 0.0
+-    dynamic_margin_amount = 0.0
+-
+-    unless user.business && user.business.true_margin?
+-      # Get the values from the biz
+-      margin_percent = user.business.margin_percent || 0.0
+-      margin_amount  = user.business.margin_amount.to_f || 0.0
+-
+-      # Calculate
+-      margin_percent_amount = (margin_percent / 100.0) * net_rate.to_f   if margin_percent > 0.0
+-      margin_nightly_amount = margin_amount * num_nights                 if margin_amount > 0.0
+-      dynamic_margin_amount = (dynamic_margin / 100.0) * net_rate.to_f   if dynamic_margin && dynamic_margin > 0.0
+-    end
+-
+-    if margin_breakdown # If we have this, we are trying to track the intermediate values
+-      margin_breakdown.margin_percent_amount = margin_percent_amount
+-      margin_breakdown.margin_nightly_amount = margin_nightly_amount
+-      margin_breakdown.dynamic_margin_amount = dynamic_margin_amount
+-    end
+-
+-    (net_rate.to_f + margin_percent_amount + margin_nightly_amount + dynamic_margin_amount)
+-  rescue => ex
+-    RavenReporting::report_exception(ex)
+-    0.0
+-  end
+-
+-  # This gives us our Dynamic Margin percent based on how much we think we are probably saving them
+-  def self.calculate_dynamic_margin(user, strike_rate, net_rate)
+-    return 0.0 if strike_rate.nil? || net_rate.nil?
+-    return 0.0 if user&.business&.true_margin?
+-
+-    # Figure out the percentage saved
+-    saved = (strike_rate - net_rate) / strike_rate
+-
+-    # Short circuit if we aren't saving much of anything
+-    return 0.0 if saved <= 0.12
+-
+-    # How much of the savings we are taking away
+-    percent = saved - 0.13
+-    percent = 0.0 if percent <= 0.0
+-    percent = 0.25 if percent >= 0.25 # At max, we only take a quarter of your savings.
+-
+-    # The Dynamic Margin is the percent of the savings amount we are taking
+-    margin = percent * saved
+-    margin = 0.0 if margin <= 0.0
+-    margin = 0.15 if margin >= 0.15 # We never add more than a 15% dynamic margin
+-
+-    margin_percent = margin * 100.0
+-
+-    # Okay, this is where things get pretty goofy.  Because the margin percent above was taken
+-    # as a percentage of the *STRIKE RATE*, and later on, it's getting used as a percentage of
+-    # the *NET RATE*, we need to convert it here..
+-    net_margin_percent = (strike_rate * margin_percent) / net_rate
+-
+-    # Capping this for now.  It feels dangerous to let this get out of control just because
+-    # we *think* we are saving them a shit ton of money.
+-    net_margin_percent = 37.5 if net_margin_percent >= 37.5
+-
+-    if Rails.env.development?
+-      puts "==== CALCULATED A STRIKE DYNAMIC MARGIN OF #{margin_percent.round(2)}% " \
+-        "FROM NET/STRIKE OF $#{net_rate.round(2)}/$#{strike_rate.round(2)} " \
+-        "BECAUSE OF A SAVINGS OF #{(saved * 100).round(2)}% PASSING BACK A NET DYNAMIC MARGIN " \
+-        " OF #{net_margin_percent.round(2)}% TO BE APPLIED TO FURTHER NET RATES"
+-    end
+-
+-    net_margin_percent
+-  end
+-
+   # Only valid for a booking level fee, not nightly
+   def self.calculate_customer_public_fee(user, net_rate, num_nights, margin_breakdown = nil)
+-    return 0.0 if user&.business.nil?
++    business = user&.business_user&.business
++    return 0.0 if business.nil?
+ 
+     # Set defaults
+     public_percent_amount = 0.0
+     public_booking_amount = 0.0
+     public_nightly_amount = 0.0
+ 
+-    public_percent_amount = net_rate * (user.business.public_fee_percent / 100.0)    if user.business.public_fee_percent
+-    public_booking_amount = user.business.public_fee_booking_amount                  if user.business.public_fee_booking_amount
+-    public_nightly_amount = user.business.public_fee_nightly_amount * num_nights     if user.business.public_fee_nightly_amount
++    public_percent_amount = net_rate * (business.public_fee_percent / 100.0)    if business.public_fee_percent
++    public_booking_amount = business.public_fee_booking_amount                  if business.public_fee_booking_amount
++    public_nightly_amount = business.public_fee_nightly_amount * num_nights     if business.public_fee_nightly_amount
+ 
+     if margin_breakdown
+       margin_breakdown.public_percent_amount = public_percent_amount
+       margin_breakdown.public_booking_amount = public_booking_amount
+       margin_breakdown.public_nightly_amount = public_nightly_amount
+     end
+ 
+     (public_percent_amount + public_booking_amount + public_nightly_amount).round(2)
+   rescue => ex
+     RavenReporting::report_exception(ex)
+     0.0
+   end
+ 
+   # Only valid for a booking level fee, not nightly
+   def self.calculate_customer_shadow_fee(user, net_rate, num_nights, margin_breakdown = nil)
+-    return 0.0 if user&.business.nil?
++    business = user&.business_user&.business
++    return 0.0 if business.nil?
+ 
+     # Set defaults
+     shadow_percent_amount = 0.0
+     shadow_booking_amount = 0.0
+     shadow_nightly_amount = 0.0
+ 
+-    shadow_percent_amount = net_rate * (user.business.shadow_fee_percent / 100.0)    if user.business.shadow_fee_percent
+-    shadow_booking_amount = user.business.shadow_fee_booking_amount                  if user.business.shadow_fee_booking_amount
+-    shadow_nightly_amount = user.business.shadow_fee_nightly_amount * num_nights     if user.business.shadow_fee_nightly_amount
++    shadow_percent_amount = net_rate * (business.shadow_fee_percent / 100.0)    if business.shadow_fee_percent
++    shadow_booking_amount = business.shadow_fee_booking_amount                  if business.shadow_fee_booking_amount
++    shadow_nightly_amount = business.shadow_fee_nightly_amount * num_nights     if business.shadow_fee_nightly_amount
+ 
+     if margin_breakdown
+       margin_breakdown.shadow_percent_amount = shadow_percent_amount
+       margin_breakdown.shadow_booking_amount = shadow_booking_amount
+       margin_breakdown.shadow_nightly_amount = shadow_nightly_amount
+     end
+ 
+     (shadow_percent_amount + shadow_booking_amount + shadow_nightly_amount).round(2)
+   rescue => ex
+     RavenReporting::report_exception(ex)
+     0.0
+   end
+ 
+   def self.exclude_rate?(user, customer_rate, stars)
+-    return false if user&.business.nil? || customer_rate.nil?
++    return false if user&.business_user&.business.nil? || customer_rate.nil?
+ 
+     max_daily_rate = user&.department&.max_daily_rate
+     max_stars = user&.department&.max_stars
+ 
+     return true if (max_daily_rate && customer_rate > max_daily_rate) ||
+                    (max_stars && stars && stars.to_i > max_stars)
+ 
+     false
+   rescue => ex
+     RavenReporting::report_exception(ex)
+     false
+   end
+ end

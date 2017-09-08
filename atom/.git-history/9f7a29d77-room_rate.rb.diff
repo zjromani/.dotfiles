@@ -1,0 +1,159 @@
+diff --git a/app/models/room_rate.rb b/app/models/room_rate.rb
+index 020db3194..3bc6d39e5 100644
+--- a/app/models/room_rate.rb
++++ b/app/models/room_rate.rb
+@@ -1,132 +1,127 @@
+ class RoomRate < ActiveRecord::Base
+   before_save :set_rates!
+   before_save :sanitize_description
+ 
+   include IsCancellable
+   include RoundMoneyFields # must be included after set_customer_rate! so its callbacks happen last
+ 
+   belongs_to :search
+   belongs_to :property
+   has_many :contract_rates
+   has_one :engine_search_rate
+ 
+   delegate :check_in, :check_out, :num_guests, :num_nights, :room_count, :user, :child_ages, :num_children, to: :search
+   scope :supplier, lambda { |supplier| where(supplier: supplier) }
+ 
+-  attr_accessor :cancellation
++  attr_accessor :cancellation, :search_rate
+ 
+   serialize :nightly_rates, JSON
+ 
+   def set_rates!
+-    set_strike_rate!
++    set_search_rate!
++    set_strike_rate_from_search_rate!
+     set_customer_rate_and_dynamic_margin!
+-    clean_up_negative_saves!
+-  end
+-
+-  def set_strike_rate!
+-    search_rate = SearchRate.where(search_id: search_id, property_id: property_id)&.first
+-    self.strike_rate = search_rate&.strike_rate if search_rate&.strike_rate
+   end
+ 
+   def set_customer_rate_and_dynamic_margin!
+-    margin_calc = DynamicMargin.margin_calculator_for(user, strike_rate, net_rate)
+-    calc_customer_rate = margin_calc.customer_rate
+-    calc_dynamic_margin = margin_calc.dynamic_margin_percent
+-    if engine_search_rate&.priceline_or_expedia?
+-      self.customer_rate, self.dynamic_margin =
+-        DynamicMargin.rate_and_dm_guard_for_pl_and_expedia(engine_search_rate, calc_customer_rate, calc_dynamic_margin)
+-    else
+-      self.dynamic_margin = calc_dynamic_margin
+-      self.customer_rate = calc_customer_rate
+-    end
+-  end
+-
+-  def clean_up_negative_saves!
+-    if strike_rate < customer_rate
+-      self.strike_rate = customer_rate
+-    end
++    margin_calc = DynamicMargin.margin_calculator_for(user, strike_rate, net_rate, num_nights)
++    self.dynamic_margin = margin_calc.dynamic_margin_percent
++    self.customer_rate = margin_calc.customer_rate
+   end
+ 
+   def sanitize_description
+     self.description = RoomRate::SanitizeDescription.new(description).call
+   end
+ 
+   def booking_engine
+     supplier
+   end
+ 
+   def as_json(_options = {})
+     strike = strike_rate.to_f > 0.0 ? strike_rate : best_rate
+ 
+     {
+       id: id,
+       code:              rate_code,
+       description:       description,
+       currency:          currency,
+       strike_rate:       strike.to_f.round(2),
+       customer_rate:     customer_rate.to_f.round(2),
+       is_provisional:    is_provisional,
+       fax:               property&.pretty_fax,
+       is_cancellable:    is_cancellable?,
+       cancel_by:         cancel_by,
+       pet_fee:           pet_fee_description,
+       pet_deposit:       pet_deposit_description,
+       cancellation_details: cancellation_details,
+     }
+   end
+ 
+   def add_nightly_rate(available_on, best_rate, net_rate)
+     margin_calc = DynamicMargin.margin_calculator_for(user, strike_rate, net_rate)
+     customer_rate = margin_calc.customer_rate.round(2)
+-    if engine_search_rate&.priceline_or_expedia?
+-      customer_rate = DynamicMargin.rate_guard_for_pl_and_expedia(engine_search_rate, customer_rate)
+-    end
+     return if customer_rate.to_f == 0
+ 
+     self.nightly_rates = [] if nightly_rates.nil?
+ 
+     self.nightly_rates << {
+       available_on:  available_on,
+       customer_rate: customer_rate
+     }
+   end
+ 
+   def display_room_code
+     (supplier == 'Sabre') ? "#{gross_room_code}/#{room_code}" : room_code
+   end
+ 
+   def engine_search_rate
+     esr = EngineSearchRate
+       .where(search_id: search_id, property_id: property_id, booking_engine: supplier)
+       .where('net_rate IS NOT NULL')
+       .try(:first)
+     return esr if esr
+   end
+ 
+   def self.dedupe(room_rates)
+     # De-dupe an array of room rates based on description/is_cancellable
+     return_rates = []
+ 
+     room_rates.group_by { |rr| "#{rr.is_cancellable?}-#{rr[:description]}" }.each do |_key, rates|
+       return_rates << rates.sort_by(&:net_rate).shift
+     end
+ 
+     return_rates
+   end
+ 
+   def self.create_priceline_error(search, property, description)
+     create(search:          search,
+            property:        property,
+            supplier:        'Priceline',
+            room_code:       'ERROR',
+            rate_code:       'ERROR',
+            gross_room_code: 'ERROR',
+            gross_rate_code: 'ERROR',
+            product:         'PRICELINE ERROR',
+            description:     description,
+            strike_rate:     0.0,
+            best_rate:       0.0,
+            gross_rate:      0.0,
+            net_rate:        0.0)
+   end
++
++  private
++
++  def set_search_rate!
++    self.search_rate = SearchRate.where(
++      search_id: search_id, property_id: property_id
++    ).first
++  end
++
++  def set_strike_rate_from_search_rate!
++    self.strike_rate = search_rate.strike_rate if we_should_use_search_rate_strike?
++  end
++
++  def we_should_use_search_rate_strike?
++    (search_rate&.strike_rate && (search_rate.strike_rate > strike_rate))
++  end
+ end
