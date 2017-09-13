@@ -99,6 +99,7 @@ alias dots="~/.dotfiles"
 alias t="rspec"
 alias h="heroku"
 alias rprodsql="heroku pg:psql HEROKU_POSTGRESQL_AMBER -a he-api"
+alias hrailsc='h run rails console --app he-api'
 
 export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api

@@ -1,0 +1,64 @@
+diff --git a/app/models/custom_field.rb b/app/models/custom_field.rb
+index be27d78e1..85dd349d0 100644
+--- a/app/models/custom_field.rb
++++ b/app/models/custom_field.rb
+@@ -1,13 +1,59 @@
+ class CustomField < ActiveRecord::Base
+   belongs_to :business
+ 
+   has_and_belongs_to_many :departments
+ 
+   has_many :contract_custom_fields
+   has_many :contracts, through: :contract_custom_fields, source: :contractable, source_type: 'Contract'
+   has_many :group_contracts, through: :contract_custom_fields, source: :contractable, source_type: 'GroupContract'
+ 
+   validates :name, length: { maximum: 255 }
+ 
+   scope :active, -> { where(active: true) }
++
++  # o: organization
++  # gpo: group_purchase_organization
++  # custom_fields: custom_fields
++  # contract_custom_fields: contract_custom_fields
++
++  # consumed_nights_intervals: consumed_nights_intervals
++  # b: business
++  # p: property
++  # c: contract
++  # vpay: vpay_card
++  # i: invoice
++
++  # fix concat space on guest names
++  # fix pim thing with start date
++  # add num nights
++  # statement_number
++
++
++"
++
++  SELECT c.id, c.contract_number, c.priceline_itinerary, c.hotel_contract_number,
++    c.confirmation_number, c.business_id, c.created_at,
++    p.name || p.street || p.city || p.state AS qualifier, p.state,
++    p.country, b.name, gpo.name, o.name,
++    c.guest_first || c.guest_last AS guest_name,
++    c.booking_engine, c.sub_total, c.taxes, c.booking_fee, c.customer_total,
++    c.vpay_charge, c.commission, c.bonus_commission, c.margin,
++    c.check_in, c.check_out, c.shadow_fee,
++    vpay.number, c.direct_bill,
++    custom_fields.name, contract_custom_fields.value
++  FROM contracts c
++  LEFT JOIN contract_rates ON c.contract_rate_id = contract_rates.id
++  LEFT JOIN room_rates ON contract_rates.room_rate_id = room_rates.id
++  LEFT JOIN properties p ON room_rates.property_id = p.id
++  LEFT JOIN consumed_nights_intervals ON consumed_nights_intervals.contract_id = c.id
++  LEFT JOIN vpay_cards vpay ON c.vpay_card_id = vpay.id
++  LEFT JOIN invoices i ON consumed_nights_intervals.invoice_id = i.id
++  LEFT JOIN businesses b ON i.business_id = b.id
++  LEFT JOIN organizations o ON b.organization_id = o.id
++  LEFT JOIN group_purchase_organizations gpo ON o.group_purchase_organization_id = gpo.id
++  LEFT JOIN contract_custom_fields ON contract_custom_fields.contractable_id = c.id
++  LEFT JOIN custom_fields on custom_fields.id = contract_custom_fields.custom_field_id
++  WHERE c.check_out >= '2017-09-01';
++
++   "
+ end

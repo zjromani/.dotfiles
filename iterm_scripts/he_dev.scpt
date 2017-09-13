@@ -19,6 +19,16 @@ tell application "iTerm"
   tell third session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "rabbitmq-server"
+
+    split vertically with default profile
+  end tell
+
+  tell fourth session of current tab of current window
+    write text "/Users/johnromani/projects/he-public-api/"
+    write text "yarn"
+    write text "gco develop"
+    write text "git pull"
+    write text "npm run develop"
   end tell
 
   tell current window
@@ -36,7 +46,7 @@ tell application "iTerm"
 
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
-    write text "rails s"
+    write text "rails s -b ::"
   end tell
 
   tell current window

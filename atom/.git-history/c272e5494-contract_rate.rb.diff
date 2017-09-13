@@ -1,0 +1,151 @@
+diff --git a/app/models/contract_rate.rb b/app/models/contract_rate.rb
+index 4b7bb5e7c..6102e780b 100644
+--- a/app/models/contract_rate.rb
++++ b/app/models/contract_rate.rb
+@@ -1,114 +1,112 @@
+ class ContractRate < ActiveRecord::Base
+   before_save :do_math!, :clean_up_text
+ 
+   include IsCancellable
+-  include RoundMoneyFields  # needs to come after do_math! so its not overwritten
++  include RoundMoneyFields # needs to come after do_math! so its not overwritten
+ 
+   belongs_to :room_rate
+   belongs_to :group_contract_rate
+   has_one :margin_breakdown, as: :marginable, autosave: true
+   has_many :contracts
+ 
+   delegate :user, :search, :check_in, :check_out, :num_guests, :num_nights, :currency,
+     :nightly_rates, :product, :room_code, :gross_room_code, :room_count, :child_ages,
+     :num_children, :gross_rate_code, :property, :property_id, :supplier, :description,
+-    :booking_engine, :dynamic_margin, to: :room_rate
++    :booking_engine, :strike_rate, :dynamic_margin, to: :room_rate
+ 
+   def do_math!
+     # We want to store all of the intermediate values for reporting
+     self.margin_breakdown = MarginBreakdown.new
+ 
+-    num_nights = check_out - check_in
+-
+     self.best_total = best_subtotal + best_tax if best_total == 0 && best_subtotal && best_tax
+     self.gross_total = gross_subtotal + gross_tax if gross_total == 0
+     self.net_total = net_subtotal + net_tax if net_total == 0
+ 
+     set_shadow_fee!
+     set_public_fee!
+     set_customer_subtotal!
++    set_margin_breakdown!
+ 
+-    # TODO validate and use state_taxes(num_nights), also need to look for city/locality taxes...
+     self.customer_tax = gross_tax.round(2)
+-    self.customer_total = customer_subtotal + customer_tax + surcharge.to_f
+ 
++    self.customer_total = customer_subtotal + customer_tax
++    self.customer_total += surcharge if surcharge
+     self.customer_total += shadow_fee.round(2) if shadow_fee
+     self.customer_total += public_fee.round(2) if public_fee
+   end
+ 
+   def clean_up_text
+-    self.cancellation = CGI.unescapeHTML(cancellation).to_s
++    self.cancellation = CGI.unescapeHTML(cancellation)&.to_s
+   end
+ 
+   def state_taxes(num_nights)
+     return 0 unless booking_engine == 'Sabre'
+     property = room_rate&.property
+     property.nil? ? 0 : CalculateStateTax.new(property).run(num_nights.to_i)
+   end
+ 
+-  def as_json(options = {})
++  def as_json(_options = {})
+     {
+       id: id,
++      user_id: user&.id,
+       supplier: booking_engine.to_s[0, 1],
+       property_id: property_id,
+       room_rate_id: room_rate_id,
+       cancellation: cancellation,
+       cancel_by: cancel_by,
+       currency: currency || 'USD',
+       customer_rate: customer_rate.to_f,
+       customer_subtotal: customer_subtotal.to_f,
+       customer_tax: customer_tax.to_f + shadow_fee.to_f,
+       customer_total: customer_total.to_f,
+       public_fee: public_fee.to_f,
+       nightly_rates: nightly_rates,
+       mandatory_fees_amount: mandatory_fees_amount.to_f.round(2),
+       mandatory_fees_description: mandatory_fees_description,
+       is_cancellable: is_cancellable?,
+       description: description,
+-      non_refundable: non_refundable,
+-      supplier_fee: 0  # TODO remove after Eric has refactored it out.
++      non_refundable: non_refundable
+     }
+   end
+ 
+   def customer_rate
+     (customer_subtotal.to_f / num_nights).round(2)
+   end
+ 
+   def gross_margin
+-    gross = customer_total.to_f - gross_total.to_f + commission.to_f
+-
+-    gross += (customer_rate.to_f * APP[:commission][:priceline].to_f * num_nights).round(2) if booking_engine == 'Priceline'
+-    gross += (customer_rate.to_f * APP[:commission][:cug].to_f * num_nights).round(2) if booking_engine == 'Cug'
+-
+-    gross
++    customer_total - gross_total + commission
+   end
+ 
+   def set_customer_subtotal!
+-    self.customer_subtotal = CustomerRateService.calculate_customer_rate(
+-                               user,
+-                               best_subtotal,
+-                               net_subtotal,
+-                               dynamic_margin,
+-                               num_nights,
+-                               margin_breakdown
+-                            )
++    margin_amount = (dynamic_margin / 100) * net_subtotal
++    self.customer_subtotal = (margin_amount + net_subtotal) * room_count
++  end
++
++  def set_margin_breakdown!
++    DynamicMargin::MarginBreakdown.new(
++      user,
++      net_subtotal,
++      dynamic_margin,
++      num_nights,
++      margin_breakdown
++    ).call
+   end
+ 
+   def set_shadow_fee!
+     self.shadow_fee = CustomerRateService.calculate_customer_shadow_fee(
+-                        user,
+-                        net_subtotal,
+-                        num_nights,
+-                        margin_breakdown
+-                      )
++      user,
++      net_subtotal,
++      num_nights,
++      margin_breakdown
++    )
+   end
+ 
+   def set_public_fee!
+     self.public_fee = CustomerRateService.calculate_customer_public_fee(
+-                        user,
+-                        net_subtotal,
+-                        num_nights,
+-                        margin_breakdown
+-                      )
++      user,
++      net_subtotal,
++      num_nights,
++      margin_breakdown
++    )
+   end
+ end

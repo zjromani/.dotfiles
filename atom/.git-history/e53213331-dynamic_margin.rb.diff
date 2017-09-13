@@ -1,0 +1,67 @@
+diff --git a/lib/dynamic_margin.rb b/lib/dynamic_margin.rb
+index 26905e462..4caf405ff 100644
+--- a/lib/dynamic_margin.rb
++++ b/lib/dynamic_margin.rb
+@@ -1,55 +1,11 @@
+ module DynamicMargin
+-  def self.margin_calculator_for(user, strike, net)
++  def self.margin_calculator_for(user, strike, net, num_nights = 1)
+     return unless strike && net
+-    if configured_for_legacy_margin?(user)
+-      return LegacyCalculator.new(user, strike, net)
+-    end
+-    customer_rate = calculate_customer_rate(user, strike, net)
+-    klass_for(strike, net, customer_rate)
+-  end
+-
+-  def self.calculate_customer_rate(user, strike, net)
+-    user_percent = (user&.business&.margin_percent)
+-    user_percent_to_add = user_percent ? (user_percent / 100.0) : 0.00
+-    cost_for_doing_business_with_he = (net + (user_percent_to_add * net)).to_f
+-    margin_difference = strike - net - (user_percent_to_add * net)
+-    customer_rate = TierMargin.new(margin_difference).margin + cost_for_doing_business_with_he
+-
+-    if customer_rate > strike || customer_rate == net
+-      strike
+-    else
+-      customer_rate
+-    end
+-  end
+-
+-  def self.klass_for(strike, net, customer_rate)
+-    if savings_over_100?(strike, customer_rate)
+-      OneHundredSavingsCalculator.new(strike, net, customer_rate)
+-    elsif customer_save_percent_too_low?(strike, customer_rate)
+-      CustomerFriendlyCalculator.new(strike, net, customer_rate)
+-    else
+-      Calculator.new(strike, net, customer_rate)
+-    end
+-  end
+-
+-  def self.savings_over_100?(strike, customer_rate)
+-    strike - customer_rate > 100.0
+-  end
+-
+-  def self.customer_save_percent_too_low?(strike, customer_rate)
+-    save_percent_limit = to_percent(ENV.fetch('CUSTOMER_SAVE_MINIMUM', nil))
+-    return false unless save_percent_limit
+-    customer_savings = strike - customer_rate
+-    (customer_savings / strike) < save_percent_limit
+-  end
+-
+-  def self.to_percent(number)
+-    return nil unless number
+-    (number.to_f * 100).to_f
+-  end
+-
+-  def self.configured_for_legacy_margin?(user)
+-    return false unless user
+-    user.business&.legacy_dynamic_margin? || user.business&.true_margin?
++    CustomerRateUtility.new(
++      user: user,
++      strike: strike,
++      net: net,
++      num_nights: num_nights
++    ).margin_calculator
+   end
+ end
