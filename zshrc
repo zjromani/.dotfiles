@@ -105,8 +105,10 @@ export HE_DB_USERNAME=johnromani
 export HE_DB_DEVELOPMENT=he_api
 export HE_DB_TEST=he_api_test
 export EMAIL_ON_ACID_ADDRESS=yomikescar.runme@previews.emailonacid.com
+export NVM_DIR=~/.nvm
 #export HOTEL_BEDS_DISCOUNT_PERCENT=0.01
 
+source $(brew --prefix nvm)/nvm.sh
 
 
 
