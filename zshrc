@@ -108,9 +108,6 @@ export EMAIL_ON_ACID_ADDRESS=yomikescar.runme@previews.emailonacid.com
 export NVM_DIR=~/.nvm
 #export HOTEL_BEDS_DISCOUNT_PERCENT=0.01
 
-source $(brew --prefix nvm)/nvm.sh
-
-
 
 path+=/Users/johnromani/bin
 path+=$PATH:/usr/local/bin:/usr/local/sbin
