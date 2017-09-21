@@ -38,6 +38,7 @@
 'atom-text-editor.vim-mode-plus.insert-mode':
   'j k': 'vim-mode-plus:activate-normal-mode'
   'z z': 'custom:byebug'
+  'q q': 'custom:todo'
 
 'atom-text-editor.vim-mode-plus.normal-mode':
   'L': 'vim-mode-plus:move-to-last-character-of-line'

@@ -13,3 +13,7 @@
 atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
   'custom:byebug': ->
     atom.workspace.getActiveTextEditor()?.insertText('byebug')
+
+atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
+  'custom:todo': ->
+    atom.workspace.getActiveTextEditor()?.insertText('# TODO - JR - ')
