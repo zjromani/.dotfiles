@@ -51,10 +51,6 @@ tell application "iTerm"
     create tab with default profile
   end tell
 
-  tell current window
-    create tab with default profile
-  end tell
-
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
   end tell
