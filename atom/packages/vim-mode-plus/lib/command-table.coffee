@@ -159,6 +159,10 @@ InsertAtEndOfTarget:
   file: "./operator-insert"
   commandName: "vim-mode-plus:insert-at-end-of-target"
   commandScope: "atom-text-editor"
+InsertAtHeadOfTarget:
+  file: "./operator-insert"
+  commandName: "vim-mode-plus:insert-at-head-of-target"
+  commandScope: "atom-text-editor"
 InsertAtStartOfOccurrence:
   file: "./operator-insert"
   commandName: "vim-mode-plus:insert-at-start-of-occurrence"
@@ -331,9 +335,13 @@ ToggleLineComments:
   file: "./operator-transform-string"
   commandName: "vim-mode-plus:toggle-line-comments"
   commandScope: "atom-text-editor"
-AutoFlow:
+Reflow:
   file: "./operator-transform-string"
-  commandName: "vim-mode-plus:auto-flow"
+  commandName: "vim-mode-plus:reflow"
+  commandScope: "atom-text-editor"
+ReflowWithStay:
+  file: "./operator-transform-string"
+  commandName: "vim-mode-plus:reflow-with-stay"
   commandScope: "atom-text-editor"
 SurroundBase:
   file: "./operator-transform-string"
@@ -626,6 +634,20 @@ MoveToFirstCharacterOfLineAndDown:
 MoveToFirstLine:
   file: "./motion"
   commandName: "vim-mode-plus:move-to-first-line"
+  commandScope: "atom-text-editor"
+MoveToScreenColumn:
+  file: "./motion"
+MoveToBeginningOfScreenLine:
+  file: "./motion"
+  commandName: "vim-mode-plus:move-to-beginning-of-screen-line"
+  commandScope: "atom-text-editor"
+MoveToFirstCharacterOfScreenLine:
+  file: "./motion"
+  commandName: "vim-mode-plus:move-to-first-character-of-screen-line"
+  commandScope: "atom-text-editor"
+MoveToLastCharacterOfScreenLine:
+  file: "./motion"
+  commandName: "vim-mode-plus:move-to-last-character-of-screen-line"
   commandScope: "atom-text-editor"
 MoveToLastLine:
   file: "./motion"
@@ -1087,6 +1109,8 @@ InnerPersistentSelection:
   file: "./text-object"
   commandName: "vim-mode-plus:inner-persistent-selection"
   commandScope: "atom-text-editor"
+LastPastedRange:
+  file: "./text-object"
 VisibleArea:
   file: "./text-object"
 AVisibleArea:

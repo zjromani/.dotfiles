@@ -5,8 +5,6 @@
   core:
     disabledPackages: [
       "language-hyperlink"
-      "git-blame"
-      "git-time-machine"
     ]
     packagesWithKeymapsDisabled: [
       "last-cursor-position"

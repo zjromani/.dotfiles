@@ -2,39 +2,39 @@
   "_args": [
     [
       {
-        "raw": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
+        "raw": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
-        "spec": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
+        "rawSpec": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
+        "spec": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
         "type": "local"
       },
-      "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/apm-install-dir-11788-77169-1rmvbx1.4xkzkt9"
+      "/private/tmp/apm-install-dir-117822-82699-dhq2e9.qbh1qyqfr"
     ]
   ],
-  "_from": "../d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
-  "_id": "atom-typescript@11.0.8",
+  "_from": "../d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
+  "_id": "atom-typescript@11.0.9",
   "_inCache": true,
   "_location": "/atom-typescript",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
+    "raw": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
-    "spec": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
+    "rawSpec": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
+    "spec": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
     "type": "local"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "file:../d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
-  "_shasum": "8efdc4479717515d916795f5da188dd875dff9c1",
+  "_resolved": "file:../d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
+  "_shasum": "a4463bbca3bce75b14eece75de97af791e55718b",
   "_shrinkwrap": {
     "name": "atom-typescript",
-    "version": "11.0.8",
+    "version": "11.0.9",
     "dependencies": {
       "@types/atom": {
         "version": "0.0.38",
@@ -701,8 +701,8 @@
       }
     }
   },
-  "_spec": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/d-11788-77169-1tlia3t.ckqve4gqfr/package.tgz",
-  "_where": "/private/var/folders/v7/dw2lrvj96nvf1v_nh0_r44wc0000gn/T/apm-install-dir-11788-77169-1rmvbx1.4xkzkt9",
+  "_spec": "/private/tmp/d-117822-82699-4o9e8d.qrbgwrk9/package.tgz",
+  "_where": "/private/tmp/apm-install-dir-117822-82699-dhq2e9.qbh1qyqfr",
   "activationHooks": [
     "atom-typescript:grammar-used"
   ],
@@ -798,7 +798,7 @@
     "prettier": "ts-node scripts/prettier.ts write",
     "test": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts && ts-node scripts/prettier.ts check"
   },
-  "version": "11.0.8",
+  "version": "11.0.9",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
