@@ -1,7 +1,8 @@
 tell application "iTerm"
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
-    write text "redis-server"
+    write text "brew services start rabbitmq"
+    write text "brew services start redis"
     
     split horizontally with default profile
   end tell
@@ -10,23 +11,16 @@ tell application "iTerm"
     write text "/Users/johnromani/projects/he-web/"
     write text "gco develop"
     write text "git pull"
-    write text "npm run develop"
-
-    split horizontally with default profile
-  end tell
-
-  tell third session of current tab of current window
-    write text "/Users/johnromani/projects/he-api/"
-    write text "rabbitmq-server"
+    write text "docker run -p 8000:8000 he-web:latest"
 
     split vertically with default profile
   end tell
 
-  tell fourth session of current tab of current window
+  tell third session of current tab of current window
     write text "/Users/johnromani/projects/he-public-api/"
     write text "gco develop"
     write text "git pull"
-    write text "npm start"
+    write text "npm run develop"
   end tell
 
   tell current window
@@ -36,13 +30,10 @@ tell application "iTerm"
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "sidestart.sh"
+    split vertically with default profile
   end tell
 
-  tell current window
-    create tab with default profile
-  end tell
-
-  tell current session of current tab of current window
+  tell second session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "rails s -b ::"
   end tell
@@ -53,5 +44,6 @@ tell application "iTerm"
 
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
+    write text "gst"
   end tell
 end tell
