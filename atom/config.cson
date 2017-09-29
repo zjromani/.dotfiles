@@ -17,8 +17,9 @@
       "seti-ui"
       "seti-syntax"
     ]
+    titleBar: "custom"
   editor:
-    fontSize: 11
+    fontSize: 10
   "exception-reporting":
     userId: "b52f92a7-7543-11a3-9f8b-0c16b527f4c8"
   "linter-ui-default": {}
@@ -35,6 +36,8 @@
     compactView: true
     disableAnimations: true
     fileIcons: false
+    hideProjectTab: true
+    themeColor: "Purple"
   "split-diff":
     diffWords: true
     ignoreWhitespace: true
