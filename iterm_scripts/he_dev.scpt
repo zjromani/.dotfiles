@@ -13,7 +13,7 @@ tell application "iTerm"
     write text "git pull"
     write text "docker run -p 8000:8000 he-web:latest"
 
-    split vertically with default profile
+    split horizontally with default profile
   end tell
 
   tell third session of current tab of current window
@@ -24,13 +24,13 @@ tell application "iTerm"
   end tell
 
   tell current window
-    create tab with default profile
+    create window with default profile
   end tell
 
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "sidestart.sh"
-    split vertically with default profile
+    split horizontally with default profile
   end tell
 
   tell second session of current tab of current window
@@ -44,6 +44,6 @@ tell application "iTerm"
 
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
-    write text "gst"
+    write text "gss"
   end tell
 end tell
