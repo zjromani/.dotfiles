@@ -16,4 +16,4 @@ atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
 
 atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
   'custom:todo': ->
-    atom.workspace.getActiveTextEditor()?.insertText('# TODO - JR - ')
+    atom.workspace.getActiveTextEditor()?.insertText('# TODO - @johnromani90 - ')

@@ -7,7 +7,6 @@ set tabstop=2
 set shiftwidth=2
 " On pressing tab, insert 2 spaces
 set expandtab
-
 syntax on
 
 let g:mustache_abbreviations = 1
