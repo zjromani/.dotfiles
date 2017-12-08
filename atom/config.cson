@@ -46,6 +46,7 @@
   "todo-show": {}
   "tree-view":
     hideVcsIgnoredFiles: true
-  "vim-mode-plus": {}
+  "vim-mode-plus":
+    notifiedCoffeeScriptNoLongerSupportedToExtendVMP: true
   welcome:
     showOnStartup: false
