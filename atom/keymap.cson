@@ -30,6 +30,10 @@
 # If you are unfamiliar with CSON, you can read more about it in the
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
+
+'atom-text-editor.vim-mode-plus.insert-mode.autocomplete-active':
+  'escape': 'autocomplete-plus:cancel'
+
 '.platform-darwin atom-text-editor':
   'ctrl-p': 'fuzzy-finder:toggle-file-finder'
   'ctrl-w m':  'pane:merge-all-panes'
@@ -44,6 +48,8 @@
   'L': 'vim-mode-plus:move-to-last-character-of-line'
   'H': 'vim-mode-plus:move-to-first-character-of-line'
   'space': 'vim-mode-plus:inner-word'
+  'down': 'keystroke d d p' # move line down
+  'up': 'keystroke d d k P' # move line up'space k': 'keystroke 5 k'
 
 'atom-text-editor.vim-mode-plus.visual-mode':
   'L': 'vim-mode-plus:move-to-last-character-of-line'

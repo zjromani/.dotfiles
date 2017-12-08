@@ -14,8 +14,8 @@
     ]
     telemetryConsent: "no"
     themes: [
-      "one-dark-ui"
-      "base16-tomorrow-dark-theme"
+      "isotope-ui"
+      "monokai"
     ]
     titleBar: "custom"
   editor:
