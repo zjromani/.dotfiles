@@ -20,6 +20,7 @@
     titleBar: "custom"
   editor:
     fontSize: 11
+    scrollPastEnd: true
   "exception-reporting":
     userId: "b52f92a7-7543-11a3-9f8b-0c16b527f4c8"
   fonts:
@@ -48,7 +49,6 @@
   "todo-show": {}
   "tree-view":
     hideVcsIgnoredFiles: true
-  "vim-mode-plus":
-    notifiedCoffeeScriptNoLongerSupportedToExtendVMP: true
+  "vim-mode-plus": {}
   welcome:
     showOnStartup: false
