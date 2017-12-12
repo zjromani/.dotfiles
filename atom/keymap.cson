@@ -50,6 +50,8 @@
   'space': 'vim-mode-plus:inner-word'
   'down': 'keystroke d d p' # move line down
   'up': 'keystroke d d k P' # move line up'space k': 'keystroke 5 k'
+  '; j': 'keystroke 5 j'
+  '; k': 'keystroke 5 k'
 
 'atom-text-editor.vim-mode-plus.visual-mode':
   'L': 'vim-mode-plus:move-to-last-character-of-line'

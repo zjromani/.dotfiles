@@ -14,14 +14,16 @@
     ]
     telemetryConsent: "no"
     themes: [
-      "isotope-ui"
-      "monokai"
+      "one-dark-ui"
+      "northem-dark-atom-syntax"
     ]
     titleBar: "custom"
   editor:
     fontSize: 11
   "exception-reporting":
     userId: "b52f92a7-7543-11a3-9f8b-0c16b527f4c8"
+  fonts:
+    fontFamily: "Source Code Pro Light"
   "linter-ui-default": {}
   "one-dark-ui":
     tabSizing: "Minimum"
