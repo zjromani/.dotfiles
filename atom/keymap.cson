@@ -42,6 +42,7 @@
 '.fuzzy-finder atom-text-editor[mini]':
   'ctrl-v': 'pane:split-right'
   'ctrl-s': 'pane:split-down'
+  'alt-enter': 'custom:replace-tab'
 #vim
 'atom-text-editor.vim-mode-plus.insert-mode':
   'j k': 'vim-mode-plus:activate-normal-mode'

@@ -17,3 +17,7 @@ atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
 atom.commands.add 'atom-text-editor.vim-mode-plus.insert-mode',
   'custom:todo': ->
     atom.workspace.getActiveTextEditor()?.insertText('# TODO - @johnromani90 - ')
+
+atom.commands.add '.fuzzy-finder atom-text-editor[mini]', 'custom:replace-tab', ->
+  atom.workspace.getActiveTextEditor().destroy()
+  atom.commands.dispatch(@, "core:confirm")
