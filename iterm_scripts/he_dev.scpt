@@ -45,5 +45,6 @@ tell application "iTerm"
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "gss"
+    write text "atom ."
   end tell
 end tell
