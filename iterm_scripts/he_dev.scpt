@@ -11,6 +11,7 @@ tell application "iTerm"
     write text "/Users/johnromani/projects/he-web/"
     write text "gco develop"
     write text "git pull"
+    write text "docker build -t he-web ."
     write text "docker run -p 8000:8000 he-web:latest"
 
     split horizontally with default profile
@@ -18,7 +19,7 @@ tell application "iTerm"
 
   tell third session of current tab of current window
     write text "/Users/johnromani/projects/he-public-api/"
-    write text "gco develop"
+    write text "gco master"
     write text "git pull"
     write text "npm run develop"
   end tell
