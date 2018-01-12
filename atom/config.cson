@@ -16,7 +16,7 @@
     telemetryConsent: "no"
     themes: [
       "one-dark-ui"
-      "railscast-theme"
+      "monokai-seti"
     ]
     titleBar: "custom"
   editor:
