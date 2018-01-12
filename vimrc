@@ -1,4 +1,5 @@
 "execute pathogen#infect()
+set number
 colorscheme molokai
 filetype plugin indent on
 " show existing tab with 2 spaces width
