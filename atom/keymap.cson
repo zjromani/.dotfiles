@@ -72,8 +72,8 @@
   'ctrl-j': 'pane:show-previous-item'
 
 'atom-workspace':
-  'ctrl-h': 'last-cursor-position:previous'
-  'ctrl-l': 'last-cursor-position:next'
+  'ctrl-o': 'last-cursor-position:previous'
+  'ctrl-i': 'last-cursor-position:next'
   'cmd-]': 'editor:unfold-current-row'
   'cmd-[': 'editor:fold-current-row'
 
