@@ -72,15 +72,14 @@
   'ctrl-j': 'pane:show-previous-item'
 
 'atom-workspace':
-  'ctrl-o': 'last-cursor-position:previous'
-  'ctrl-i': 'last-cursor-position:next'
+  'ctrl-h': 'last-cursor-position:previous'
+  'ctrl-l': 'last-cursor-position:next'
   'cmd-]': 'editor:unfold-current-row'
   'cmd-[': 'editor:fold-current-row'
 
 'atom-workspace atom-text-editor:not([mini])':
   'cmd-[': 'unset!'
   'cmd-]': 'unset!'
-
 
 'atom-text-editor:not([mini])':
   'cmd-alt-b': 'git-blame:toggle'
