@@ -1,4 +1,4 @@
-"execute pathogen#infect()
+execute pathogen#infect()
 set number
 colorscheme molokai
 filetype plugin indent on
