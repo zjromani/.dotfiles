@@ -6,6 +6,13 @@
     closeDeletedFileTabs: true
     disabledPackages: [
       "language-hyperlink"
+      "atom-typescript"
+      "busy-signal"
+      "file-icons"
+      "intentions"
+      "linter"
+      "linter-ui-default"
+      "ruby-block"
     ]
     packagesWithKeymapsDisabled: [
       "last-cursor-position"
