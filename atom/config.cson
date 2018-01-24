@@ -10,15 +10,11 @@
       "busy-signal"
       "file-icons"
       "intentions"
-      "linter"
-      "linter-ui-default"
-      "ruby-block"
       "autosave"
       "background-tips"
       "bookmarks"
       "encoding-selector"
       "exception-reporting"
-      "recent-files-fuzzy-finder"
       "go-to-line"
       "grammar-selector"
       "welcome"
@@ -51,7 +47,6 @@
   rspec:
     command: "rspec"
   "ruby-block":
-    highlightLine: false
     highlightLineNumber: true
     showBottomPanel: false
   "seti-syntax": {}
