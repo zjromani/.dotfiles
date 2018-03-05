@@ -1,3 +1,4 @@
+let g:NERDSpaceDelims = 1
 set nocompatible " be iMproved
 execute pathogen#infect()
 set number
@@ -64,3 +65,8 @@ augroup filetype_rb
   autocmd!
   autocmd FileType ruby :iabbrev <buffer> def def<enter>end jkkA
 augroup END
+
+"copy file name
+nmap <leader>cs :let @*=expand("%")<CR>
+"copy file name and full path
+nmap <leader>cl :let @*=expand("%:p")<CR>
