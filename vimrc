@@ -21,8 +21,10 @@ set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components
 
 set iskeyword=@,48-57,_,192-255
 
+"insert mode maps
 :inoremap jk <Esc>
 :inoremap zz byebug
+:inoremap qq # TODO - @johnromani90 - 
 "ctrl d to delete line in insert
 "when in insert mode, ctrl d to delete and stay in insert
 :inoremap <c-d> <esc>ddi
