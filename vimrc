@@ -11,6 +11,7 @@ set shiftwidth=2
 " On pressing tab, insert 2 spaces
 set expandtab
 syntax on
+set nowrap
 
 let g:mustache_abbreviations = 1
 
@@ -32,8 +33,8 @@ set iskeyword=@,48-57,_,192-255
 :inoremap <c-u> <esc>viwU
 
 
-:nnoremap  <C-j> :tabn<CR>
-:nnoremap  <C-k> :tabp<CR>
+:nnoremap  <C-j> :tabp<CR>
+:nnoremap  <C-k> :tabn<CR>
 "press space when on a word to highlight and go into visual mode
 :nnoremap <space> viw
 "move a line down or up one line
