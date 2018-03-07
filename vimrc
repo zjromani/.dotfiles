@@ -1,4 +1,3 @@
-let g:NERDSpaceDelims = 1
 set nocompatible " be iMproved
 execute pathogen#infect()
 set number
@@ -62,6 +61,8 @@ vnoremap L $
 :nnoremap <C-h> <C-^>
 
 :nnoremap <C-n> :NERDTreeToggle<CR>
+:nnoremap { :vertical resize +5<CR>
+:nnoremap } :vertical resize -5<CR>
 
 "Ruby auto group/ abrev and cmds
 augroup filetype_rb
@@ -70,6 +71,6 @@ augroup filetype_rb
 augroup END
 
 "copy file name
-nmap <leader>cs :let @*=expand("%")<CR>
-"copy file name and full path
-nmap <leader>cl :let @*=expand("%:p")<CR>
+nnoremap <leader>cs :let @*=expand("%")<CR>
+" copy file name and full path
+" :nmap <leader>cl :let @*=expand("%:p")<CR>
