@@ -21,33 +21,33 @@ set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components
 
 set iskeyword=@,48-57,_,192-255
 
-"insert mode maps
+" insert mode maps
 :inoremap jk <Esc>
 :inoremap zz byebug
 :inoremap qq # TODO - @johnromani90 - 
-"ctrl d to delete line in insert
-"when in insert mode, ctrl d to delete and stay in insert
+" ctrl d to delete line in insert
+" when in insert mode, ctrl d to delete and stay in insert
 :inoremap <c-d> <esc>ddi
-"upcase a word in insert
+" upcase a word in insert
 :inoremap <c-u> <esc>viwU
 
 
 :nnoremap  <C-j> :tabp<CR>
 :nnoremap  <C-k> :tabn<CR>
-"press space when on a word to highlight and go into visual mode
+" press space when on a word to highlight and go into visual mode
 :nnoremap <space> viw
-"move a line down or up one line
+" move a line down or up one line
 :nnoremap _ ddkP
 :nnoremap - ddp
-"edit and source vimrc
+" edit and source vimrc
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>
 :nnoremap <leader>d YP
 
-"surround quotes
+" surround quotes
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
-"go to front and last part of line
+" go to front and last part of line
 nnoremap H ^
 nnoremap L $
 
@@ -60,11 +60,10 @@ vnoremap L $
 " go back to previous buffer
 :nnoremap <C-h> <C-^>
 
-:nnoremap <C-n> :NERDTreeToggle<CR>
 :nnoremap { :vertical resize +5<CR>
 :nnoremap } :vertical resize -5<CR>
 
-"Ruby auto group/ abrev and cmds
+" Ruby auto group/ abrev and cmds
 augroup filetype_rb
   autocmd!
   autocmd FileType ruby :iabbrev <buffer> def def<enter>end jkkA
@@ -74,3 +73,7 @@ augroup END
 nnoremap <leader>cs :let @*=expand("%")<CR>
 " copy file name and full path
 " :nmap <leader>cl :let @*=expand("%:p")<CR>
+
+" NerdTree
+:nnoremap <C-n> :NERDTreeToggle<CR>
+:nnoremap <C-f> :NERDTreeFind<CR>
