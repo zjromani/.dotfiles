@@ -9,6 +9,10 @@ set tabstop=2
 set shiftwidth=2
 " On pressing tab, insert 2 spaces
 set expandtab
+" get rid of vim auto load promt when branch changes
+set autoread                                                                                                                                                                                    
+au CursorHold * checktime  
+
 syntax on
 set nowrap
 
