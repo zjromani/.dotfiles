@@ -11,6 +11,8 @@ set shiftwidth=2
 set expandtab
 syntax on
 set nowrap
+set autoread
+au CursorHold * checktime "auto read on file change
 
 let g:mustache_abbreviations = 1
 
