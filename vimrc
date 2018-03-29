@@ -1,7 +1,7 @@
 set nocompatible " be iMproved
 execute pathogen#infect()
 set number
-colorscheme molokai
+colorscheme badwolf
 filetype plugin indent on
 " show existing tab with 2 spaces width
 set tabstop=2
@@ -12,6 +12,9 @@ set expandtab
 " get rid of vim auto load promt when branch changes
 set autoread                                                                                                                                                                                    
 au CursorHold * checktime  
+
+" Disable all blinking:
+:set guicursor+=a:blinkon0
 
 syntax on
 set nowrap
