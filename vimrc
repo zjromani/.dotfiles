@@ -83,3 +83,9 @@ nnoremap <leader>cs :let @*=expand("%")<CR>
 " NerdTree
 :nnoremap <C-n> :NERDTreeToggle<CR>
 :nnoremap <C-f> :NERDTreeFind<CR>
+
+" Grepper Pluggin
+nnoremap <leader>g :Grepper -tool git<cr>
+nnoremap <leader>G :Grepper -tool ack<cr>
+" nmap gs <plug>(GrepperOperator)
+
