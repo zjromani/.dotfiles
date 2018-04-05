@@ -5,3 +5,4 @@
 --ignore-dir=xml
 --ignore-dir=docs
 --ignore-file=is:examples.txt
+--ignore-file=is:.byebug_history

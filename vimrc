@@ -10,8 +10,8 @@ set shiftwidth=2
 " On pressing tab, insert 2 spaces
 set expandtab
 " get rid of vim auto load promt when branch changes
-set autoread                                                                                                                                                                                    
-au CursorHold * checktime  
+set autoread
+au CursorHold * checktime
 
 syntax on
 set nowrap
@@ -33,7 +33,7 @@ set iskeyword=@,48-57,_,192-255
 " insert mode maps
 :inoremap jk <Esc>
 :inoremap zz byebug
-:inoremap qq # TODO - @johnromani90 - 
+:inoremap qq # TODO - @johnromani90 -
 " ctrl d to delete line in insert
 " when in insert mode, ctrl d to delete and stay in insert
 :inoremap <c-d> <esc>ddi
@@ -76,6 +76,7 @@ vnoremap L $
 augroup filetype_rb
   autocmd!
   autocmd FileType ruby :iabbrev <buffer> def def<enter>end jkkA
+  autocmd BufWritePre * %s/\s\+$//e
 augroup END
 
 "copy file name
