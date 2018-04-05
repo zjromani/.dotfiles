@@ -19,6 +19,7 @@ set autoread
 au CursorHold * checktime "auto read on file change
 
 let g:mustache_abbreviations = 1
+let g:NERDTreeWinPos = "right"
 
 let mapleader = ","
 let g:ctrlp_map = '<c-p>'
@@ -26,6 +27,8 @@ let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components/*
 
 set iskeyword=@,48-57,_,192-255
+
+:nnoremap <leader>ef :set hlsearch!<CR>
 
 " insert mode maps
 :inoremap jk <Esc>
@@ -77,8 +80,6 @@ augroup END
 
 "copy file name
 nnoremap <leader>cs :let @*=expand("%")<CR>
-" copy file name and full path
-" :nmap <leader>cl :let @*=expand("%:p")<CR>
 
 " NerdTree
 :nnoremap <C-n> :NERDTreeToggle<CR>
