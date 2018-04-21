@@ -3,7 +3,7 @@ tell application "iTerm"
     write text "/Users/johnromani/projects/he-api/"
     write text "brew services start rabbitmq"
     write text "brew services start redis"
-    
+
     split horizontally with default profile
   end tell
 
@@ -46,7 +46,7 @@ tell application "iTerm"
   end tell
 
   tell current window
-    create tab with default profile
+    create window with default profile
   end tell
 
   tell current session of current tab of current window
