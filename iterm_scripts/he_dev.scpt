@@ -37,7 +37,7 @@ tell application "iTerm"
   tell second session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "rails s"
-    split vertically with default profile
+    split horizontally with default profile
   end tell
 
   tell third session of current tab of current window
