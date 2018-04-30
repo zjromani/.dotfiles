@@ -17,7 +17,7 @@ syntax on
 set nowrap
 set autoread
 au CursorHold * checktime "auto read on file change
-setlocal spell
+:setlocal spell
 
 let g:mustache_abbreviations = 1
 let g:NERDTreeWinPos = "right"
