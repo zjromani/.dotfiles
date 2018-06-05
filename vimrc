@@ -28,8 +28,9 @@ let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components/*
 
 set iskeyword=@,48-57,_,192-255
-
 :nnoremap <leader>ef :set hlsearch!<CR>
+
+map <Leader> <Plug>(easymotion-prefix)
 
 " insert mode maps
 :inoremap jk <Esc>
