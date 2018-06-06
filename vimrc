@@ -35,7 +35,7 @@ map <Leader> <Plug>(easymotion-prefix)
 " insert mode maps
 :inoremap jk <Esc>
 :inoremap zz byebug
-:inoremap qq # TODO - @johnromani90 -
+:inoremap qq # TODO - @zjromani -
 " ctrl d to delete line in insert
 " when in insert mode, ctrl d to delete and stay in insert
 :inoremap <c-d> <esc>ddi
