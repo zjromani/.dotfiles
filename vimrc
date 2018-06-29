@@ -27,6 +27,9 @@ let mapleader = ","
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components/*
+" edit and source vimrc
+:nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+:nnoremap <leader>sv :source $MYVIMRC<cr>
 
 set iskeyword=@,48-57,_,192-255
 :nnoremap <leader>ef :set hlsearch!<CR>
@@ -51,9 +54,7 @@ map <Leader> <Plug>(easymotion-prefix)
 " move a line down or up one line
 :nnoremap _ ddkP
 :nnoremap - ddp
-" edit and source vimrc
-:nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-:nnoremap <leader>sv :source $MYVIMRC<cr>
+" copy and insert line under
 :nnoremap <leader>d YP
 
 " surround quotes
@@ -67,10 +68,10 @@ nnoremap L $
 vnoremap H ^
 vnoremap L $
 
-" ctrl b to then <number> <cr> for buffer sitch
-:nnoremap <C-b> :buffers<CR>:buffer<Space>
-" go back to previous buffer
-:nnoremap <C-h> <C-^>
+" ctrl b to then <number> <cr> to switch buffer
+:nnoremap <C-b> :CtrlPBuffer<CR>
+" ctrl d delete all buffs
+:nnoremap <C-d> :bufdo bd<CR>
 
 :nnoremap { :vertical resize +5<CR>
 :nnoremap } :vertical resize -5<CR>
