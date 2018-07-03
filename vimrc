@@ -18,7 +18,6 @@ set nowrap
 set autoread
 au CursorHold * checktime "auto read on file change
 set spell
-setlocal foldmethod=indent
 
 let g:mustache_abbreviations = 1
 let g:NERDTreeWinPos = "right"
@@ -71,7 +70,7 @@ vnoremap L $
 " ctrl b to then <number> <cr> to switch buffer
 :nnoremap <C-b> :CtrlPBuffer<CR>
 " ctrl d delete all buffs
-:nnoremap <C-d> :bufdo bd<CR>
+:nnoremap <leader><leader>d :bufdo bd<CR>
 
 :nnoremap { :vertical resize +5<CR>
 :nnoremap } :vertical resize -5<CR>
