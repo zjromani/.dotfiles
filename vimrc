@@ -63,6 +63,8 @@ nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
 nnoremap H ^
 nnoremap L $
 
+:nnoremap <leader>cv :%s/:\([^ ]*\)\(\s*\)=>/\1:/g
+
 
 vnoremap H ^
 vnoremap L $
