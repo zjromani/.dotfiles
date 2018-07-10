@@ -34,6 +34,11 @@ set iskeyword=@,48-57,_,192-255
 :nnoremap <leader>ef :set hlsearch!<CR>
 
 map <Leader> <Plug>(easymotion-prefix)
+nmap s <Plug>(easymotion-overwin-f)
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 " insert mode maps
 :inoremap jk <Esc>
