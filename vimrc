@@ -30,6 +30,9 @@ set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>
 
+:nnoremap <leader><leader>f :set foldmethod=indent<CR>
+
+
 set iskeyword=@,48-57,_,192-255
 :nnoremap <leader>ef :set hlsearch!<CR>
 
