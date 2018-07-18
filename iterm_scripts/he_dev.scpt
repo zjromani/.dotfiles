@@ -54,6 +54,8 @@ tell application "iTerm"
   end tell
 
   tell current session of current tab of current window
+    write text "dots"
+    write text "gl"
     write text "/Users/johnromani/projects/he-api/"
     write text "gss"
     write text "mvim"
