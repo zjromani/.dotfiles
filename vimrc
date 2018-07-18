@@ -31,6 +31,7 @@ set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>
 
+set nofoldenable
 :nnoremap <leader><leader>f :set foldmethod=indent<CR>
 
 
