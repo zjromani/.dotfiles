@@ -19,6 +19,7 @@ set autoread
 au CursorHold * checktime "auto read on file change
 set spell
 set guifont=Monaco:h13
+set guioptions=
 
 let g:mustache_abbreviations = 1
 let g:NERDTreeWinPos = "right"
