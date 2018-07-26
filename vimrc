@@ -9,7 +9,7 @@ set tabstop=2
 set shiftwidth=2
 " On pressing tab, insert 2 spaces
 set expandtab
-" get rid of vim auto load promt when branch changes
+" get rid of vim auto load prompt when branch changes
 set autoread
 au CursorHold * checktime
 
@@ -27,6 +27,7 @@ let g:NERDTreeWinPos = "right"
 let mapleader = ","
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+
 set wildignore+=*/tmp/*,*.o,*.so,*.swp,*.zip,*/node_modules/*,*/bower_components/*
 " edit and source vimrc
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -88,11 +89,28 @@ vnoremap L $
 :nnoremap { :vertical resize +5<CR>
 :nnoremap } :vertical resize -5<CR>
 
+" Strip white space pre-write
+autocmd BufWritePre * %s/\s\+$//e
+
 " Ruby auto group/ abrev and cmds
 augroup filetype_rb
   autocmd!
   autocmd FileType ruby :iabbrev <buffer> def def<enter>end jkkA
-  autocmd BufWritePre * %s/\s\+$//e
+augroup END
+
+" TS and JS auto auto groups
+augroup filetype_javascript
+    au!
+    au FileType javascript setlocal foldmethod=syntax
+    au FileType javascript set tabstop=4
+    au FileType javascript set shiftwidth=4
+augroup END
+
+augroup filetype_typescript
+    au!
+    au FileType typescript setlocal foldmethod=syntax
+    au FileType typescript set tabstop=4
+    au FileType javascript set shiftwidth=4
 augroup END
 
 "copy file name
