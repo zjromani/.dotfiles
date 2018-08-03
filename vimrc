@@ -13,6 +13,9 @@ set expandtab
 set autoread
 au CursorHold * checktime
 
+" No swapssssss
+set noswapfile
+
 syntax on
 set nowrap
 set autoread
