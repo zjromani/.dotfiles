@@ -1,3 +1,6 @@
+" convert old ruby hash rocket syntax
+" %s/:\([^ ]*\)\(\s*\)=>/\1:/g
+
 set nocompatible " be iMproved
 execute pathogen#infect()
 set number
