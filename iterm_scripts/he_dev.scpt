@@ -11,8 +11,7 @@ tell application "iTerm"
     write text "/Users/johnromani/projects/he-web/"
     write text "gco develop"
     write text "git pull"
-    write text "docker build -t he-web ."
-    write text "docker run -p 8000:8000 he-web:latest"
+    write text "NODE_ENV=alpha PUBLIC_API_HOST=http://localhost:5000 yarn run develop"
 
     split horizontally with default profile
   end tell
@@ -21,7 +20,7 @@ tell application "iTerm"
     write text "/Users/johnromani/projects/he-public-api/"
     write text "gco master"
     write text "git pull"
-    write text "npm run develop"
+    write text "yarn start"
     tell application "System Events" to tell process "iTerm2" to keystroke "m" using command down
   end tell
 

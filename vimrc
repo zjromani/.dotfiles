@@ -16,6 +16,9 @@ set expandtab
 set autoread
 au CursorHold * checktime
 
+" No swapssssss
+set noswapfile
+
 syntax on
 set nowrap
 set autoread
@@ -105,8 +108,8 @@ augroup END
 augroup filetype_javascript
     au!
     au FileType javascript setlocal foldmethod=syntax
-    au FileType javascript set tabstop=4
-    au FileType javascript set shiftwidth=4
+    au FileType javascript set tabstop=2
+    au FileType javascript set shiftwidth=2
 augroup END
 
 augroup filetype_typescript
