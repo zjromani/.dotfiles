@@ -30,7 +30,7 @@ tell application "iTerm"
 
   tell current session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
-    write text "sidestart.sh"
+    write text "bin/sidekiq-development.sh"
     split horizontally with default profile
   end tell
 
