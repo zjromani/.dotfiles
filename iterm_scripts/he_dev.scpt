@@ -21,6 +21,14 @@ tell application "iTerm"
     write text "gco master"
     write text "git pull"
     write text "yarn start"
+
+    split horizontally with default profile
+  end tell
+
+  tell fourth session of current tab of current window
+    write text "/Users/johnromani/projects/he-api/"
+    write text "rails s"
+
     tell application "System Events" to tell process "iTerm2" to keystroke "m" using command down
   end tell
 
@@ -37,15 +45,6 @@ tell application "iTerm"
   tell second session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "rake sneakers:run SNEAKERS_HEARTBEAT=100000000000"
-  end tell
-
-  tell current window
-    create tab with default profile
-  end tell
-
-  tell current session of current tab of current window
-    write text "/Users/johnromani/projects/he-api/"
-    write text "rails s"
   end tell
 
   tell current window
