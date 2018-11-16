@@ -4,7 +4,7 @@
 set nocompatible " be iMproved
 execute pathogen#infect()
 set number
-colorscheme monokai
+colorscheme monokai-chris
 filetype plugin indent on
 " show existing tab with 2 spaces width
 set tabstop=2
