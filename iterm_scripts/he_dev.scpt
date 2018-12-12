@@ -45,8 +45,6 @@ tell application "iTerm"
   tell second session of current tab of current window
     write text "/Users/johnromani/projects/he-api/"
     write text "rake sneakers:run SNEAKERS_HEARTBEAT=100000000000"
-
-    tell application "System Events" to tell process "iTerm2" to keystroke "m" using command down
   end tell
 
   tell current window
