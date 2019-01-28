@@ -8,7 +8,7 @@ tell application "iTerm"
   end tell
 
   tell second session of current tab of current window
-    write text "/Users/johnromani/projects/he-web/"
+    write text "/Users/johnromani/projects/members/"
     write text "gco develop"
     write text "git pull"
     write text "NODE_ENV=alpha PUBLIC_API_HOST=http://localhost:5000 yarn run develop"
