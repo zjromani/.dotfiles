@@ -1,10 +1,10 @@
 " convert old ruby hash rocket syntax
 " %s/:\([^ ]*\)\(\s*\)=>/\1:/g
 
-set nocompatible " be iMproved
 execute pathogen#infect()
+set nocompatible " be iMproved
 set number
-colorscheme monokai-chris
+colorscheme monokai
 filetype plugin indent on
 " show existing tab with 2 spaces width
 set tabstop=2
@@ -24,7 +24,7 @@ set nowrap
 set autoread
 au CursorHold * checktime "auto read on file change
 set spell
-set guifont=Roboto\ Mono:h11
+set guifont=Menlo:h14
 set guioptions=
 
 let g:mustache_abbreviations = 1
