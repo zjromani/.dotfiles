@@ -191,7 +191,7 @@
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>1219 1050 400 129 0 0 3008 1669 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>1610 1322 620 392 0 0 3840 2137 </string>
+	<string>1610 1308 620 392 0 0 3840 2137 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>811 361 606 469 0 0 3840 2137 </string>
 	<key>NSWindow Frame SharedPreferences</key>
@@ -199,13 +199,13 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>127 443 592 584 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 56 1914 2081 0 0 3840 2137 </string>
+	<string>42 220 730 807 0 0 1680 1050 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>1920 56 1914 2081 0 0 3840 2137 </string>
+	<string>769 204 730 807 0 0 1680 1050 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>0 56 1914 2081 0 0 3840 2137 </string>
+	<string>1920 0 1918 2137 0 0 3840 2137 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>1599 624 730 792 0 0 3840 2137 </string>
+	<string>0 0 910 1027 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
 	<string>1081 293 1927 1376 0 0 3008 1669 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
@@ -910,15 +910,18 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
+		<string>3.3.2</string>
 		<string>3.2.9</string>
+		<string>3.3.1</string>
 		<string>3.3.0</string>
+		<string>3.3.3</string>
 	</array>
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
 		<string>{{0, 0}, {3840, 2160}}</string>
 		<key>topLeft</key>
-		<string>{736, 1179}</string>
+		<string>{673, 968}</string>
 	</dict>
 	<key>NoSyncHaveRequestedFullDiskAccess</key>
 	<true/>
@@ -927,7 +930,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>62481C36-B2F8-4FE9-BAE9-7BB08CB8078B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>1</integer>
+	<integer>34</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -1280,6 +1283,14 @@
 				<key>isTerminal</key>
 				<true/>
 				<key>name</key>
+				<string>currentTab.currentSession.termid</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
 				<string>currentTab.currentSession.terminalWindowName</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
@@ -1353,6 +1364,14 @@
 				<true/>
 				<key>name</key>
 				<string>currentTab.currentSession.path</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
+				<string>number</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
 			</dict>
@@ -1624,16 +1643,29 @@
 	<true/>
 	<key>NoSyncSearchHistory</key>
 	<array>
-		<string>access</string>
-		<string>custom</string>
-		<string>hid3</string>
-		<string>hide_if</string>
-		<string>main</string>
-		<string>state</string>
-		<string>comple</string>
-		<string>priceline</string>
-		<string>ENABLE_DATA_WAREHOUSINGh</string>
-		<string>ENABLE_DATAWAREHOUSING</string>
+		<string>giata</string>
+		<string>rate_co</string>
+		<string>hero</string>
+		<string>herok</string>
+		<string>heroku</string>
+		<string>status</string>
+		<string>rates.\\\</string>
+		<string>ratee</string>
+		<string>search-rates</string>
+		<string>rapid</string>
+	</array>
+	<key>NoSyncSearchHistory2</key>
+	<array>
+		<string>prod</string>
+		<string>guarante</string>
+		<string>gura</string>
+		<string>rates</string>
+		<string>sabre</string>
+		<string>suppp</string>
+		<string>qdev</string>
+		<string>holt</string>
+		<string>hold</string>
+		<string>sneakers::us</string>
 	</array>
 	<key>NoSyncSuppressBroadcastInputWarning</key>
 	<true/>
@@ -1691,11 +1723,11 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-08-07T06:03:17Z</date>
+	<date>2019-09-12T12:58:04Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
-	<true/>
+	<false/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>TabStyle</key>
@@ -1715,7 +1747,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.0</string>
+	<string>3.3.3</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
