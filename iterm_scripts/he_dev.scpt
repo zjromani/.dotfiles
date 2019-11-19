@@ -34,7 +34,7 @@ tell application "iTerm"
 
   tell fifth session of current tab of current window
     write text "/Users/zachromani/projects/he-api/"
-    write text "rails s"
+    write text "rails s -p 2000"
   end tell
 
   tell current window
