@@ -7,7 +7,6 @@
     ~/.gitconfig: gitconfig
     ~/.vimrc: vimrc
     ~/.zshrc: zshrc
-    ~/.atom: atom/
     ~/bin:
         path: bin/
         create: true
