@@ -4,6 +4,8 @@
 <dict>
 	<key>AppleAntiAliasingThreshold</key>
 	<integer>1</integer>
+	<key>ApplePressAndHoldEnabled</key>
+	<false/>
 	<key>AppleScrollAnimationEnabled</key>
 	<integer>0</integer>
 	<key>AppleSmoothFixedFontsSizeThreshold</key>
@@ -1663,7 +1665,7 @@
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>1219 1050 400 129 0 0 3008 1669 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>530 476 620 392 0 0 1680 1027 </string>
+	<string>-1270 588 620 392 -1920 0 1920 1177 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>811 361 606 469 0 0 3840 2137 </string>
 	<key>NSWindow Frame SharedPreferences</key>
@@ -1671,9 +1673,9 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>127 443 592 584 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1920 1177 0 0 1680 1027 </string>
+	<string>0 0 3840 2137 0 0 3840 2160 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>0 0 1680 1027 0 0 1680 1027 </string>
+	<string>0 0 1680 1027 0 0 3840 2137 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
 	<string>0 0 1680 1027 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
@@ -2385,13 +2387,14 @@
 	<key>NoSyncAllAppVersions</key>
 	<array>
 		<string>3.3.6</string>
-		<string>3.3.0</string>
+		<string>3.3.2</string>
+		<string>3.3.8</string>
 		<string>3.3.1</string>
 		<string>3.3.3</string>
 		<string>3.3.5</string>
 		<string>3.3.7</string>
 		<string>3.2.9</string>
-		<string>3.3.2</string>
+		<string>3.3.0</string>
 		<string>3.3.4</string>
 	</array>
 	<key>NoSyncFrame_SessionsPreferences</key>
@@ -2415,7 +2418,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>62481C36-B2F8-4FE9-BAE9-7BB08CB8078B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>145</integer>
+	<integer>167</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -3142,32 +3145,6 @@
 	</dict>
 	<key>NoSyncSaveDocumentAsPathSet_saveDocumentAs:</key>
 	<true/>
-	<key>NoSyncSearchHistory</key>
-	<array>
-		<string>giata</string>
-		<string>rate_co</string>
-		<string>hero</string>
-		<string>herok</string>
-		<string>heroku</string>
-		<string>status</string>
-		<string>rates.\\\</string>
-		<string>ratee</string>
-		<string>search-rates</string>
-		<string>rapid</string>
-	</array>
-	<key>NoSyncSearchHistory2</key>
-	<array>
-		<string>vali</string>
-		<string>rateAcc</string>
-		<string>supp</string>
-		<string>getRoomRates</string>
-		<string>excep</string>
-		<string>excp</string>
-		<string>error</string>
-		<string>user</string>
-		<string>exis</string>
-		<string>search</string>
-	</array>
 	<key>NoSyncSuppressBroadcastInputWarning</key>
 	<true/>
 	<key>NoSyncSuppressBroadcastInputWarning_selection</key>
@@ -3226,7 +3203,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-01-09T01:20:04Z</date>
+	<date>2020-02-05T14:55:45Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
@@ -3258,7 +3235,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.7</string>
+	<string>3.3.8</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
