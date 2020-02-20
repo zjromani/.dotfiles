@@ -1673,7 +1673,7 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>127 443 592 584 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 85 1680 942 0 0 1680 1027 </string>
+	<string>0 0 1680 1027 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>400 -5 1680 1026 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
@@ -2262,7 +2262,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>FiraMonoForPowerline-Regular 18</string>
+			<string>FiraMonoForPowerline-Regular 20</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -2390,14 +2390,14 @@
 	<array>
 		<string>3.3.6</string>
 		<string>3.3.8</string>
-		<string>3.3.4</string>
+		<string>3.2.9</string>
 		<string>3.3.1</string>
 		<string>3.3.3</string>
 		<string>3.3.5</string>
 		<string>3.3.7</string>
 		<string>3.3.0</string>
 		<string>3.3.2</string>
-		<string>3.2.9</string>
+		<string>3.3.4</string>
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
@@ -2425,7 +2425,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>62481C36-B2F8-4FE9-BAE9-7BB08CB8078B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>172</integer>
+	<integer>173</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
