@@ -3,6 +3,7 @@ tell application "iTerm"
     write text "/Users/zachromani/projects/he-api/"
     write text "brew services start rabbitmq"
     write text "brew services start redis"
+    write text "redis-server"
 
     split horizontally with default profile
   end tell
