@@ -20,6 +20,7 @@ ln -s /Users/zachromani/.dotfiles/vimrc /Users/zachromani/.vimrc
 
 - Install
   - pathogen
+  - [color schemes](https://github.com/flazz/vim-colorschemes)
   - nerdtree
   - ctrl-p
   - vim-rails
