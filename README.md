@@ -2,13 +2,11 @@
 
 ## Setup
 
-`~/git clone`
+`~/git clone https://github.com/zjromani/.dotfiles.git`
 
 ### Sym Links
 
-```
-ln -s /Users/zachromani/.dotfiles/bin /Users/zachromani/bin
-
+```bash
 ln -s /Users/zachromani/.dotfiles/iterm_profile /Users/zachromani/iterm_profile
 
 ln -s /Users/zachromani/.dotfiles/psqlrc /Users/zachromani/.psqlrc
