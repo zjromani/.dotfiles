@@ -1,8 +1,0 @@
---ignore-dir=.idea/
---ignore-dir=node_modules
---ignore-dir=tmp
---ignore-dir=log
---ignore-dir=xml
---ignore-dir=docs
---ignore-file=is:examples.txt
---ignore-file=is:.byebug_history
