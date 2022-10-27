@@ -7,11 +7,19 @@
 ### Sym Links
 
 ```bash
-ln -s /Users/zachromani/.dotfiles/iterm_profile /Users/zachromani/iterm_profile
-
 ln -s /Users/zachromani/.dotfiles/psqlrc /Users/zachromani/.psqlrc
 
 ln -s /Users/zachromani/.dotfiles/vimrc /Users/zachromani/.vimrc
+
+ln -s /Users/zachromani/.dotfiles/iterm_profile /Users/zachromani/iterm_profile
+```
+
+## Iterm
+
+After you `ln` iterm_profile:
+
+```
+Open iterm -> setting -> preferences -> √ load settings from folder -> select home directory
 ```
 
 ### Vim Config
