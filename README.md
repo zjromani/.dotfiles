@@ -10,12 +10,15 @@
 ln -s $HOME/.dotfiles/psqlrc $HOME/.psqlrc
 
 ln -s $HOME/.dotfiles/vimrc $HOME/.vimrc
-
-ln -s $HOME/.dotfiles/iterm_profile $HOME/iterm_profile
 ```
 
 ## Iterm
 
+Iterm setting dont seem to work with sym links. Instead, you can manually point the config setting to this repo locally
+
+```
+Open iterm -> setting -> preferences -> √ load settings from folder -> $HOME/.dotfiles/iterm_profile
+```
 
 ### Vim Config
 
