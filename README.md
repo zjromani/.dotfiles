@@ -7,22 +7,27 @@
 ### Sym Links
 
 ```bash
-ln -s /Users/zachromani/.dotfiles/psqlrc /Users/zachromani/.psqlrc
+ln -s $HOME/.dotfiles/psqlrc $HOME/.psqlrc
 
-ln -s /Users/zachromani/.dotfiles/vimrc /Users/zachromani/.vimrc
+ln -s $HOME/.dotfiles/vimrc $HOME/.vimrc
 
-ln -s /Users/zachromani/.dotfiles/iterm_profile /Users/zachromani/iterm_profile
+ln -s $HOME/.dotfiles/iterm_profile $HOME/iterm_profile
 ```
 
 ## Iterm
 
-After you `ln` iterm_profile:
-
-```
-Open iterm -> setting -> preferences -> √ load settings from folder -> select home directory
-```
 
 ### Vim Config
+
+```bash
+# install pathogen first
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
+git clone https://github.com/preservim/nerdtree.git ~/.vim/bundle/nerdtree
+git clone https://github.com/flazz/vim-colorschemes.git ~/.vim/bundle/colorschemes
+git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
+```
 
 - Install
   - pathogen
