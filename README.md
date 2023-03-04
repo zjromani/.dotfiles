@@ -10,9 +10,14 @@
 ln -s $HOME/.dotfiles/psqlrc $HOME/.psqlrc
 
 ln -s $HOME/.dotfiles/vimrc $HOME/.vimrc
+ln -s $HOME/.dotfiles/gitconfig $HOME/.gitconfig
 ```
 
-## Iterm
+### Git
+
+Managing .gitconfig via this repo. The config then points to a hooks directory found inside `dot-config` which is also managed in this project to maintain consistency.
+
+### Iterm
 
 Iterm setting dont seem to work with sym links. Instead, you can manually point the config setting to this repo locally
 

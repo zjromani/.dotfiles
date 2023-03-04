@@ -1,10 +1,8 @@
 " convert old ruby hash rocket syntax
 " %s/:\([^ ]*\)\(\s*\)=>/\1:/g
 
-execute pathogen#infect()
 set nocompatible " be iMproved
 set number
-colorscheme angr
 filetype plugin indent on
 " show existing tab with 2 spaces width
 set tabstop=2

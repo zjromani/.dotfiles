@@ -1477,6 +1477,10 @@
 	</dict>
 	<key>Default Bookmark Guid</key>
 	<string>CF16B9C8-D1C4-475F-B706-CB1B893559C5</string>
+	<key>DisableFullscreenTransparency</key>
+	<false/>
+	<key>EnableAPIServer</key>
+	<true/>
 	<key>GlobalKeyMap</key>
 	<dict>
 		<key>0x5a-0x120000</key>
@@ -1493,20 +1497,6 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x6a-0x40000</key>
-		<dict>
-			<key>Action</key>
-			<integer>2</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0x6b-0x40000</key>
-		<dict>
-			<key>Action</key>
-			<integer>0</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
 		<key>0x70-0x100000-0x23</key>
 		<dict>
 			<key>Action</key>
@@ -1515,20 +1505,6 @@
 			<string></string>
 			<key>Text</key>
 			<string></string>
-		</dict>
-		<key>0x79-0x40000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>0x0C 0x10 0x0d</string>
-		</dict>
-		<key>0x7a-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>11</integer>
-			<key>Text</key>
-			<string>Send Hex Codes: 0x1f</string>
 		</dict>
 		<key>0x7f-0x100000</key>
 		<dict>
@@ -1572,12 +1548,16 @@
 			<key>Text</key>
 			<string>Send Hex Codes: 0x01</string>
 		</dict>
-		<key>0xf702-0x320000</key>
+		<key>0xf702-0x380000-0x7b</key>
 		<dict>
 			<key>Action</key>
-			<integer>33</integer>
+			<integer>2</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
 		<key>0xf703-0x300000</key>
 		<dict>
@@ -1586,15 +1566,21 @@
 			<key>Text</key>
 			<string>Send Hex Codes: 0x05</string>
 		</dict>
-		<key>0xf703-0x320000</key>
+		<key>0xf703-0x380000-0x7c</key>
 		<dict>
 			<key>Action</key>
-			<integer>34</integer>
+			<integer>0</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>HapticFeedbackForEsc</key>
+	<false/>
+	<key>HideScrollbar</key>
 	<false/>
 	<key>HideTab</key>
 	<true/>
@@ -2367,6 +2353,8 @@
 	<integer>1</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
+	<key>UseBorder</key>
+	<false/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>WordCharacters</key>
