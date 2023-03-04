@@ -11,10 +11,9 @@ cd ~/.dotfiles
 
 stow --adopt -v --dotfiles -t ~/.config/ dot-config
 
-ln -s $HOME/.dotfiles/psqlrc $HOME/.psqlrc
-
-ln -s $HOME/.dotfiles/vimrc $HOME/.vimrc
-ln -s $HOME/.dotfiles/gitconfig $HOME/.gitconfig
+stow psqlrc
+stow vimrc
+stow gitconfig
 ```
 
 
