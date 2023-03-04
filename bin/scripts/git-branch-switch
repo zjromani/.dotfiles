@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+branch=$(git branch --sort=committerdate | fzf | xargs)
+
+git checkout "$branch"

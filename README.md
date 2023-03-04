@@ -4,18 +4,19 @@
 
 `~/git clone https://github.com/zjromani/.dotfiles.git`
 
-### Sym Links
+### Sym Links with Stow
 
 ```bash
+cd ~/.dotfiles 
+
+stow --adopt -v --dotfiles -t ~/.config/ dot-config
+
 ln -s $HOME/.dotfiles/psqlrc $HOME/.psqlrc
 
 ln -s $HOME/.dotfiles/vimrc $HOME/.vimrc
 ln -s $HOME/.dotfiles/gitconfig $HOME/.gitconfig
 ```
 
-### Git
-
-Managing .gitconfig via this repo. The config then points to a hooks directory found inside `dot-config` which is also managed in this project to maintain consistency.
 
 ### Iterm
 
