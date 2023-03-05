@@ -10,10 +10,11 @@
 cd ~/.dotfiles 
 
 stow --adopt -v --dotfiles -t ~/.config/ dot-config
-
 stow psqlrc
 stow vimrc
 stow gitconfig
+stow tmux
+stow zsh
 ```
 
 
