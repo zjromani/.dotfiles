@@ -22,9 +22,9 @@ stow zsh
 
 Iterm setting dont seem to work with sym links. Instead, you can manually point the config setting to this repo locally
 
-```
-Open iterm -> setting -> preferences -> √ load settings from folder -> $HOME/.dotfiles/iterm_profile
-```
+
+> Open iterm -> setting -> preferences -> √ load settings from folder -> $HOME/.dotfiles/iterm_profile
+
 
 ### Vim Config
 
