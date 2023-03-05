@@ -8,9 +8,6 @@ export HOMEBREW_PREFIX="$(brew --prefix)"
 
 DISABLE_MAGIC_FUNCTIONS=true
 
-bindkey -s ^f "tmux-sessionizer\n"
-bindkey -s ^g "git-branch-switch\n"
-
 # If you come from bash you might have to change your $PATH.
 #export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -124,6 +121,9 @@ export RAILS_EAGER_LOAD_TEST=false
 # FOR NODE TEST public-api
 export CLOUDAMQP_URL=amqp://localhost
 export NODE_ENV=development
+
+bindkey -s ^g "git-branch-switch\n"
+bindkey -s ^f "tmux-sessionizer\n"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
