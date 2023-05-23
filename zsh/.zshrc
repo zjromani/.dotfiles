@@ -160,6 +160,8 @@ load-nvmrc
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+export PATH="$PATH:$HOME/.cargo/bin"
+
 # add .dotfile scripts to path
 export PATH="$PATH:$HOME/.dotfiles/bin/scripts"
 
