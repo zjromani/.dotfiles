@@ -65,6 +65,7 @@ export EDITOR='nvim'
 alias vimrc="nvim ~/.vimrc"
 alias jsontidy="pbpaste | jq '.' | pbcopy"
 alias vim="nvim"
+alias k="kubectl"
 
 alias unfuck-turbo="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
 alias zrc="nvim ~/.zshrc"
@@ -80,12 +81,12 @@ alias dots="~/.dotfiles"
 alias t="bundle exec rspec"
 alias sp="spring rspec"
 alias h="heroku"
-alias rprodsql="heroku pg:psql postgresql-clear-51558 --app he-api"
+#alias rprodsql="heroku pg:psql postgresql-clear-51558 --app he-api"
 alias guards="bundle exec guard -G Guardfile.spring"
-alias wprodsql="heroku pg:psql postgresql-parallel-53332 --app he-public-api"
-alias rstagesql="heroku pg:psql postgresql-adjacent-00545 --app he-api-staging"
-alias wstagesql="heroku pg:psql postgresql-horizontal-38842 --app he-api-staging"
-alias wsandsql="heroku pg:psql postgresql-fitted-33271 --app he-public-api-sandbox"
+#alias wprodsql="heroku pg:psql postgresql-parallel-53332 --app he-public-api"
+#alias rstagesql="heroku pg:psql postgresql-adjacent-00545 --app he-api-staging"
+#alias wstagesql="heroku pg:psql postgresql-horizontal-38842 --app he-api-staging"
+#alias wsandsql="heroku pg:psql postgresql-fitted-33271 --app he-public-api-sandbox"
 alias hrailsc='h run rails console --app he-api'
 alias rs='rails s'
 alias rc='rails c'
@@ -98,8 +99,8 @@ alias prod_tail="heroku logs -a he-api --tail"
 alias stage_tail="h logs -a he-api-staging --tail"
 alias rake='noglob rake'
 alias desk='~/Desktop/'
-alias ever='code /Users/$HOME/Desktop/ever'
-alias note='mvim /Users/$HOME/Desktop/ever/general.md'
+#alias ever='code /Users/$HOME/Desktop/ever'
+#alias note='mvim /Users/$HOME/Desktop/ever/general.md'
 alias gcm='gco main'
 
 # Alchemists: https://www.alchemists.io/projects/dotfiles/#_aliases
@@ -155,9 +156,6 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH="$PATH:$HOME/.cargo/bin"
@@ -167,3 +165,9 @@ export PATH="$PATH:$HOME/.dotfiles/bin/scripts"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
