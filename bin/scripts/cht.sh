@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-languages=$(echo "ruby typescript rust cpp golang c javascript aws" | tr " " "\n")
+languages=$(echo "kotlin ruby typescript rust cpp golang c javascript aws" | tr " " "\n")
 core_utils=$(echo "find xargs sed awk" | tr " " "\n")
 
 selected=$(echo -e "$languages\n$core_utils" | fzf)
