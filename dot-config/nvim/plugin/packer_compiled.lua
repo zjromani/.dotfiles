@@ -75,7 +75,7 @@ time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
   ["CopilotChat.nvim"] = {
-    config = { "\27LJ\2\n=\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\16CopilotChat\frequire\0" },
+    config = { "\27LJ\2\nl\0\0\5\0\a\0\0146\0\0\0009\0\1\0009\0\2\0'\2\3\0B\0\2\2\6\0\4\0X\1\6€6\1\0\0009\1\5\1'\3\6\0\18\4\0\0&\3\4\3B\1\2\1K\0\1\0\17CopilotChat \bcmd\5\18Ask Copilot: \ninput\afn\bvimÑ\1\1\0\6\0\f\0\0176\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\0013\0\3\0007\0\4\0006\0\5\0009\0\6\0009\0\a\0'\2\b\0'\3\t\0'\4\n\0005\5\v\0B\0\5\1K\0\1\0\1\0\2\vsilent\2\fnoremap\2$<cmd>lua CopilotChatInput()<CR>\16<leader>cci\6n\20nvim_set_keymap\bapi\bvim\21CopilotChatInput\0\nsetup\16CopilotChat\frequire\0" },
     loaded = true,
     path = "/Users/zacharyromani/.local/share/nvim/site/pack/packer/start/CopilotChat.nvim",
     url = "https://github.com/CopilotC-Nvim/CopilotChat.nvim"
@@ -112,7 +112,7 @@ _G.packer_plugins = {
   },
   ["copilot.lua"] = {
     commands = { "Copilot" },
-    config = { "\27LJ\2\n„\4\0\0\5\0\16\0\0216\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\4\0=\4\5\0035\4\6\0=\4\a\3=\3\t\0025\3\n\0005\4\v\0=\4\5\3=\3\f\0025\3\r\0=\3\14\0024\3\0\0=\3\15\2B\0\2\1K\0\1\0\26server_opts_overrides\14filetypes\1\0\t\tyaml\2\6.\1\bcvs\1\bsvn\1\rhgcommit\1\14gitrebase\1\14gitcommit\1\thelp\1\rmarkdown\2\15suggestion\1\0\6\16accept_word\1\tnext\n<M-]>\fdismiss\n<C-]>\vaccept\n<M-l>\tprev\n<M-[>\16accept_line\1\1\0\3\17auto_trigger\2\rdebounce\3K\fenabled\2\npanel\1\0\1\25copilot_node_command\tnode\vlayout\1\0\2\nratio\4š³æÌ\t™³æþ\3\rposition\vbottom\vkeymap\1\0\5\vaccept\t<CR>\14jump_prev\a[[\topen\v<M-CR>\frefresh\agr\14jump_next\a]]\1\0\2\17auto_refresh\1\fenabled\2\nsetup\fcopilot\frequire\0" },
+    config = { "\27LJ\2\n„\4\0\0\5\0\16\0\0216\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\4\0=\4\5\0035\4\6\0=\4\a\3=\3\t\0025\3\n\0005\4\v\0=\4\5\3=\3\f\0025\3\r\0=\3\14\0024\3\0\0=\3\15\2B\0\2\1K\0\1\0\26server_opts_overrides\14filetypes\1\0\t\thelp\1\rmarkdown\2\tyaml\2\6.\1\bcvs\1\bsvn\1\rhgcommit\1\14gitrebase\1\14gitcommit\1\15suggestion\1\0\6\fdismiss\n<C-]>\16accept_line\1\16accept_word\1\tnext\n<M-]>\vaccept\n<M-l>\tprev\n<M-[>\1\0\3\fenabled\2\17auto_trigger\2\rdebounce\3K\npanel\1\0\1\25copilot_node_command\tnode\vlayout\1\0\2\nratio\4š³æÌ\t™³æþ\3\rposition\vbottom\vkeymap\1\0\5\14jump_next\a]]\topen\v<M-CR>\14jump_prev\a[[\frefresh\agr\vaccept\t<CR>\1\0\2\fenabled\2\17auto_refresh\1\nsetup\fcopilot\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -219,10 +219,6 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: CopilotChat.nvim
-time([[Config for CopilotChat.nvim]], true)
-try_loadstring("\27LJ\2\n=\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\16CopilotChat\frequire\0", "config", "CopilotChat.nvim")
-time([[Config for CopilotChat.nvim]], false)
 -- Config for: telescope-frecency.nvim
 time([[Config for telescope-frecency.nvim]], true)
 try_loadstring("\27LJ\2\nM\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0'\2\3\0B\0\2\1K\0\1\0\rfrecency\19load_extension\14telescope\frequire\0", "config", "telescope-frecency.nvim")
@@ -231,6 +227,10 @@ time([[Config for telescope-frecency.nvim]], false)
 time([[Config for monokai-pro]], true)
 try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16monokai-pro\frequire\0", "config", "monokai-pro")
 time([[Config for monokai-pro]], false)
+-- Config for: CopilotChat.nvim
+time([[Config for CopilotChat.nvim]], true)
+try_loadstring("\27LJ\2\nl\0\0\5\0\a\0\0146\0\0\0009\0\1\0009\0\2\0'\2\3\0B\0\2\2\6\0\4\0X\1\6€6\1\0\0009\1\5\1'\3\6\0\18\4\0\0&\3\4\3B\1\2\1K\0\1\0\17CopilotChat \bcmd\5\18Ask Copilot: \ninput\afn\bvimÑ\1\1\0\6\0\f\0\0176\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\0013\0\3\0007\0\4\0006\0\5\0009\0\6\0009\0\a\0'\2\b\0'\3\t\0'\4\n\0005\5\v\0B\0\5\1K\0\1\0\1\0\2\vsilent\2\fnoremap\2$<cmd>lua CopilotChatInput()<CR>\16<leader>cci\6n\20nvim_set_keymap\bapi\bvim\21CopilotChatInput\0\nsetup\16CopilotChat\frequire\0", "config", "CopilotChat.nvim")
+time([[Config for CopilotChat.nvim]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)

@@ -7,6 +7,7 @@ vim.keymap.set("n", "_", "ddp")
 vim.keymap.set("n", "H", "^")
 vim.keymap.set("n", "L", "$")
 
+
 vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -35,3 +36,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("i", "jk", "<Esc>")
 
 
+--Copilot
+vim.keymap.set('n', '<leader>ci', ':CopilotChat ', {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>cb', ':CopilotChatBuffer Explain ', {noremap = true, silent = true})
+vim.keymap.set("v", "<leader>ce", ":y<CR>:CopilotChatExplain<CR>")
