@@ -7,6 +7,7 @@ require'nvim-treesitter.configs'.setup {
     "lua",
     "rust",
     "markdown",
+    "mermaid",
     "kotlin",
     "java",
     "proto",

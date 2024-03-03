@@ -22,14 +22,13 @@ return require('packer').startup(function(use)
     requires = {"kkharji/sqlite.lua"}
   }
 
-  use({
-    'rose-pine/neovim',
-    as = 'rose-pine',
+  use {
+    "loctvl842/monokai-pro.nvim",
+    as = "monokai-pro",
     config = function()
-      require("rose-pine").setup()
-      vim.cmd('colorscheme rose-pine')
+      require("monokai-pro").setup()
     end
-  })
+  }
 
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})
   use("nvim-treesitter/playground")
@@ -94,8 +93,8 @@ return require('packer').startup(function(use)
           },
         },
         filetypes = {
-          yaml = false,
-          markdown = false,
+          yaml = true,
+          markdown = true,
           help = false,
           gitcommit = false,
           gitrebase = false,
@@ -110,11 +109,9 @@ return require('packer').startup(function(use)
     end,
   }
 
-  -- install without yarn or npm
   use({
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
   })
 
-  use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 end)
