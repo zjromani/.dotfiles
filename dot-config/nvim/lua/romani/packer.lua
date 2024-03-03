@@ -31,15 +31,6 @@ return require('packer').startup(function(use)
     end
   })
 
-  use {
-    "Al0den/notion.nvim",
-    requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
-    after = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require"notion".setup()
-    end
-  }
-
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})
   use("nvim-treesitter/playground")
   use("theprimeagen/harpoon")
@@ -118,4 +109,12 @@ return require('packer').startup(function(use)
       })
     end,
   }
+
+  -- install without yarn or npm
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+  })
+
+  use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 end)
