@@ -164,6 +164,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 export PATH="$PATH:$HOME/.cargo/bin"
 
+export PATH="/usr/local/opt/python@3.12/bin:$PATH"
+
 # add .dotfile scripts to path
 export PATH="$PATH:$HOME/.dotfiles/bin/scripts"
 
