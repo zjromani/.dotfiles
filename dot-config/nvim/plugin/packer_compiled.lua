@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.1703358377/share/lua/5.1/?.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.1703358377/share/lua/5.1/?/init.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.1703358377/lib/luarocks/rocks-5.1/?.lua;/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.1703358377/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/zacharyromani/.cache/nvim/packer_hererocks/2.1.1703358377/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -75,7 +75,7 @@ time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
   ["CopilotChat.nvim"] = {
-    config = { "\27LJ\2\n\127\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0]Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.\vnotify\bvimô\3\1\0\6\0\v\0\0176\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\3\0005\4\4\0=\4\5\0033\4\6\0=\4\a\0034\4\3\0005\5\b\0>\5\1\0045\5\t\0>\5\2\4=\4\n\3B\1\2\1K\0\1\0\17dependencies\1\2\0\0\26nvim-lua/plenary.nvim\1\2\0\0\"nvim-telescope/telescope.nvim\nbuild\0\fprompts\1\0\4\nTestsKBriefly explain how the selected code works, then generate unit tests.\vReview?Review the following code and provide concise suggestions.\rRefactor:Refactor the code to improve clarity and readability.\fExplain.Explain how it works by English language.\1\0\4\ndebug\2\nevent\rVeryLazy\nproxy\v******\14show_help\byes\nsetup\16CopilotChat\frequire\0" },
+    config = { "\27LJ\2\n\127\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0]Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.\vnotify\bvimô\3\1\0\6\0\v\0\0176\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\3\0005\4\4\0=\4\5\0033\4\6\0=\4\a\0034\4\3\0005\5\b\0>\5\1\0045\5\t\0>\5\2\4=\4\n\3B\1\2\1K\0\1\0\17dependencies\1\2\0\0\26nvim-lua/plenary.nvim\1\2\0\0\"nvim-telescope/telescope.nvim\nbuild\0\fprompts\1\0\4\rRefactor:Refactor the code to improve clarity and readability.\nTestsKBriefly explain how the selected code works, then generate unit tests.\vReview?Review the following code and provide concise suggestions.\fExplain.Explain how it works by English language.\1\0\4\14show_help\byes\nproxy\v******\nevent\rVeryLazy\ndebug\2\nsetup\16CopilotChat\frequire\0" },
     loaded = true,
     path = "/Users/zacharyromani/.local/share/nvim/site/pack/packer/start/CopilotChat.nvim",
     url = "https://github.com/CopilotC-Nvim/CopilotChat.nvim"
@@ -112,7 +112,7 @@ _G.packer_plugins = {
   },
   ["copilot.lua"] = {
     commands = { "Copilot" },
-    config = { "\27LJ\2\n„\4\0\0\5\0\16\0\0216\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\4\0=\4\5\0035\4\6\0=\4\a\3=\3\t\0025\3\n\0005\4\v\0=\4\5\3=\3\f\0025\3\r\0=\3\14\0024\3\0\0=\3\15\2B\0\2\1K\0\1\0\26server_opts_overrides\14filetypes\1\0\t\6.\1\bcvs\1\bsvn\1\rhgcommit\1\14gitrebase\1\14gitcommit\1\thelp\1\rmarkdown\2\tyaml\2\15suggestion\1\0\6\tnext\n<M-]>\16accept_word\1\16accept_line\1\tprev\n<M-[>\fdismiss\n<C-]>\vaccept\n<M-l>\1\0\3\17auto_trigger\2\rdebounce\3K\fenabled\2\npanel\1\0\1\25copilot_node_command\tnode\vlayout\1\0\2\rposition\vbottom\nratio\4š³æÌ\t™³æþ\3\vkeymap\1\0\5\frefresh\agr\topen\v<M-CR>\14jump_next\a]]\14jump_prev\a[[\vaccept\t<CR>\1\0\2\17auto_refresh\1\fenabled\2\nsetup\fcopilot\frequire\0" },
+    config = { "\27LJ\2\n„\4\0\0\5\0\16\0\0216\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\4\0=\4\5\0035\4\6\0=\4\a\3=\3\t\0025\3\n\0005\4\v\0=\4\5\3=\3\f\0025\3\r\0=\3\14\0024\3\0\0=\3\15\2B\0\2\1K\0\1\0\26server_opts_overrides\14filetypes\1\0\t\bsvn\1\14gitcommit\1\6.\1\14gitrebase\1\rmarkdown\2\thelp\1\tyaml\2\rhgcommit\1\bcvs\1\15suggestion\1\0\6\tprev\n<M-[>\16accept_line\1\fdismiss\n<C-]>\16accept_word\1\vaccept\n<M-l>\tnext\n<M-]>\1\0\3\rdebounce\3K\17auto_trigger\2\fenabled\2\npanel\1\0\1\25copilot_node_command\tnode\vlayout\1\0\2\rposition\vbottom\nratio\4š³æÌ\t™³æþ\3\vkeymap\1\0\5\14jump_next\a]]\topen\v<M-CR>\frefresh\agr\vaccept\t<CR>\14jump_prev\a[[\1\0\2\fenabled\2\17auto_refresh\1\nsetup\fcopilot\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -219,18 +219,18 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: CopilotChat.nvim
-time([[Config for CopilotChat.nvim]], true)
-try_loadstring("\27LJ\2\n\127\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0]Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.\vnotify\bvimô\3\1\0\6\0\v\0\0176\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\3\0005\4\4\0=\4\5\0033\4\6\0=\4\a\0034\4\3\0005\5\b\0>\5\1\0045\5\t\0>\5\2\4=\4\n\3B\1\2\1K\0\1\0\17dependencies\1\2\0\0\26nvim-lua/plenary.nvim\1\2\0\0\"nvim-telescope/telescope.nvim\nbuild\0\fprompts\1\0\4\nTestsKBriefly explain how the selected code works, then generate unit tests.\vReview?Review the following code and provide concise suggestions.\rRefactor:Refactor the code to improve clarity and readability.\fExplain.Explain how it works by English language.\1\0\4\ndebug\2\nevent\rVeryLazy\nproxy\v******\14show_help\byes\nsetup\16CopilotChat\frequire\0", "config", "CopilotChat.nvim")
-time([[Config for CopilotChat.nvim]], false)
--- Config for: telescope-frecency.nvim
-time([[Config for telescope-frecency.nvim]], true)
-try_loadstring("\27LJ\2\nM\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0'\2\3\0B\0\2\1K\0\1\0\rfrecency\19load_extension\14telescope\frequire\0", "config", "telescope-frecency.nvim")
-time([[Config for telescope-frecency.nvim]], false)
 -- Config for: monokai-pro
 time([[Config for monokai-pro]], true)
 try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16monokai-pro\frequire\0", "config", "monokai-pro")
 time([[Config for monokai-pro]], false)
+-- Config for: telescope-frecency.nvim
+time([[Config for telescope-frecency.nvim]], true)
+try_loadstring("\27LJ\2\nM\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0'\2\3\0B\0\2\1K\0\1\0\rfrecency\19load_extension\14telescope\frequire\0", "config", "telescope-frecency.nvim")
+time([[Config for telescope-frecency.nvim]], false)
+-- Config for: CopilotChat.nvim
+time([[Config for CopilotChat.nvim]], true)
+try_loadstring("\27LJ\2\n\127\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0]Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.\vnotify\bvimô\3\1\0\6\0\v\0\0176\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\3\0005\4\4\0=\4\5\0033\4\6\0=\4\a\0034\4\3\0005\5\b\0>\5\1\0045\5\t\0>\5\2\4=\4\n\3B\1\2\1K\0\1\0\17dependencies\1\2\0\0\26nvim-lua/plenary.nvim\1\2\0\0\"nvim-telescope/telescope.nvim\nbuild\0\fprompts\1\0\4\rRefactor:Refactor the code to improve clarity and readability.\nTestsKBriefly explain how the selected code works, then generate unit tests.\vReview?Review the following code and provide concise suggestions.\fExplain.Explain how it works by English language.\1\0\4\14show_help\byes\nproxy\v******\nevent\rVeryLazy\ndebug\2\nsetup\16CopilotChat\frequire\0", "config", "CopilotChat.nvim")
+time([[Config for CopilotChat.nvim]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
