@@ -102,6 +102,7 @@ alias desk='~/Desktop/'
 #alias ever='code /Users/$HOME/Desktop/ever'
 #alias note='mvim /Users/$HOME/Desktop/ever/general.md'
 alias gcm='gco main'
+alias gcp='git-pull-switch'
 
 # Alchemists: https://www.alchemists.io/projects/dotfiles/#_aliases
 alias glt='git for-each-ref --sort=taggerdate --color --format="%(color:yellow)%(refname:short)%(color:reset)|%(taggerdate:short)|%(color:blue)%(color:bold)%(*authorname)%(color:reset)|%(subject)" refs/tags | column -s"|" -t'
@@ -109,20 +110,12 @@ alias gtagv='git tag --verify'
 alias ruba="git ls-files -m | xargs ls -1 2>/dev/null | grep '\.rb$' | xargs rubocop -a"
 alias cpymsg='cat .git/COMMIT_EDITMSG | grep --invert-match "^\#.*" | pbcopy'
 
-export HE_DB_USERNAME=$USER
-export HE_DB_DEVELOPMENT=he_api
+# Load sensitive environment variables if the file exists
+if [[ -f $HOME/.zshenv_private ]]; then
+  source $HOME/.zshenv_private
+fi
 
-# export DATABASE_URL=he_api
-export HE_DB_TEST=he_api_test
-export CLOUDAMQP_URL=amqp://localhost
-export ALLOWED_CORS_DOMAINS="localhost:,he-members-staging-br-"
-export RACK_ENV=development
-export RAILS_EAGER_LOAD_TEST=false
-
-# FOR NODE TEST public-api
-export CLOUDAMQP_URL=amqp://localhost
-export NODE_ENV=development
-
+# BIND KEYS FOR CUSTOM SCRIPTS
 bindkey -s ^g "git-branch-switch\n"
 bindkey -s ^f "tmux-sessionizer\n"
 

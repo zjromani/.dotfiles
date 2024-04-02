@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This script checks out a given branch from a Git repository.
+# If the branch does not exist locally, it attempts to fetch from the remote
+# and tries the checkout again.
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <branch>"
+    exit 1
+fi
+
+BRANCH_NAME=$1
+
+git checkout $BRANCH_NAME
+
+if [ $? -eq 0 ]; then
+  echo "Switched to branch $BRANCH_NAME"
+else
+  echo "Branch $BRANCH_NAME does not exist locally. Attempting to fetch from remote..."
+  git fetch --prune
+  git checkout $BRANCH_NAME
+  if [ $? -eq 0 ]; then
+    echo "Switched to branch $BRANCH_NAME"
+  else
+    echo "Branch $BRANCH_NAME does not exist in the remote repository."
+  fi
+fi
