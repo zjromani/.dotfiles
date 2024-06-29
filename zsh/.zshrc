@@ -1,5 +1,3 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
@@ -54,8 +52,7 @@ ZSH_THEME="robbyrussell"
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="yyyy/mm/dd"
 
-# I'm using "Fig terminal" instead of zsh auto suggestions
-# zsh-autosuggestions
+#zsh-autosuggestions
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
@@ -90,6 +87,7 @@ alias guards="bundle exec guard -G Guardfile.spring"
 alias hrailsc='h run rails console --app he-api'
 alias rs='rails s'
 alias rc='rails c'
+alias glog='git log --since="3 weeks ago" --date=relative --pretty=format:"%h%x09%ar%x09%an%x09%s%x09https://github.com/HotelEngine/$(basename $(pwd))/commit/%H%n%b" | column -t -s $'\''\t'\'
 alias gpr='git pull-request -o'
 alias grec='git branch --sort=committerdate'
 alias topo='top -o mem'
@@ -102,7 +100,7 @@ alias desk='~/Desktop/'
 #alias ever='code /Users/$HOME/Desktop/ever'
 #alias note='mvim /Users/$HOME/Desktop/ever/general.md'
 alias gcm='gco main'
-alias gcp='git-pull-switch'
+alias gsw='git-pull-switch'
 
 # Alchemists: https://www.alchemists.io/projects/dotfiles/#_aliases
 alias glt='git for-each-ref --sort=taggerdate --color --format="%(color:yellow)%(refname:short)%(color:reset)|%(taggerdate:short)|%(color:blue)%(color:bold)%(*authorname)%(color:reset)|%(subject)" refs/tags | column -s"|" -t'
@@ -165,8 +163,30 @@ export PATH="$PATH:$HOME/.dotfiles/bin/scripts"
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
-
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
