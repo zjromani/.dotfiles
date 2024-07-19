@@ -71,9 +71,6 @@ alias sourcez="source ~/.zshrc"
 alias rpid="lsof -wni tcp:3000"
 alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
 alias he_debug="osascript ~/.dotfiles/iterm_scripts/he_debug.scpt"
-alias a="~/work/he-api"
-alias r="~/work/he-relay"
-alias m="~/work/microservices"
 alias dots="~/.dotfiles"
 alias t="bundle exec rspec"
 alias sp="spring rspec"
@@ -87,7 +84,7 @@ alias guards="bundle exec guard -G Guardfile.spring"
 alias hrailsc='h run rails console --app he-api'
 alias rs='rails s'
 alias rc='rails c'
-alias glog='git log --since="3 weeks ago" --date=relative --pretty=format:"%h%x09%ar%x09%an%x09%s%x09https://github.com/HotelEngine/$(basename $(pwd))/commit/%H%n%b" | column -t -s $'\''\t'\'
+alias glog='git log --oneline --decorate --graph --since="3 weeks ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)https://github.com/HotelEngine/engine-booking-api/commit/%H%C(reset)"'
 alias gpr='git pull-request -o'
 alias grec='git branch --sort=committerdate'
 alias topo='top -o mem'

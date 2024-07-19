@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# Jira credentials and URL
+JIRA_URL="https://hotelengine.atlassian.net"
+JIRA_USERNAME="zach.romani@hotelengine.com"
+JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+PROJECT_KEY="Engine"
+
+# JQL query to get issues updated in the last 7 days
+JQL='project = Engine AND "Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 AND updated >= -7d ORDER BY updated DESC'
+
+# Fields to retrieve
+FIELDS='["key","summary","status","assignee","description","created","updated","resolution","priority","issuetype","reporter","customfield_10000","customfield_10041"]' # customfield_10041 is the field ID for Acceptance Criteria
+
+# JSON payload
+JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields "$FIELDS" '
+{
+  jql: $jql,
+  startAt: 0,
+  maxResults: 50,
+  fields: $fields
+}')
+
+# Fetch Jira issues
+RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data "${JSON_PAYLOAD}" \
+    ${JIRA_URL}/rest/api/2/search)
+
+# Check if the request was successful
+if [ $? -ne 0 ]; then
+    echo "Failed to fetch issues"
+    exit 1
+fi
+
+# Parse the JSON response
+ISSUES=$(echo "${RESPONSE}" | jq '.issues')
+
+# Check if ISSUES is null or empty
+if [ "${ISSUES}" == "null" ] || [ -z "${ISSUES}" ]; then
+    echo "No issues found or failed to parse response."
+    exit 1
+fi
+
+# Function to check if an issue was closed in the last 7 days using Python
+issue_closed_in_last_7_days() {
+    local issue_key=$1
+    local changelog=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}?expand=changelog" | jq -r '.changelog.histories[] | select(.items[] | .field == "status" and .toString == "Closed") | .created')
+
+    # Check if any of the changelog entries are within the last 7 days using Python
+    local result=$(python3 -c "
+import sys
+from datetime import datetime, timedelta, timezone
+
+change_dates = sys.argv[1:]
+seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+for change_date in change_dates:
+    change_date = datetime.strptime(change_date, '%Y-%m-%dT%H:%M:%S.%f%z')
+    if change_date > seven_days_ago:
+        print('True')
+        sys.exit(0)
+print('False')
+" ${changelog})
+
+    if [ "${result}" == "True" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Create a temporary file to store the release notes
+RELEASE_NOTES_FILE=$(mktemp)
+
+# Add Jira issues to the release notes
+echo "## Jira Issues Closed in the Last 7 Days" >> ${RELEASE_NOTES_FILE}
+echo "" >> ${RELEASE_NOTES_FILE}
+
+for row in $(echo "${ISSUES}" | jq -r '.[] | @base64'); do
+    _jq() {
+        echo "${row}" | base64 --decode | jq -r "${1}"
+    }
+
+    issue_key=$(_jq '.key')
+
+    if issue_closed_in_last_7_days ${issue_key}; then
+        echo "Key: $issue_key" >> ${RELEASE_NOTES_FILE}
+        echo "Link: ${JIRA_URL}/browse/$issue_key" >> ${RELEASE_NOTES_FILE}
+        echo "Summary: $(_jq '.fields.summary')" >> ${RELEASE_NOTES_FILE}
+        echo "Status: $(_jq '.fields.status.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Assignee: $(_jq '.fields.assignee.displayName // "Unassigned"')" >> ${RELEASE_NOTES_FILE}
+        echo "Reporter: $(_jq '.fields.reporter.displayName // "Unknown"')" >> ${RELEASE_NOTES_FILE}
+        echo "Description: $(_jq '.fields.description // "No description provided"')" >> ${RELEASE_NOTES_FILE}
+        echo "Acceptance Criteria: $(_jq '.fields.customfield_10041 // "No acceptance criteria provided"')"  # Use the correct field ID
+        echo "Created: $(_jq '.fields.created')" >> ${RELEASE_NOTES_FILE}
+        echo "Updated: $(_jq '.fields.updated')" >> ${RELEASE_NOTES_FILE}
+        echo "Resolution: $(_jq '.fields.resolution.name // "Unresolved"')" >> ${RELEASE_NOTES_FILE}
+        echo "Priority: $(_jq '.fields.priority.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Issue Type: $(_jq '.fields.issuetype.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Custom Field 10000: $(_jq '.fields.customfield_10000 // "N/A"')" >> ${RELEASE_NOTES_FILE}
+        echo "----------------------------------------" >> ${RELEASE_NOTES_FILE}
+        echo "" >> ${RELEASE_NOTES_FILE}
+    fi
+done
+
+# Add Git log to the release notes
+echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
+echo "" >> ${RELEASE_NOTES_FILE}
+
+git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)\e]8;;https://github.com/HotelEngine/engine-booking-api/commit/%H\\e\\\\Link\\e]8;;\e\\%C(reset)%n%b" >> ${RELEASE_NOTES_FILE}
+
+# Display the release notes
+cat ${RELEASE_NOTES_FILE}
+
+# Copy to clipboard (macOS specific)
+cat ${RELEASE_NOTES_FILE} | pbcopy
+
+# Clean up
+rm ${RELEASE_NOTES_FILE}
