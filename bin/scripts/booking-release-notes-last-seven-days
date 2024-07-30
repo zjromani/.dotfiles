@@ -6,6 +6,9 @@ JIRA_USERNAME="zach.romani@hotelengine.com"
 JIRA_API_TOKEN="${JIRA_API_TOKEN}"
 PROJECT_KEY="Engine"
 
+# GPT URL to post the release notes
+GPT_API_URL="https://chatgpt.com/g/g-M5QBbVVZF-software-release-notes"
+
 # JQL query to get issues updated in the last 7 days
 JQL='project = Engine AND "Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 AND updated >= -7d ORDER BY updated DESC'
 
@@ -115,6 +118,12 @@ cat ${RELEASE_NOTES_FILE}
 
 # Copy to clipboard (macOS specific)
 cat ${RELEASE_NOTES_FILE} | pbcopy
+
+# Read the release notes content into a variable
+RELEASE_NOTES_CONTENT=$(cat ${RELEASE_NOTES_FILE})
+
+# Post the release notes to the GPT URL
+curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"${RELEASE_NOTES_CONTENT}\"}" ${GPT_API_URL}
 
 # Clean up
 rm ${RELEASE_NOTES_FILE}
