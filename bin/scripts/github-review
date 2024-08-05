@@ -1,0 +1,22 @@
+git-pull-switch
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <branch_name>"
+    exit 1
+fi
+
+BRANCH=$1
+
+# Fetch the latest changes from the remote
+git fetch origin
+
+# Switch to the specified branch
+git checkout $BRANCH
+
+# Get the diff of the specified branch with main
+DIFF=$(git diff origin/main...$BRANCH)
+
+# Copy the diff to the clipboard
+echo "$DIFF" | pbcopy
+
+echo "Diff of branch '$BRANCH' with 'main' has been copied to the clipboard."
