@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JIRA_URL="https://hotelengine.atlassian.net"
-JIRA_USERNAME="zach.romani@hotelengine.com"
+JIRA_USERNAME="${WORK_EMAIL}"
 JIRA_API_TOKEN="${JIRA_API_TOKEN}"
 
 # Project and issue details
@@ -46,8 +46,13 @@ RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
     ${JIRA_URL}/rest/api/2/issue)
 
 if echo "$RESPONSE" | grep -q '"key"'; then
-    echo "Issue created successfully:"
-    echo "$RESPONSE" | jq '.key'
+    ISSUE_KEY=$(echo "$RESPONSE" | jq -r '.key')
+    ISSUE_LINK="${JIRA_URL}/browse/$ISSUE_KEY"
+    echo "Issue created successfully: $ISSUE_KEY"
+    echo "Link: $ISSUE_LINK"
+    echo "$ISSUE_LINK" | pbcopy
+    echo "The issue link has been copied to your clipboard."
+    open "$ISSUE_LINK"
 else
     echo "Failed to create issue:"
     echo "$RESPONSE" | jq .
