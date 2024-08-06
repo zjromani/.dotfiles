@@ -11,6 +11,7 @@ CUSTOM_FIELD_TYPE_ID="customfield_10045"
 CUSTOM_FIELD_TYPE_VALUE="Infrastructure"
 CUSTOM_FIELD_TEAM_ID="customfield_10001"
 CUSTOM_FIELD_TEAM_VALUE="2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8"
+STATUS_NAME="Ready for Dev"
 
 # Issue summary and description (passed as arguments)
 SUMMARY=$1
@@ -21,6 +22,7 @@ if [ -z "$SUMMARY" ] || [ -z "$DESCRIPTION" ]; then
   exit 1
 fi
 
+# JSON payload for creating a Jira task
 JSON_PAYLOAD=$(jq -n --arg project_key "$PROJECT_KEY" --arg issue_type "$ISSUE_TYPE" \
   --arg summary "$SUMMARY" --arg description "$DESCRIPTION" \
   --arg custom_field_type_id "$CUSTOM_FIELD_TYPE_ID" --arg custom_field_type_value "$CUSTOM_FIELD_TYPE_VALUE" \
@@ -53,6 +55,27 @@ if echo "$RESPONSE" | grep -q '"key"'; then
     echo "$ISSUE_LINK" | pbcopy
     echo "The issue link has been copied to your clipboard."
     open "$ISSUE_LINK"
+
+    # Get the transition ID for "Ready for Dev"
+    TRANSITION_ID=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
+        -X GET \
+        -H "Content-Type: application/json" \
+        ${JIRA_URL}/rest/api/2/issue/$ISSUE_KEY/transitions | jq -r '.transitions[] | select(.name == "Ready for Dev") | .id')
+
+    if [ -n "$TRANSITION_ID" ]; then
+        # Transition the issue to "Ready for Dev"
+        TRANSITION_PAYLOAD=$(jq -n --arg transition_id "$TRANSITION_ID" '{ transition: { id: $transition_id } }')
+
+        TRANSITION_RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
+            -X POST \
+            -H "Content-Type: application/json" \
+            --data "${TRANSITION_PAYLOAD}" \
+            ${JIRA_URL}/rest/api/2/issue/$ISSUE_KEY/transitions)
+
+        echo "Issue transitioned to 'Ready for Dev'."
+    else
+        echo "Failed to find transition ID for 'Ready for Dev'."
+    fi
 else
     echo "Failed to create issue:"
     echo "$RESPONSE" | jq .
