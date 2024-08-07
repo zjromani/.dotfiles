@@ -11,14 +11,13 @@ CUSTOM_FIELD_TYPE_ID="customfield_10045"
 CUSTOM_FIELD_TYPE_VALUE="Infrastructure"
 CUSTOM_FIELD_TEAM_ID="customfield_10001"
 CUSTOM_FIELD_TEAM_VALUE="2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8"
-STATUS_NAME="Ready for Dev"
 
 # Issue summary and description (passed as arguments)
 SUMMARY=$1
 DESCRIPTION=$2
 
-if [ -z "$SUMMARY" ] || [ -z "$DESCRIPTION" ]; then
-  echo "Usage: $0 <summary> <description>"
+if [ -z "$SUMMARY" ]; then
+  echo "Usage: $0 <summary> [description]"
   exit 1
 fi
 
