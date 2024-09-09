@@ -111,19 +111,12 @@ done
 echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
-git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)\e]8;;https://github.com/HotelEngine/engine-booking-api/commit/%H\\e\\\\Link\\e]8;;\e\\%C(reset)%n%b" >> ${RELEASE_NOTES_FILE}
-
-# Display the release notes
-cat ${RELEASE_NOTES_FILE}
+# git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)\e]8;;https://github.com/HotelEngine/engine-booking-api/commit/%H\\e\\\\Link\\e]8;;\e\\%C(reset)%n%b" >> ${RELEASE_NOTES_FILE}
+#git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)%nhttps://github.com/HotelEngine/engine-booking-api/commit/%H %C(reset)%n%b" -p >> ${RELEASE_NOTES_FILE}
+git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
 
 # Copy to clipboard (macOS specific)
 cat ${RELEASE_NOTES_FILE} | pbcopy
-
-# Read the release notes content into a variable
-RELEASE_NOTES_CONTENT=$(cat ${RELEASE_NOTES_FILE})
-
-# Post the release notes to the GPT URL
-curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"${RELEASE_NOTES_CONTENT}\"}" ${GPT_API_URL}
 
 # Clean up
 rm ${RELEASE_NOTES_FILE}
