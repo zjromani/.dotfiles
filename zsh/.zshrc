@@ -64,6 +64,7 @@ alias jsontidy="pbpaste | jq '.' | pbcopy"
 alias vim="nvim"
 alias k="kubectl"
 alias ja="jira-add"
+alias je="jira-add-epic"
 
 alias unfuck-turbo="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
 alias zrc="nvim ~/.zshrc"
