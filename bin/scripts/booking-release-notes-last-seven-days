@@ -73,6 +73,12 @@ print('False')
     fi
 }
 
+# Function to get comments for a Jira issue
+get_issue_comments() {
+    local issue_key=$1
+    curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}/comment" | jq -r '.comments[] | "\(.author.displayName): \(.body)"'
+}
+
 # Create a temporary file to store the release notes
 RELEASE_NOTES_FILE=$(mktemp)
 
@@ -102,6 +108,16 @@ for row in $(echo "${ISSUES}" | jq -r '.[] | @base64'); do
         echo "Priority: $(_jq '.fields.priority.name')" >> ${RELEASE_NOTES_FILE}
         echo "Issue Type: $(_jq '.fields.issuetype.name')" >> ${RELEASE_NOTES_FILE}
         echo "Custom Field 10000: $(_jq '.fields.customfield_10000 // "N/A"')" >> ${RELEASE_NOTES_FILE}
+        
+        # Fetch and add comments
+        echo "Comments:" >> ${RELEASE_NOTES_FILE}
+        comments=$(get_issue_comments $issue_key)
+        if [ -z "$comments" ]; then
+            echo "  No comments available." >> ${RELEASE_NOTES_FILE}
+        else
+            echo "$comments" | sed 's/^/  /' >> ${RELEASE_NOTES_FILE}  # Indent comments
+        fi
+        
         echo "----------------------------------------" >> ${RELEASE_NOTES_FILE}
         echo "" >> ${RELEASE_NOTES_FILE}
     fi
@@ -111,8 +127,6 @@ done
 echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
-# git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)\e]8;;https://github.com/HotelEngine/engine-booking-api/commit/%H\\e\\\\Link\\e]8;;\e\\%C(reset)%n%b" >> ${RELEASE_NOTES_FILE}
-#git log --oneline --decorate --graph --since="7 days ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)%nhttps://github.com/HotelEngine/engine-booking-api/commit/%H %C(reset)%n%b" -p >> ${RELEASE_NOTES_FILE}
 git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
 
 # Copy to clipboard (macOS specific)
