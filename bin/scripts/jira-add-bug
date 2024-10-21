@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Jira credentials and API details
+JIRA_URL="https://hotelengine.atlassian.net"
+JIRA_USERNAME="${WORK_EMAIL}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+
+# Jira project and issue details
+PROJECT_KEY="PLS"
+ISSUE_TYPE="Bug"
+CUSTOM_FIELD_TEAM_ID="customfield_10001"
+CUSTOM_FIELD_TEAM_VALUE="2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8"
+CUSTOM_FIELD_TYPE_ID="customfield_10045"
+CUSTOM_FIELD_TYPE_VALUE="Infrastructure"
+CUSTOM_FIELD_BUG_TYPE_ID="customfield_10078"
+CUSTOM_FIELD_BUG_TYPE_VALUE="PD Found"
+CUSTOM_FIELD_BUG_ENVIRONMENT_ID="customfield_10186"
+CUSTOM_FIELD_BUG_ENVIRONMENT_VALUE="Production"
+
+BUG_SUMMARY=$1
+
+# Check if a summary (bug title) is provided
+if [ -z "$BUG_SUMMARY" ]; then
+  echo "Usage: $0 <bug summary>"
+  exit 1
+fi
+
+# Create JSON payload for Jira API
+JSON_PAYLOAD=$(jq -n --arg project_key "$PROJECT_KEY" --arg issue_type "$ISSUE_TYPE" \
+  --arg summary "$BUG_SUMMARY" --arg description "Bug description goes here" \
+  --arg custom_field_team_id "$CUSTOM_FIELD_TEAM_ID" --arg custom_field_team_value "$CUSTOM_FIELD_TEAM_VALUE" \
+  --arg custom_field_type_id "$CUSTOM_FIELD_TYPE_ID" --arg custom_field_type_value "$CUSTOM_FIELD_TYPE_VALUE" \
+  --arg custom_field_bug_type_id "$CUSTOM_FIELD_BUG_TYPE_ID" --arg custom_field_bug_type_value "$CUSTOM_FIELD_BUG_TYPE_VALUE" \
+  --arg custom_field_bug_environment_id "$CUSTOM_FIELD_BUG_ENVIRONMENT_ID" --arg custom_field_bug_environment_value "$CUSTOM_FIELD_BUG_ENVIRONMENT_VALUE" '
+{
+  fields: {
+    project: { key: $project_key },
+    issuetype: { name: $issue_type },
+    summary: $summary,
+    description: $description,
+    ($custom_field_team_id): $custom_field_team_value,
+    ($custom_field_type_id): { value: $custom_field_type_value },
+    ($custom_field_bug_type_id): { value: $custom_field_bug_type_value },
+    ($custom_field_bug_environment_id): { value: $custom_field_bug_environment_value },
+    labels: ["Shield"]  # Add the "Shield" label
+  }
+}')
+
+echo "JSON Payload:"
+echo "$JSON_PAYLOAD" | jq .
+
+# Send the request to Jira API to create the issue
+RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data "${JSON_PAYLOAD}" \
+    ${JIRA_URL}/rest/api/2/issue)
+
+# Check if the issue creation was successful and output the result
+if echo "$RESPONSE" | grep -q '"key"'; then
+    ISSUE_KEY=$(echo "$RESPONSE" | jq -r '.key')
+    ISSUE_LINK="${JIRA_URL}/browse/$ISSUE_KEY"
+    echo "Bug created successfully: $ISSUE_KEY"
+    echo "Link: $ISSUE_LINK"
+    open "$ISSUE_LINK"
+else
+    echo "Failed to create bug:"
+    echo "$RESPONSE" | jq .
+fi

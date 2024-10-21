@@ -65,6 +65,7 @@ alias vim="nvim"
 alias k="kubectl"
 alias ja="jira-add"
 alias je="jira-add-epic"
+alias jb="jira-add-bug"
 
 alias unfuck-turbo="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
 alias zrc="nvim ~/.zshrc"
@@ -106,6 +107,8 @@ alias glt='git for-each-ref --sort=taggerdate --color --format="%(color:yellow)%
 alias gtagv='git tag --verify'
 alias ruba="git ls-files -m | xargs ls -1 2>/dev/null | grep '\.rb$' | xargs rubocop -a"
 alias cpymsg='cat .git/COMMIT_EDITMSG | grep --invert-match "^\#.*" | pbcopy'
+
+alias tf="terraform"
 
 # Load sensitive environment variables if the file exists
 if [[ -f $HOME/.zshenv_private ]]; then
