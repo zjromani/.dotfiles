@@ -1,21 +1,14 @@
 #!/bin/bash
 
-# Jira credentials and URL
 JIRA_URL="https://hotelengine.atlassian.net"
 JIRA_USERNAME="zach.romani@hotelengine.com"
 JIRA_API_TOKEN="${JIRA_API_TOKEN}"
 PROJECT_KEY="Engine"
 
-# GPT URL to post the release notes
-GPT_API_URL="https://chatgpt.com/g/g-M5QBbVVZF-software-release-notes"
-
-# JQL query to get issues updated in the last 7 days
 JQL='project = Engine AND "Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 AND updated >= -7d ORDER BY updated DESC'
 
-# Fields to retrieve
 FIELDS='["key","summary","status","assignee","description","created","updated","resolution","priority","issuetype","reporter","customfield_10000","customfield_10041"]' # customfield_10041 is the field ID for Acceptance Criteria
 
-# JSON payload
 JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields "$FIELDS" '
 {
   jql: $jql,
@@ -24,34 +17,28 @@ JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields "$FIELDS" '
   fields: $fields
 }')
 
-# Fetch Jira issues
 RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
     -X POST \
     -H "Content-Type: application/json" \
     --data "${JSON_PAYLOAD}" \
     ${JIRA_URL}/rest/api/2/search)
 
-# Check if the request was successful
 if [ $? -ne 0 ]; then
     echo "Failed to fetch issues"
     exit 1
 fi
 
-# Parse the JSON response
 ISSUES=$(echo "${RESPONSE}" | jq '.issues')
 
-# Check if ISSUES is null or empty
 if [ "${ISSUES}" == "null" ] || [ -z "${ISSUES}" ]; then
     echo "No issues found or failed to parse response."
     exit 1
 fi
 
-# Function to check if an issue was closed in the last 7 days using Python
 issue_closed_in_last_7_days() {
     local issue_key=$1
     local changelog=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}?expand=changelog" | jq -r '.changelog.histories[] | select(.items[] | .field == "status" and .toString == "Closed") | .created')
 
-    # Check if any of the changelog entries are within the last 7 days using Python
     local result=$(python3 -c "
 import sys
 from datetime import datetime, timedelta, timezone
@@ -82,7 +69,6 @@ get_issue_comments() {
 # Create a temporary file to store the release notes
 RELEASE_NOTES_FILE=$(mktemp)
 
-# Add Jira issues to the release notes
 echo "## Jira Issues Closed in the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
@@ -123,14 +109,11 @@ for row in $(echo "${ISSUES}" | jq -r '.[] | @base64'); do
     fi
 done
 
-# Add Git log to the release notes
 echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
 git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
 
-# Copy to clipboard (macOS specific)
 cat ${RELEASE_NOTES_FILE} | pbcopy
 
-# Clean up
 rm ${RELEASE_NOTES_FILE}
