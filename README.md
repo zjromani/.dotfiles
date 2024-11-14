@@ -35,32 +35,6 @@ iTerm settings do not work well with symbolic links. Instead, manually point iTe
 
 > Open iTerm -> Preferences -> Profiles -> Other Actions... (next to the profile name) -> Load JSON Profile... -> Navigate to `$HOME/git/.dotfiles/iterm_profile` and select the JSON profile.
 
-### Vim Configuration
-
-To set up Vim, start by installing Pathogen, a runtime path manager, and then proceed to clone your preferred Vim plugins:
-
-```bash
-# Install Pathogen
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-
-# Clone Vim plugins
-git clone https://github.com/preservim/nerdtree.git ~/.vim/bundle/nerdtree
-git clone https://github.com/flazz/vim-colorschemes.git ~/.vim/bundle/colorschemes
-git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp.vim
-```
-
-#### Vim Plugins
-
-Ensure the following plugins are installed:
-- **Pathogen** - For managing your runtime path.
-- **NERDTree** - A file system explorer for the Vim editor.
-- **Color Schemes** - Enhance your Vim interface with various color schemes.
-- **CtrlP** - Full path fuzzy file, buffer, mru, tag, etc., finder for Vim.
-- Additional recommended plugins:
-  - **vim-rails**
-  - **vim-fugitive**
-  - **vim-easymotion**
 
 ### Secure Environment Variables
 
