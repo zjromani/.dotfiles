@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+DOTFILES_DIR="$HOME/.dotfiles"
+CONFIG_DIR="$HOME/.config"
+BIN_DIR="$DOTFILES_DIR/bin"
+SCRIPTS_DIR="$BIN_DIR/scripts"
+
+STOW_FOLDERS=("bin" "tmux" "zsh" "iterm_profile")
+
+# Define individual files to symlink
+SYMLINK_FILES=("vimrc" "psqlrc" "gitconfig")
+
+function check_stow_installed() {
+    if ! command -v stow &> /dev/null; then
+        echo "GNU Stow is not installed. Installing..."
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            sudo apt-get update && sudo apt-get install -y stow
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            echo "Please install Stow using Homebrew or your package manager."
+            exit 1
+        fi
+    else
+        echo "GNU Stow is already installed."
+    fi
+}
+
+check_stow_installed
+
+# Change to DOTFILES_DIR
+cd "$DOTFILES_DIR" || exit
+
+# Stow each directory in the whitelist
+echo "Stowing selected directories in $DOTFILES_DIR to $HOME..."
+for folder in "${STOW_FOLDERS[@]}"; do
+    if [ -d "$folder" ]; then
+        echo "Stowing $folder..."
+        stow "$folder"
+    else
+        echo "Warning: $folder does not exist in $DOTFILES_DIR"
+    fi
+done
+
+# Symlink individual files to $HOME
+echo "Creating symbolic links for individual files..."
+for file in "${SYMLINK_FILES[@]}"; do
+    if [ -f "$DOTFILES_DIR/$file" ]; then
+        ln -sf "$DOTFILES_DIR/$file" "$HOME/.$file"
+        echo "Linked $file to $HOME/.$file"
+    else
+        echo "Warning: $file does not exist in $DOTFILES_DIR"
+    fi
+done
+
+# Specifically stow `dot-config` to the `.config` directory
+echo "Creating symbolic links for dot-config in .config..."
+if [ ! -d "$CONFIG_DIR" ]; then
+    mkdir -p "$CONFIG_DIR"
+fi
+stow -t "$CONFIG_DIR" dot-config
+
+# Add bin and scripts directories to PATH in .zshrc or .bashrc
+echo "Adding bin and scripts directories to PATH..."
+if [[ "$SHELL" == *"zsh"* ]]; then
+    SHELL_RC="$HOME/.zshrc"
+elif [[ "$SHELL" == *"bash"* ]]; then
+    SHELL_RC="$HOME/.bashrc"
+else
+    SHELL_RC="$HOME/.profile"
+fi
+
+if ! grep -q "$BIN_DIR" "$SHELL_RC"; then
+    echo "export PATH=\"\$PATH:$BIN_DIR\"" >> "$SHELL_RC"
+    echo "Added $BIN_DIR to PATH in $SHELL_RC."
+fi
+
+if ! grep -q "$SCRIPTS_DIR" "$SHELL_RC"; then
+    echo "export PATH=\"\$PATH:$SCRIPTS_DIR\"" >> "$SHELL_RC"
+    echo "Added $SCRIPTS_DIR to PATH in $SHELL_RC."
+fi
+
+# Source the shell configuration file to apply PATH changes immediately
+source "$SHELL_RC"
+
+echo "Dotfiles setup complete!"

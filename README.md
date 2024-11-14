@@ -12,8 +12,6 @@ git clone https://github.com/zjromani/.dotfiles.git ~/.dotfiles
 
 ### Sym Links with Stow
 
-**THIS WILL NOT WORK WITH CURRENT SETTINGS. When stow was used, it was looking for ~/git folder, not ~/.dotfiles. This will need to be updated to reflect the correct path.**
-
 GNU Stow is a symlink farm manager which makes it easy to manage your dotfiles by keeping them version-controlled in a single directory and symlinked into place. Here's how to use it:
 
 
