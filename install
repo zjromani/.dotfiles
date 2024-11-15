@@ -5,10 +5,7 @@ CONFIG_DIR="$HOME/.config"
 BIN_DIR="$DOTFILES_DIR/bin"
 SCRIPTS_DIR="$BIN_DIR/scripts"
 
-STOW_FOLDERS=("bin" "tmux" "zsh" "iterm_profile")
-
-# Define individual files to symlink
-SYMLINK_FILES=("vimrc" "psqlrc" "gitconfig")
+STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim"  "psql" "vim")
 
 function check_stow_installed() {
     if ! command -v stow &> /dev/null; then
@@ -40,24 +37,6 @@ for folder in "${STOW_FOLDERS[@]}"; do
     fi
 done
 
-# Symlink individual files to $HOME
-echo "Creating symbolic links for individual files..."
-for file in "${SYMLINK_FILES[@]}"; do
-    if [ -f "$DOTFILES_DIR/$file" ]; then
-        ln -sf "$DOTFILES_DIR/$file" "$HOME/.$file"
-        echo "Linked $file to $HOME/.$file"
-    else
-        echo "Warning: $file does not exist in $DOTFILES_DIR"
-    fi
-done
-
-# Specifically stow `dot-config` to the `.config` directory
-echo "Creating symbolic links for dot-config in .config..."
-if [ ! -d "$CONFIG_DIR" ]; then
-    mkdir -p "$CONFIG_DIR"
-fi
-stow -t "$CONFIG_DIR" dot-config
-
 # Add bin and scripts directories to PATH in .zshrc or .bashrc
 echo "Adding bin and scripts directories to PATH..."
 if [[ "$SHELL" == *"zsh"* ]]; then
@@ -78,7 +57,6 @@ if ! grep -q "$SCRIPTS_DIR" "$SHELL_RC"; then
     echo "Added $SCRIPTS_DIR to PATH in $SHELL_RC."
 fi
 
-# Source the shell configuration file to apply PATH changes immediately
 source "$SHELL_RC"
 
 echo "Dotfiles setup complete!"
