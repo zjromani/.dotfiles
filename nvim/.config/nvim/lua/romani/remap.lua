@@ -41,7 +41,7 @@ vim.keymap.set("n", "<leader><leader>cb",  ':CopilotChatBuffer ', { remap=false 
 vim.keymap.set("x", "<leader><leader>cx",  ':CopilotChatInPlace<CR>', { remap=false })
 
 -- telescope
-local ccca = require("CopilotChat.code_actions")
-vim.keymap.set("n", "<leader><leader>ch",  function() ccca.show_help_actions() end, { remap=false })
-vim.keymap.set("n", "<leader><leader>cp",  function() ccca.show_prompt_actions() end, { remap=false })
-vim.keymap.set("x", "<leader><leader>cp",  function() ccca.show_prompt_actions(true) end, { remap=false })
+--local ccca = require("CopilotChat.code_actions")
+--vim.keymap.set("n", "<leader><leader>ch",  function() ccca.show_help_actions() end, { remap=false })
+--vim.keymap.set("n", "<leader><leader>cp",  function() ccca.show_prompt_actions() end, { remap=false })
+--vim.keymap.set("x", "<leader><leader>cp",  function() ccca.show_prompt_actions(true) end, { remap=false })
