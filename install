@@ -26,6 +26,11 @@ check_stow_installed
 # Change to DOTFILES_DIR
 cd "$DOTFILES_DIR" || exit
 
+if [-f $HOME/.zshrc]; then
+    echo "Removing existing .zshrc..."
+    rm $HOME/.zshrc
+fi
+
 # Stow each directory in the whitelist
 echo "Stowing selected directories in $DOTFILES_DIR to $HOME..."
 for folder in "${STOW_FOLDERS[@]}"; do
