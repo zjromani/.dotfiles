@@ -4,21 +4,18 @@
 [pull]
 	rebase = true
 [core]
-	hooksPath = /Users/zacharyromani/.dotfiles/git/.config/hooks
+	hooksPath = /Users/zachromani/.dotfiles/git/.config/hooks
 [fetch]
 	pruneTags = true
 	prune = true
 [init]
 	defaultBranch = main
-[credential]
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager-core
-[credential "https://dev.azure.com"]
-	useHttpPath = true
+[url "git@github.com:"]
+    insteadOf = https://github.com/
 [maintenance]
-	repo = /Users/zacharyromani/work/engine-booking-api
-	repo = /Users/zacharyromani/work/engine-booking-deploy
-	repo = /Users/zacharyromani/work/engine-public-contracts
-	repo = /Users/zacharyromani/work/engine-rate-history
-	repo = /Users/zacharyromani/work/engine-internal-contracts
-	repo = /Users/zacharyromani/.dotfiles
+	repo = /Users/zachromani/work/engine-booking-api
+	repo = /Users/zachromani/work/engine-booking-deploy
+	repo = /Users/zachromani/work/engine-public-contracts
+	repo = /Users/zachromani/work/engine-rate-history
+	repo = /Users/zachromani/work/engine-internal-contracts
+	repo = /Users/zachromani/.dotfiles
