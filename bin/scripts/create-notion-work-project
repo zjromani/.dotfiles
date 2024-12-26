@@ -28,7 +28,12 @@ JSON_PAYLOAD=$(cat <<EOF
     },
     "Status": {
       "status": {
-        "name": "waiting-for"
+        "name": "in-progress"
+      }
+    },
+    "Importance": {
+      "select": {
+        "name": "med"
       }
     }
   }

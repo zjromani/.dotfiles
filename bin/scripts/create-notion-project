@@ -18,6 +18,11 @@ JSON_PAYLOAD=$(cat <<EOF
           }
         }
       ]
+    },
+    "Importance": {
+      "select": {
+        "name": "low"
+      }
     }
   }
 }
