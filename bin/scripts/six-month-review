@@ -1,0 +1,85 @@
+#!/bin/bash
+# pr_activity.sh
+#
+# This script retrieves pull requests created by a specified GitHub user
+# across a given organization over a specified date range using the GitHub Search API.
+#
+# Usage:
+#   ./pr_activity.sh --github-user <github_user> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>
+#
+# Environment variable required:
+#   GITHUB_API_TOKEN
+#
+# Reference:
+#   GitHub Search API for issues and pull requests: https://docs.github.com/en/rest/search#search-issues-and-pull-requests
+#
+#
+
+# set GITHUB_API_TOKEN to the GITHUB_TOKEN Environment
+export GITHUB_API_TOKEN=$GITHUB_TOKEN
+
+function usage() {
+    echo "Usage: $0 --github-user <github_user> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>"
+    exit 1
+}
+
+# Parse command-line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --github-user)
+            GITHUB_USER="$2"
+            shift ;;
+        --org)
+            ORG_NAME="$2"
+            shift ;;
+        --start-date)
+            START_DATE="$2"
+            shift ;;
+        --end-date)
+            END_DATE="$2"
+            shift ;;
+        *)
+            echo "Unknown parameter: $1"
+            usage ;;
+    esac
+    shift
+done
+
+if [[ -z "$GITHUB_USER" || -z "$ORG_NAME" || -z "$START_DATE" || -z "$END_DATE" ]]; then
+    usage
+fi
+
+if [[ -z "$GITHUB_API_TOKEN" ]]; then
+    echo "GITHUB_API_TOKEN must be set in your environment."
+    exit 1
+fi
+
+# Build the search query (ensure no trailing newline)
+QUERY="author:${GITHUB_USER} org:${ORG_NAME} type:pr created:${START_DATE}..${END_DATE}"
+ENCODED_QUERY=$(printf "%s" "$QUERY" | jq -s -R -r @uri)
+
+# Construct the search URL
+SEARCH_URL="https://api.github.com/search/issues?q=${ENCODED_QUERY}&per_page=100&page=1"
+
+echo "Fetching pull requests for user ${GITHUB_USER} in organization ${ORG_NAME} from ${START_DATE} to ${END_DATE}..."
+echo "Using query: ${QUERY}"
+echo "Encoded URL: ${SEARCH_URL}"
+
+# Query the GitHub Search API for pull requests
+RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_API_TOKEN}" \
+  -H "Accept: application/vnd.github.v3+json" \
+  "${SEARCH_URL}")
+
+if [ $? -ne 0 ]; then
+    echo "Failed to fetch pull requests from GitHub."
+    exit 1
+fi
+
+TOTAL_COUNT=$(echo "$RESPONSE" | jq '.total_count')
+echo "Total pull requests found: $TOTAL_COUNT"
+echo ""
+
+# Output pull request details
+echo "Pull Request Details:"
+echo "----------------------"
+echo "$RESPONSE" | jq -r '.items[] | "PR #" + (.number|tostring) + " - " + .title + "\nCreated - " + .created_at + "\nURL - " + .html_url + "\n----------------------"'
