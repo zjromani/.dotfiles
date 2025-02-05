@@ -1,85 +1,154 @@
 #!/bin/bash
-# pr_activity.sh
+# six-month-review-all.sh
 #
-# This script retrieves pull requests created by a specified GitHub user
-# across a given organization over a specified date range using the GitHub Search API.
+# This script aggregates activity for a specified user from both JIRA and GitHub
+# over a defined time period.
 #
-# Usage:
-#   ./pr_activity.sh --github-user <github_user> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>
+# Usage -
+#   ./six-month-review-all.sh --jira-user <jira_username> --github-user <github_username> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>
 #
-# Environment variable required:
-#   GITHUB_API_TOKEN
+# Environment variables required -
+#   For JIRA:
+#     JIRA_URL       - Your JIRA instance URL (e.g. https://your-domain.atlassian.net)
+#     JIRA_API_TOKEN - Your JIRA API token
+#     PROJECT_KEY    - The JIRA project key
 #
-# Reference:
-#   GitHub Search API for issues and pull requests: https://docs.github.com/en/rest/search#search-issues-and-pull-requests
+#   For GitHub:
+#     GITHUB_API_TOKEN - Your GitHub personal access token
 #
+# References -
+#   JIRA REST API: https://developer.atlassian.com/cloud/jira/platform/rest/v2/intro/
+#   GitHub Search API: https://docs.github.com/en/rest/search#search-issues-and-pull-requests
 #
 
-# set GITHUB_API_TOKEN to the GITHUB_TOKEN Environment
-export GITHUB_API_TOKEN=$GITHUB_TOKEN
+JIRA_URL="https://hotelengine.atlassian.net"
+#JIRA_USERNAME="zach.romani@hotelengine.com"
+JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+PROJECT_KEY="BOOK"
+GITHUB_API_TOKEN="${GITHUB_TOKEN}"
+
 
 function usage() {
-    echo "Usage: $0 --github-user <github_user> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>"
-    exit 1
+  echo "Usage: $0 --jira-user <jira_username> --github-user <github_username> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>"
+  exit 1
 }
 
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        --github-user)
-            GITHUB_USER="$2"
-            shift ;;
-        --org)
-            ORG_NAME="$2"
-            shift ;;
-        --start-date)
-            START_DATE="$2"
-            shift ;;
-        --end-date)
-            END_DATE="$2"
-            shift ;;
-        *)
-            echo "Unknown parameter: $1"
-            usage ;;
-    esac
-    shift
+  case $1 in
+    --jira-user)
+      JIRA_USER="$2"
+      shift ;;
+    --github-user)
+      GITHUB_USER="$2"
+      shift ;;
+    --org)
+      ORG_NAME="$2"
+      shift ;;
+    --start-date)
+      START_DATE="$2"
+      shift ;;
+    --end-date)
+      END_DATE="$2"
+      shift ;;
+    *)
+      echo "Unknown parameter: $1"
+      usage ;;
+  esac
+  shift
 done
 
-if [[ -z "$GITHUB_USER" || -z "$ORG_NAME" || -z "$START_DATE" || -z "$END_DATE" ]]; then
-    usage
+if [[ -z "$JIRA_USER" || -z "$GITHUB_USER" || -z "$ORG_NAME" || -z "$START_DATE" || -z "$END_DATE" ]]; then
+  usage
+fi
+
+# Verify required environment variables for JIRA and GitHub
+if [[ -z "$JIRA_URL" || -z "$JIRA_API_TOKEN" || -z "$PROJECT_KEY" ]]; then
+  echo "Please set JIRA_URL, JIRA_API_TOKEN, and PROJECT_KEY environment variables."
+  exit 1
 fi
 
 if [[ -z "$GITHUB_API_TOKEN" ]]; then
-    echo "GITHUB_API_TOKEN must be set in your environment."
-    exit 1
+  echo "Please set GITHUB_API_TOKEN environment variable."
+  exit 1
 fi
 
-# Build the search query (ensure no trailing newline)
-QUERY="author:${GITHUB_USER} org:${ORG_NAME} type:pr created:${START_DATE}..${END_DATE}"
-ENCODED_QUERY=$(printf "%s" "$QUERY" | jq -s -R -r @uri)
+OUTPUT_FILE=$(mktemp)
 
-# Construct the search URL
-SEARCH_URL="https://api.github.com/search/issues?q=${ENCODED_QUERY}&per_page=100&page=1"
+##########################
+# JIRA Query Section
+##########################
 
-echo "Fetching pull requests for user ${GITHUB_USER} in organization ${ORG_NAME} from ${START_DATE} to ${END_DATE}..."
-echo "Using query: ${QUERY}"
-echo "Encoded URL: ${SEARCH_URL}"
+echo "## JIRA Issues for ${JIRA_USER} in project ${PROJECT_KEY} (${START_DATE} to ${END_DATE})" >> ${OUTPUT_FILE}
 
-# Query the GitHub Search API for pull requests
-RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_API_TOKEN}" \
+# Build a JQL query to find issues in the specified project assigned to the specified user
+# and updated in the given date range.
+JQL="project = \"${PROJECT_KEY}\" AND assignee = \"${JIRA_USER}\" AND updated >= \"${START_DATE}\" AND updated <= \"${END_DATE}\" ORDER BY updated DESC"
+
+# Define the fields to return; adjust as needed.
+JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields '["key","summary","status","assignee","description","created","updated"]' \
+  '{jql: $jql, startAt: 0, maxResults: 100, fields: $fields}')
+
+echo "Fetching JIRA issues..."
+JIRA_RESPONSE=$(curl -s -u ${JIRA_USER}:${JIRA_API_TOKEN} \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --data "${JSON_PAYLOAD}" \
+  ${JIRA_URL}/rest/api/2/search)
+
+# Process the response
+JIRA_ISSUES=$(echo "${JIRA_RESPONSE}" | jq '.issues')
+if [[ "${JIRA_ISSUES}" == "null" || -z "${JIRA_ISSUES}" ]]; then
+  echo "No JIRA issues found." >> ${OUTPUT_FILE}
+else
+  echo "${JIRA_ISSUES}" | jq -c '.[]' | while read -r issue; do
+    key=$(echo "$issue" | jq -r '.key')
+    summary=$(echo "$issue" | jq -r '.fields.summary')
+    status=$(echo "$issue" | jq -r '.fields.status.name')
+    assignee=$(echo "$issue" | jq -r '.fields.assignee.displayName // "Unassigned"')
+    created=$(echo "$issue" | jq -r '.fields.created')
+    updated=$(echo "$issue" | jq -r '.fields.updated')
+    
+    echo "Key - ${key}" >> ${OUTPUT_FILE}
+    echo "Summary - ${summary}" >> ${OUTPUT_FILE}
+    echo "Status - ${status}" >> ${OUTPUT_FILE}
+    echo "Assignee - ${assignee}" >> ${OUTPUT_FILE}
+    echo "Created - ${created}" >> ${OUTPUT_FILE}
+    echo "Updated - ${updated}" >> ${OUTPUT_FILE}
+    echo "----------------------------------------" >> ${OUTPUT_FILE}
+  done
+fi
+
+##########################
+# GitHub Query Section
+##########################
+
+echo "" >> ${OUTPUT_FILE}
+echo "## GitHub Pull Request Activity for ${GITHUB_USER} (${START_DATE} to ${END_DATE})" >> ${OUTPUT_FILE}
+
+# Build the search query with qualifiers:
+# - author:<github_user> filters PRs by creator.
+# - type:pr limits to pull requests.
+# - org:<org_name> restricts results to the given organization.
+# - created:<start_date>..<end_date> sets the time range.
+GITHUB_QUERY="author:${GITHUB_USER} type:pr org:${ORG_NAME} created:${START_DATE}..${END_DATE}"
+ENCODED_QUERY=$(printf "%s" "$GITHUB_QUERY" | jq -s -R -r @uri)
+GITHUB_SEARCH_URL="https://api.github.com/search/issues?q=${ENCODED_QUERY}&per_page=100&page=1"
+
+echo "Fetching GitHub pull requests..."
+GH_RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_API_TOKEN}" \
   -H "Accept: application/vnd.github.v3+json" \
-  "${SEARCH_URL}")
+  "${GITHUB_SEARCH_URL}")
 
-if [ $? -ne 0 ]; then
-    echo "Failed to fetch pull requests from GitHub."
-    exit 1
+TOTAL_COUNT=$(echo "$GH_RESPONSE" | jq '.total_count')
+echo "Total pull requests found: ${TOTAL_COUNT}" >> ${OUTPUT_FILE}
+echo "" >> ${OUTPUT_FILE}
+
+if [ "${TOTAL_COUNT}" -eq 0 ]; then
+  echo "No GitHub pull requests found." >> ${OUTPUT_FILE}
+else
+  echo "$GH_RESPONSE" | jq -r '.items[] | "PR #" + (.number|tostring) + " - " + .title + "\nCreated - " + .created_at + "\nURL - " + .html_url + "\n----------------------"' >> ${OUTPUT_FILE}
 fi
 
-TOTAL_COUNT=$(echo "$RESPONSE" | jq '.total_count')
-echo "Total pull requests found: $TOTAL_COUNT"
-echo ""
-
-# Output pull request details
-echo "Pull Request Details:"
-echo "----------------------"
-echo "$RESPONSE" | jq -r '.items[] | "PR #" + (.number|tostring) + " - " + .title + "\nCreated - " + .created_at + "\nURL - " + .html_url + "\n----------------------"'
+echo "Output written to ${OUTPUT_FILE}"
+cat ${OUTPUT_FILE}
