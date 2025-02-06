@@ -1,154 +1,84 @@
 #!/bin/bash
-# six-month-review-all.sh
+# six-month-review.sh
 #
-# This script aggregates activity for a specified user from both JIRA and GitHub
-# over a defined time period.
+# This script outputs ALL commit details (metadata, commit message, and full diff)
+# for the current Git repository for a given date range and filtered by a specific author.
+# The output is copied to the clipboard (using pbcopy on macOS) and written to a file.
 #
-# Usage -
-#   ./six-month-review-all.sh --jira-user <jira_username> --github-user <github_username> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>
+# Usage:
+#   ./six-month-review.sh --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD> --author "<author>"
 #
-# Environment variables required -
-#   For JIRA:
-#     JIRA_URL       - Your JIRA instance URL (e.g. https://your-domain.atlassian.net)
-#     JIRA_API_TOKEN - Your JIRA API token
-#     PROJECT_KEY    - The JIRA project key
-#
-#   For GitHub:
-#     GITHUB_API_TOKEN - Your GitHub personal access token
-#
-# References -
-#   JIRA REST API: https://developer.atlassian.com/cloud/jira/platform/rest/v2/intro/
-#   GitHub Search API: https://docs.github.com/en/rest/search#search-issues-and-pull-requests
-#
-
-JIRA_URL="https://hotelengine.atlassian.net"
-#JIRA_USERNAME="zach.romani@hotelengine.com"
-JIRA_API_TOKEN="${JIRA_API_TOKEN}"
-PROJECT_KEY="BOOK"
-GITHUB_API_TOKEN="${GITHUB_TOKEN}"
-
+# Example:
+#   ./six-month-review.sh --start-date 2024-07-01 --end-date 2024-12-31 --author "Dan Garvey"
 
 function usage() {
-  echo "Usage: $0 --jira-user <jira_username> --github-user <github_username> --org <org_name> --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>"
+  echo "Usage: $0 --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD> --author \"<author>\""
   exit 1
 }
 
-# Parse command-line arguments
+# Parse command-line arguments (supporting both --arg value and --arg=value forms)
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-    --jira-user)
-      JIRA_USER="$2"
+    --start-date=*)
+      START_DATE="${1#*=}"
       shift ;;
-    --github-user)
-      GITHUB_USER="$2"
+    --end-date=*)
+      END_DATE="${1#*=}"
       shift ;;
-    --org)
-      ORG_NAME="$2"
+    --author=*)
+      AUTHOR="${1#*=}"
       shift ;;
     --start-date)
       START_DATE="$2"
-      shift ;;
+      shift 2 ;;
     --end-date)
       END_DATE="$2"
-      shift ;;
+      shift 2 ;;
+    --author)
+      AUTHOR="$2"
+      shift 2 ;;
     *)
       echo "Unknown parameter: $1"
       usage ;;
   esac
-  shift
 done
 
-if [[ -z "$JIRA_USER" || -z "$GITHUB_USER" || -z "$ORG_NAME" || -z "$START_DATE" || -z "$END_DATE" ]]; then
+if [[ -z "$START_DATE" || -z "$END_DATE" || -z "$AUTHOR" ]]; then
   usage
 fi
 
-# Verify required environment variables for JIRA and GitHub
-if [[ -z "$JIRA_URL" || -z "$JIRA_API_TOKEN" || -z "$PROJECT_KEY" ]]; then
-  echo "Please set JIRA_URL, JIRA_API_TOKEN, and PROJECT_KEY environment variables."
+# Ensure we're in a Git repository.
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+  echo "This is not a git repository."
   exit 1
 fi
 
-if [[ -z "$GITHUB_API_TOKEN" ]]; then
-  echo "Please set GITHUB_API_TOKEN environment variable."
-  exit 1
-fi
+# Use a file on your Desktop as the output file.
+OUTPUT_FILE="$HOME/Desktop/commits.txt"
 
-OUTPUT_FILE=$(mktemp)
-
-##########################
-# JIRA Query Section
-##########################
-
-echo "## JIRA Issues for ${JIRA_USER} in project ${PROJECT_KEY} (${START_DATE} to ${END_DATE})" >> ${OUTPUT_FILE}
-
-# Build a JQL query to find issues in the specified project assigned to the specified user
-# and updated in the given date range.
-JQL="project = \"${PROJECT_KEY}\" AND assignee = \"${JIRA_USER}\" AND updated >= \"${START_DATE}\" AND updated <= \"${END_DATE}\" ORDER BY updated DESC"
-
-# Define the fields to return; adjust as needed.
-JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields '["key","summary","status","assignee","description","created","updated"]' \
-  '{jql: $jql, startAt: 0, maxResults: 100, fields: $fields}')
-
-echo "Fetching JIRA issues..."
-JIRA_RESPONSE=$(curl -s -u ${JIRA_USER}:${JIRA_API_TOKEN} \
-  -X POST \
-  -H "Content-Type: application/json" \
-  --data "${JSON_PAYLOAD}" \
-  ${JIRA_URL}/rest/api/2/search)
-
-# Process the response
-JIRA_ISSUES=$(echo "${JIRA_RESPONSE}" | jq '.issues')
-if [[ "${JIRA_ISSUES}" == "null" || -z "${JIRA_ISSUES}" ]]; then
-  echo "No JIRA issues found." >> ${OUTPUT_FILE}
+# Check if the file exists and is writable; if not, try to create it.
+if [ -f "$OUTPUT_FILE" ]; then
+  if [ ! -w "$OUTPUT_FILE" ]; then
+    echo "Permission denied: Cannot write to $OUTPUT_FILE. Check file permissions."
+    exit 1
+  fi
 else
-  echo "${JIRA_ISSUES}" | jq -c '.[]' | while read -r issue; do
-    key=$(echo "$issue" | jq -r '.key')
-    summary=$(echo "$issue" | jq -r '.fields.summary')
-    status=$(echo "$issue" | jq -r '.fields.status.name')
-    assignee=$(echo "$issue" | jq -r '.fields.assignee.displayName // "Unassigned"')
-    created=$(echo "$issue" | jq -r '.fields.created')
-    updated=$(echo "$issue" | jq -r '.fields.updated')
-    
-    echo "Key - ${key}" >> ${OUTPUT_FILE}
-    echo "Summary - ${summary}" >> ${OUTPUT_FILE}
-    echo "Status - ${status}" >> ${OUTPUT_FILE}
-    echo "Assignee - ${assignee}" >> ${OUTPUT_FILE}
-    echo "Created - ${created}" >> ${OUTPUT_FILE}
-    echo "Updated - ${updated}" >> ${OUTPUT_FILE}
-    echo "----------------------------------------" >> ${OUTPUT_FILE}
-  done
+  touch "$OUTPUT_FILE" 2>/dev/null || { echo "Failed to create $OUTPUT_FILE. Check permissions."; exit 1; }
 fi
 
-##########################
-# GitHub Query Section
-##########################
+{
+  echo "## Local Commit History from ${START_DATE} to ${END_DATE}"
+  echo "Filtered by author: ${AUTHOR}"
+  echo ""
+} > "${OUTPUT_FILE}"
 
-echo "" >> ${OUTPUT_FILE}
-echo "## GitHub Pull Request Activity for ${GITHUB_USER} (${START_DATE} to ${END_DATE})" >> ${OUTPUT_FILE}
+# Output detailed commit information:
+# --since and --until filter by date.
+# --pretty=fuller prints full commit metadata.
+# --patch includes the full diff for each commit.
+git log --author="${AUTHOR}" --since="${START_DATE}" --until="${END_DATE}" --pretty=fuller  >> "${OUTPUT_FILE}"
 
-# Build the search query with qualifiers:
-# - author:<github_user> filters PRs by creator.
-# - type:pr limits to pull requests.
-# - org:<org_name> restricts results to the given organization.
-# - created:<start_date>..<end_date> sets the time range.
-GITHUB_QUERY="author:${GITHUB_USER} type:pr org:${ORG_NAME} created:${START_DATE}..${END_DATE}"
-ENCODED_QUERY=$(printf "%s" "$GITHUB_QUERY" | jq -s -R -r @uri)
-GITHUB_SEARCH_URL="https://api.github.com/search/issues?q=${ENCODED_QUERY}&per_page=100&page=1"
+echo "Output written to ${OUTPUT_FILE}${CLIP_MSG}."
 
-echo "Fetching GitHub pull requests..."
-GH_RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_API_TOKEN}" \
-  -H "Accept: application/vnd.github.v3+json" \
-  "${GITHUB_SEARCH_URL}")
-
-TOTAL_COUNT=$(echo "$GH_RESPONSE" | jq '.total_count')
-echo "Total pull requests found: ${TOTAL_COUNT}" >> ${OUTPUT_FILE}
-echo "" >> ${OUTPUT_FILE}
-
-if [ "${TOTAL_COUNT}" -eq 0 ]; then
-  echo "No GitHub pull requests found." >> ${OUTPUT_FILE}
-else
-  echo "$GH_RESPONSE" | jq -r '.items[] | "PR #" + (.number|tostring) + " - " + .title + "\nCreated - " + .created_at + "\nURL - " + .html_url + "\n----------------------"' >> ${OUTPUT_FILE}
-fi
-
-echo "Output written to ${OUTPUT_FILE}"
-cat ${OUTPUT_FILE}
+# copy output to clipboard
+pbcopy < "${OUTPUT_FILE}"
