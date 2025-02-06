@@ -109,7 +109,7 @@ done
 echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
-git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
+git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status --pretty >> ${RELEASE_NOTES_FILE}
 
 cat ${RELEASE_NOTES_FILE} | pbcopy
 
