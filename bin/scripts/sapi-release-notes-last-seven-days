@@ -1,0 +1,163 @@
+#!/bin/bash
+# This script fetches Jira issues for multiple teams and creates release notes.
+# Jira REST API docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/intro/
+# jq manual: https://stedolan.github.io/jq/manual/
+# CommonMark spec: https://spec.commonmark.org/
+
+# Jira connection details.
+JIRA_URL="https://hotelengine.atlassian.net"
+JIRA_USERNAME="zach.romani@hotelengine.com"
+JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+
+# Fields for the API call.
+# customfield_10041 is the field ID for Acceptance Criteria.
+FIELDS='["key","summary","status","assignee","description","created","updated","resolution","priority","issuetype","reporter","customfield_10000","customfield_10041"]'
+
+# Define team names and their corresponding queries.
+teams=( "booking" "content" "search" "sint" "blue" "green" "shield" "pricing" )
+queries=(
+'("Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 OR project = "SAPI - Booking") and type != MVP AND updated >= -7d ORDER BY updated DESC'
+'project = "SAPI - Content" and "Team[Team]" = fc09d2a7-de13-4b20-878d-1c3fb4346333 AND updated >= -7d ORDER BY updated DESC'
+'project = "SAPI - Search" AND updated >= -7d ORDER BY updated DESC'
+'project = SINT AND updated >= -7d ORDER BY updated DESC'
+'project = "SAPI - Integrations" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND ("Team[Team]" = 265dd5c4-2ffc-4c85-9395-f51713d57083 OR Labels = Shield OR (parent in (SINT-2485, SINT-2545))) AND updated >= -7d ORDER BY updated DESC'
+'project = "SAPI - Integrations" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND ("Team[Team]" = 87bd5447-29ea-40ae-9535-2d238b19e4d5 OR Assignee in (712020:5d4d1e38-3259-48b6-9e55-f6bcf2f78251,712020:3b7493e2-50ef-4ff1-b181-0c5ee7321fb6,712020:d0cbeb71-2b93-4b0f-adea-8f002dd226e7,712020:0660da7b-b2e7-408d-9b37-1ded20404786) OR labels = Shield OR (parent in (SINT-2485, SINT-2545) AND assignee = empty)) AND updated >= -7d ORDER BY updated DESC'
+'project = "SINT" AND issuetype not in (epic, MVP, Sub-task) AND labels = Shield AND (resolved is empty OR resolved > -3d) AND updated >= -7d ORDER BY updated DESC'
+'("Team[Team]" in (bcdd3c92-c083-4682-9978-f280b81e08f6-17, og-ed8a5b3f-90ca-4750-b597-c2ca7fd60b47) OR project = "SAPI - Pricing") AND updated >= -7d ORDER BY updated DESC'
+)
+
+# Create a temporary file for release notes.
+RELEASE_NOTES_FILE=$(mktemp)
+
+echo "## Jira Issues Closed in the Last 7 Days" >> "${RELEASE_NOTES_FILE}"
+echo "" >> "${RELEASE_NOTES_FILE}"
+
+# Function: Check if an issue was closed in the last 7 days.
+issue_closed_in_last_7_days() {
+    local issue_key=$1
+    local changelog
+    changelog=$(curl -s -u "${JIRA_USERNAME}:${JIRA_API_TOKEN}" -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}?expand=changelog" \
+        | jq -r '.changelog.histories[] | select(.items[] | .field == "status" and .toString == "Closed") | .created')
+    local result
+    result=$(python3 -c "
+import sys
+from datetime import datetime, timedelta, timezone
+change_dates = sys.argv[1:]
+seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+for change_date in change_dates:
+    change_date = datetime.strptime(change_date, '%Y-%m-%dT%H:%M:%S.%f%z')
+    if change_date > seven_days_ago:
+        print('True')
+        sys.exit(0)
+print('False')
+" ${changelog})
+    if [ "${result}" == "True" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function: Retrieve issue comments.
+get_issue_comments() {
+    local issue_key=$1
+    curl -s -u "${JIRA_USERNAME}:${JIRA_API_TOKEN}" -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}/comment" \
+        | jq -r '.comments[] | "\(.author.displayName): \(.body)"'
+}
+
+# Helper function to extract a field using jq.
+_jq() {
+    echo "${row}" | base64 --decode | jq -r "${1}"
+}
+
+# Loop through the teams using indices.
+for i in "${!teams[@]}"; do
+    team="${teams[$i]}"
+    jql="${queries[$i]}"
+    
+    echo "### Team: ${team}" >> "${RELEASE_NOTES_FILE}"
+    echo "" >> "${RELEASE_NOTES_FILE}"
+    
+    JSON_PAYLOAD=$(jq -n --arg jql "$jql" --argjson fields "$FIELDS" '
+    {
+      jql: $jql,
+      startAt: 0,
+      maxResults: 50,
+      fields: $fields
+    }')
+    
+    RESPONSE=$(curl -s -u "${JIRA_USERNAME}:${JIRA_API_TOKEN}" \
+        -X POST \
+        -H "Content-Type: application/json" \
+        --data "${JSON_PAYLOAD}" \
+        "${JIRA_URL}/rest/api/2/search")
+    
+    if [ $? -ne 0 ]; then
+        echo "Failed to fetch issues for team ${team}" >> "${RELEASE_NOTES_FILE}"
+        continue
+    fi
+    
+    ISSUES=$(echo "${RESPONSE}" | jq '.issues')
+    
+    if [ "${ISSUES}" == "null" ] || [ -z "${ISSUES}" ]; then
+        echo "No issues found for team ${team} or failed to parse response." >> "${RELEASE_NOTES_FILE}"
+        continue
+    fi
+    
+    # Process each issue.
+    for row in $(echo "${ISSUES}" | jq -r '.[] | @base64'); do
+        # Use the helper _jq function to extract fields.
+        issue_key=$(_jq '.key')
+        summary=$(_jq '.fields.summary')
+        status=$(_jq '.fields.status.name')
+        assignee=$(_jq '.fields.assignee.displayName // "Unassigned"')
+        reporter=$(_jq '.fields.reporter.displayName // "Unknown"')
+        description=$(_jq '.fields.description // "No description provided"')
+        acceptance=$(_jq '.fields.customfield_10041 // "No acceptance criteria provided"')
+        created=$(_jq '.fields.created')
+        updated=$(_jq '.fields.updated')
+        resolution=$(_jq '.fields.resolution.name // "Unresolved"')
+        priority=$(_jq '.fields.priority.name')
+        issuetype=$(_jq '.fields.issuetype.name')
+        customfield=$(_jq '.fields.customfield_10000 // "N/A"')
+    
+        if issue_closed_in_last_7_days "${issue_key}"; then
+            echo "Key: ${issue_key}" >> "${RELEASE_NOTES_FILE}"
+            echo "Link: ${JIRA_URL}/browse/${issue_key}" >> "${RELEASE_NOTES_FILE}"
+            echo "Summary: ${summary}" >> "${RELEASE_NOTES_FILE}"
+            echo "Status: ${status}" >> "${RELEASE_NOTES_FILE}"
+            echo "Assignee: ${assignee}" >> "${RELEASE_NOTES_FILE}"
+            echo "Reporter: ${reporter}" >> "${RELEASE_NOTES_FILE}"
+            echo "Description: ${description}" >> "${RELEASE_NOTES_FILE}"
+            echo "Acceptance Criteria: ${acceptance}" >> "${RELEASE_NOTES_FILE}"
+            echo "Created: ${created}" >> "${RELEASE_NOTES_FILE}"
+            echo "Updated: ${updated}" >> "${RELEASE_NOTES_FILE}"
+            echo "Resolution: ${resolution}" >> "${RELEASE_NOTES_FILE}"
+            echo "Priority: ${priority}" >> "${RELEASE_NOTES_FILE}"
+            echo "Issue Type: ${issuetype}" >> "${RELEASE_NOTES_FILE}"
+            echo "Custom Field 10000: ${customfield}" >> "${RELEASE_NOTES_FILE}"
+            
+            echo "Comments:" >> "${RELEASE_NOTES_FILE}"
+            comments=$(get_issue_comments "${issue_key}")
+            if [ -z "$comments" ]; then
+                echo "  No comments available." >> "${RELEASE_NOTES_FILE}"
+            else
+                echo "$comments" | sed 's/^/  /' >> "${RELEASE_NOTES_FILE}"
+            fi
+            
+            echo "----------------------------------------" >> "${RELEASE_NOTES_FILE}"
+            echo "" >> "${RELEASE_NOTES_FILE}"
+        fi
+    done
+done
+
+echo "## Git Commits from the Last 7 Days" >> "${RELEASE_NOTES_FILE}"
+echo "" >> "${RELEASE_NOTES_FILE}"
+
+# Append Git commits to the release notes.
+git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status --pretty >> "${RELEASE_NOTES_FILE}"
+
+# Copy release notes to clipboard (macOS pbcopy).
+cat "${RELEASE_NOTES_FILE}" | pbcopy
+
+rm "${RELEASE_NOTES_FILE}"

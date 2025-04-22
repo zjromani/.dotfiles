@@ -1,84 +1,117 @@
 #!/bin/bash
-# six-month-review.sh
-#
-# This script outputs ALL commit details (metadata, commit message, and full diff)
-# for the current Git repository for a given date range and filtered by a specific author.
-# The output is copied to the clipboard (using pbcopy on macOS) and written to a file.
-#
-# Usage:
-#   ./six-month-review.sh --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD> --author "<author>"
-#
-# Example:
-#   ./six-month-review.sh --start-date 2024-07-01 --end-date 2024-12-31 --author "Dan Garvey"
 
-function usage() {
-  echo "Usage: $0 --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD> --author \"<author>\""
-  exit 1
+JIRA_URL="https://hotelengine.atlassian.net"
+JIRA_USERNAME="zach.romani@hotelengine.com"
+JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+PROJECT_KEY="BOOK"
+
+JQL='Project in ("SAPI - Booking") AND "Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 AND updated >= -7d ORDER BY updated DESC'
+
+FIELDS='["key","summary","status","assignee","description","created","updated","resolution","priority","issuetype","reporter","customfield_10000","customfield_10041"]' # customfield_10041 is the field ID for Acceptance Criteria
+
+JSON_PAYLOAD=$(jq -n --arg jql "$JQL" --argjson fields "$FIELDS" '
+{
+  jql: $jql,
+  startAt: 0,
+  maxResults: 50,
+  fields: $fields
+}')
+
+RESPONSE=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data "${JSON_PAYLOAD}" \
+    ${JIRA_URL}/rest/api/2/search)
+
+if [ $? -ne 0 ]; then
+    echo "Failed to fetch issues"
+    exit 1
+fi
+
+ISSUES=$(echo "${RESPONSE}" | jq '.issues')
+
+if [ "${ISSUES}" == "null" ] || [ -z "${ISSUES}" ]; then
+    echo "No issues found or failed to parse response."
+    exit 1
+fi
+
+issue_closed_in_last_7_days() {
+    local issue_key=$1
+    local changelog=$(curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}?expand=changelog" | jq -r '.changelog.histories[] | select(.items[] | .field == "status" and .toString == "Closed") | .created')
+
+    local result=$(python3 -c "
+import sys
+from datetime import datetime, timedelta, timezone
+
+change_dates = sys.argv[1:]
+seven_days_ago = datetime.now(timezone.utc) - timedelta(days=248)
+for change_date in change_dates:
+    change_date = datetime.strptime(change_date, '%Y-%m-%dT%H:%M:%S.%f%z')
+    if change_date > seven_days_ago:
+        print('True')
+        sys.exit(0)
+print('False')
+" ${changelog})
+
+    if [ "${result}" == "True" ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
-# Parse command-line arguments (supporting both --arg value and --arg=value forms)
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    --start-date=*)
-      START_DATE="${1#*=}"
-      shift ;;
-    --end-date=*)
-      END_DATE="${1#*=}"
-      shift ;;
-    --author=*)
-      AUTHOR="${1#*=}"
-      shift ;;
-    --start-date)
-      START_DATE="$2"
-      shift 2 ;;
-    --end-date)
-      END_DATE="$2"
-      shift 2 ;;
-    --author)
-      AUTHOR="$2"
-      shift 2 ;;
-    *)
-      echo "Unknown parameter: $1"
-      usage ;;
-  esac
+get_issue_comments() {
+    local issue_key=$1
+    curl -s -u ${JIRA_USERNAME}:${JIRA_API_TOKEN} -X GET "${JIRA_URL}/rest/api/2/issue/${issue_key}/comment" | jq -r '.comments[] | "\(.author.displayName): \(.body)"'
+}
+
+RELEASE_NOTES_FILE=$(mktemp)
+
+echo "## Jira Issues Closed in the Last 7 Days" >> ${RELEASE_NOTES_FILE}
+echo "" >> ${RELEASE_NOTES_FILE}
+
+for row in $(echo "${ISSUES}" | jq -r '.[] | @base64'); do
+    _jq() {
+        echo "${row}" | base64 --decode | jq -r "${1}"
+    }
+
+    issue_key=$(_jq '.key')
+
+    if issue_closed_in_last_7_days ${issue_key}; then
+        echo "Key: $issue_key" >> ${RELEASE_NOTES_FILE}
+        echo "Link: ${JIRA_URL}/browse/$issue_key" >> ${RELEASE_NOTES_FILE}
+        echo "Summary: $(_jq '.fields.summary')" >> ${RELEASE_NOTES_FILE}
+        echo "Status: $(_jq '.fields.status.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Assignee: $(_jq '.fields.assignee.displayName // "Unassigned"')" >> ${RELEASE_NOTES_FILE}
+        echo "Reporter: $(_jq '.fields.reporter.displayName // "Unknown"')" >> ${RELEASE_NOTES_FILE}
+        echo "Description: $(_jq '.fields.description // "No description provided"')" >> ${RELEASE_NOTES_FILE}
+        echo "Acceptance Criteria: $(_jq '.fields.customfield_10041 // "No acceptance criteria provided"')" >> ${RELEASE_NOTES_FILE}
+        echo "Created: $(_jq '.fields.created')" >> ${RELEASE_NOTES_FILE}
+        echo "Updated: $(_jq '.fields.updated')" >> ${RELEASE_NOTES_FILE}
+        echo "Resolution: $(_jq '.fields.resolution.name // "Unresolved"')" >> ${RELEASE_NOTES_FILE}
+        echo "Priority: $(_jq '.fields.priority.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Issue Type: $(_jq '.fields.issuetype.name')" >> ${RELEASE_NOTES_FILE}
+        echo "Custom Field 10000: $(_jq '.fields.customfield_10000 // "N/A"')" >> ${RELEASE_NOTES_FILE}
+        
+        echo "Comments:" >> ${RELEASE_NOTES_FILE}
+        comments=$(get_issue_comments $issue_key)
+        if [ -z "$comments" ]; then
+            echo "  No comments available." >> ${RELEASE_NOTES_FILE}
+        else
+            echo "$comments" | sed 's/^/  /' >> ${RELEASE_NOTES_FILE}
+        fi
+        
+        echo "----------------------------------------" >> ${RELEASE_NOTES_FILE}
+        echo "" >> ${RELEASE_NOTES_FILE}
+    fi
 done
 
-if [[ -z "$START_DATE" || -z "$END_DATE" || -z "$AUTHOR" ]]; then
-  usage
-fi
+echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
+echo "" >> ${RELEASE_NOTES_FILE}
 
-# Ensure we're in a Git repository.
-if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-  echo "This is not a git repository."
-  exit 1
-fi
+git log --oneline --since="8 months ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
 
-# Use a file on your Desktop as the output file.
-OUTPUT_FILE="$HOME/Desktop/commits.txt"
+cat ${RELEASE_NOTES_FILE} | pbcopy
 
-# Check if the file exists and is writable; if not, try to create it.
-if [ -f "$OUTPUT_FILE" ]; then
-  if [ ! -w "$OUTPUT_FILE" ]; then
-    echo "Permission denied: Cannot write to $OUTPUT_FILE. Check file permissions."
-    exit 1
-  fi
-else
-  touch "$OUTPUT_FILE" 2>/dev/null || { echo "Failed to create $OUTPUT_FILE. Check permissions."; exit 1; }
-fi
+rm ${RELEASE_NOTES_FILE}
 
-{
-  echo "## Local Commit History from ${START_DATE} to ${END_DATE}"
-  echo "Filtered by author: ${AUTHOR}"
-  echo ""
-} > "${OUTPUT_FILE}"
-
-# Output detailed commit information:
-# --since and --until filter by date.
-# --pretty=fuller prints full commit metadata.
-# --patch includes the full diff for each commit.
-git log --author="${AUTHOR}" --since="${START_DATE}" --until="${END_DATE}" --pretty=fuller  >> "${OUTPUT_FILE}"
-
-echo "Output written to ${OUTPUT_FILE}${CLIP_MSG}."
-
-# copy output to clipboard
-pbcopy < "${OUTPUT_FILE}"
