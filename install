@@ -5,7 +5,7 @@ CONFIG_DIR="$HOME/.config"
 BIN_DIR="$DOTFILES_DIR/bin"
 SCRIPTS_DIR="$BIN_DIR/scripts"
 
-STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim"  "psql" "vim")
+STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim" "psql" "vim")
 
 function check_stow_installed() {
     if ! command -v stow &> /dev/null; then
@@ -13,7 +13,8 @@ function check_stow_installed() {
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
             sudo apt-get update && sudo apt-get install -y stow
         elif [[ "$OSTYPE" == "darwin"* ]]; then
-            echo "Please install Stow using Homebrew or your package manager."
+            echo "Please install Stow using Homebrew:"
+            echo "  brew install stow"
             exit 1
         fi
     else
@@ -24,11 +25,12 @@ function check_stow_installed() {
 check_stow_installed
 
 # Change to DOTFILES_DIR
-cd "$DOTFILES_DIR" || exit
+cd "$DOTFILES_DIR" || exit 1
 
-if [-f $HOME/.zshrc]; then
-    echo "Removing existing .zshrc..."
-    rm $HOME/.zshrc
+# Backup existing .zshrc if it exists and is not a symlink
+if [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
+    echo "Backing up existing .zshrc to .zshrc.backup"
+    mv "$HOME/.zshrc" "$HOME/.zshrc.backup"
 fi
 
 # Stow each directory in the whitelist
@@ -42,7 +44,7 @@ for folder in "${STOW_FOLDERS[@]}"; do
     fi
 done
 
-# Add bin and scripts directories to PATH in .zshrc or .bashrc
+# Add bin and scripts directories to PATH
 echo "Adding bin and scripts directories to PATH..."
 if [[ "$SHELL" == *"zsh"* ]]; then
     SHELL_RC="$HOME/.zshrc"
@@ -62,6 +64,7 @@ if ! grep -q "$SCRIPTS_DIR" "$SHELL_RC"; then
     echo "Added $SCRIPTS_DIR to PATH in $SHELL_RC."
 fi
 
-source "$SHELL_RC"
+echo ""
+echo "✅ Dotfiles setup complete!"
+echo "ℹ️  Please restart your terminal session or run: exec \$SHELL"
 
-echo "Dotfiles setup complete!"
