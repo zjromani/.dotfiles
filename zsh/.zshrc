@@ -67,6 +67,7 @@ alias ja="jira-add"
 alias je="jira-add-epic"
 alias jb="jira-add-bug"
 alias js="jira-add-shield"
+alias jc="jira-add-corrective-action"
 
 alias unfuck-turbo="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
 alias zrc="nvim ~/.zshrc"
