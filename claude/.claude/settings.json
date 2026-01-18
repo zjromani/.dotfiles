@@ -1,7 +1,8 @@
 {
+  "env": {},
   "permissions": {
     "allow": [],
     "deny": []
   },
-  "env": {}
+  "model": "sonnet"
 }

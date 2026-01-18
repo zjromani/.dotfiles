@@ -1,34 +1,12 @@
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp_zero = require('lsp-zero')
 
-lsp.ensure_installed({
-  'eslint',
-  'kotlin_language_server'
-})
-
-local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
-})
-
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
   function CopyDiagnosticsToClipboard()
     local bufnr = vim.api.nvim_get_current_buf()
     local line = vim.api.nvim_win_get_cursor(0)[1] - 1
-    local diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr, line)
+    local diagnostics = vim.diagnostic.get(bufnr, {lnum = line})
     local diagnostic_messages = ""
 
     for i, diagnostic in ipairs(diagnostics) do
@@ -46,7 +24,33 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
   vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
   vim.keymap.set('n', '<leader>cd', '<cmd>lua CopyDiagnosticsToClipboard()<CR>', {noremap = true, silent = true})
-
 end)
 
-lsp.setup()
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    'eslint',
+    'kotlin_language_server'
+  },
+  handlers = {
+    lsp_zero.default_setup,
+  },
+})
+
+local cmp = require('cmp')
+local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
+  }),
+  sources = {
+    {name = 'nvim_lsp'},
+    {name = 'buffer'},
+    {name = 'path'},
+    {name = 'luasnip'},
+  }
+})
