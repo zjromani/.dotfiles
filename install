@@ -5,7 +5,7 @@ CONFIG_DIR="$HOME/.config"
 BIN_DIR="$DOTFILES_DIR/bin"
 SCRIPTS_DIR="$BIN_DIR/scripts"
 
-STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim" "psql" "vim")
+STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim" "psql" "vim" "claude")
 
 function check_stow_installed() {
     if ! command -v stow &> /dev/null; then
