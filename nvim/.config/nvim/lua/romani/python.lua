@@ -1,2 +1,2 @@
-vim.g.python3_host_prog = '~/neovim-venv/bin/python'
+vim.g.python3_host_prog = os.getenv("HOME") .. '/neovim-venv/bin/python'
 

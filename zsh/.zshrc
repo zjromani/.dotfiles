@@ -117,10 +117,6 @@ if [[ -f $HOME/.zshenv_private ]]; then
   source $HOME/.zshenv_private
 fi
 
-# BIND KEYS FOR CUSTOM SCRIPTS
-bindkey -s "^g" "git-branch-switch\n"
-bindkey -s "^f" "tmux-sessionizer\n"
-
 fzf-history-widget() {
   local selected
   selected=$(fc -l 1 | awk '{$1=""; print substr($0,2)}' | tac | awk '!seen[$0]++' | fzf) || return
