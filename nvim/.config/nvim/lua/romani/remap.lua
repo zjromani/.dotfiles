@@ -34,14 +34,3 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("i", "jk", "<Esc>")
-
-vim.keymap.set("n", "<leader><leader>c",  ':CopilotChat ', { remap=false })
-vim.keymap.set("x", "<leader><leader>c",  ':CopilotChatVisual ', { remap=false })
-vim.keymap.set("n", "<leader><leader>cb",  ':CopilotChatBuffer ', { remap=false })
-vim.keymap.set("x", "<leader><leader>cx",  ':CopilotChatInPlace<CR>', { remap=false })
-
--- telescope
---local ccca = require("CopilotChat.code_actions")
---vim.keymap.set("n", "<leader><leader>ch",  function() ccca.show_help_actions() end, { remap=false })
---vim.keymap.set("n", "<leader><leader>cp",  function() ccca.show_prompt_actions() end, { remap=false })
---vim.keymap.set("x", "<leader><leader>cp",  function() ccca.show_prompt_actions(true) end, { remap=false })
