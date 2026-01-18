@@ -3,6 +3,5 @@
   "permissions": {
     "allow": [],
     "deny": []
-  },
-  "model": "sonnet"
+  }
 }
