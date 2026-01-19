@@ -63,4 +63,12 @@ return require('packer').startup(function(use)
     run = function() vim.fn["mkdp#util#install"]() end,
   })
 
+  use {
+    "anthropics/claude-code.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("claude-code").setup()
+    end
+  }
+
 end)

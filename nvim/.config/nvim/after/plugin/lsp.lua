@@ -21,8 +21,8 @@ lsp_zero.on_attach(function(client, bufnr)
 
   vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
   vim.keymap.set("n", "gh", function() vim.lsp.buf.hover() end, opts)
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_next() end, opts)
+  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev() end, opts)
   vim.keymap.set('n', '<leader>cd', '<cmd>lua CopyDiagnosticsToClipboard()<CR>', {noremap = true, silent = true})
 
   -- Code actions (quick fixes, refactors)
@@ -39,7 +39,8 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {
     'eslint',
-    'kotlin_language_server'
+    'kotlin_language_server',
+    'buf_ls',
   },
   handlers = {
     lsp_zero.default_setup,
