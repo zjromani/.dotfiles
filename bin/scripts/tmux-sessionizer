@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 
-session=$(find ~ ~/me ~/work -mindepth 1 -maxdepth 1 -type d  -not -path "$HOME/Public" | fzf)
+dirs=("$HOME")
+[[ -d "$HOME/me" ]] && dirs+=("$HOME/me")
+[[ -d "$HOME/work" ]] && dirs+=("$HOME/work")
+
+session=$(find "${dirs[@]}" -mindepth 1 -maxdepth 1 -type d -not -path "$HOME/Public" | fzf)
 
 session_name=$(basename "$session" | tr . _)
 
