@@ -211,3 +211,4 @@ fi
 if ! command -v python >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then
   alias python=python3
 fi
+export PATH="$HOME/.local/bin:$PATH"
