@@ -24,8 +24,10 @@ not change behavior, only structure)
 ## Example
 
 ```
-Fix authentication timeout on slow connections
+Fixed authentication timeout on slow connections
 
-Increased the default timeout from 5s to 30s to handle
-users on slower networks. Also added retry logic.
+The timeout was causing errors for a very specific user (id: 767) and this
+is critical to allow that user through as they are a large account.
+
+Plan should be to revisit this later when time.
 ```
