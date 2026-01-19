@@ -64,10 +64,9 @@ return require('packer').startup(function(use)
   })
 
   use {
-    "anthropics/claude-code.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
+    "coder/claudecode.nvim",
     config = function()
-      require("claude-code").setup()
+      require("claudecode").setup()
     end
   }
 
