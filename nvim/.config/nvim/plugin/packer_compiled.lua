@@ -120,11 +120,6 @@ _G.packer_plugins = {
     path = "/Users/zachromani/.local/share/nvim/site/pack/packer/start/harpoon",
     url = "https://github.com/theprimeagen/harpoon"
   },
-  ["lsp-zero.nvim"] = {
-    loaded = true,
-    path = "/Users/zachromani/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
-    url = "https://github.com/VonHeikemen/lsp-zero.nvim"
-  },
   ["markdown-preview.nvim"] = {
     loaded = true,
     path = "/Users/zachromani/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim",
