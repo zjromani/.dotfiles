@@ -1,10 +1,21 @@
 #! /usr/bin/env bash
 
-shopt -s nullglob
+shopt -s nullglob dotglob
 dirs=(~/*/ ~/me/*/ ~/work/*/)
-shopt -u nullglob
+shopt -u nullglob dotglob
 
-session=$(printf '%s\n' "${dirs[@]%/}" | grep -v "$HOME/Public" | fzf)
+# Get existing tmux sessions
+existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
+
+# Combine directories and existing sessions
+session=$(
+    {
+        printf '%s\n' "${dirs[@]%/}" | grep -v "$HOME/Public"
+        [ -n "$existing_sessions" ] && printf '%s\n' "$existing_sessions"
+    } | fzf
+)
+
+[ -z "$session" ] && exit 0
 
 session_name=$(basename "$session" | tr . _)
 
