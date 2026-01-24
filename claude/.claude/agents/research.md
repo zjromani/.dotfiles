@@ -1,7 +1,7 @@
 ---
 name: research
 description: "Use this agent for research tasks requiring web search, document analysis, fact verification, or synthesizing information into structured reports. It tracks sources, verifies claims, and delivers findings with proper citations."
-model: sonnet
+model: opus
 color: blue
 ---
 
