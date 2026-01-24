@@ -35,5 +35,20 @@ cd ~/.dotfiles && stow -R nvim
 The `claude/` package provides shared Claude Code configuration:
 - `settings.json` - global permissions and env vars
 - `skills/` - reusable workflows (`/commit`, `/pr`, `/review`)
+- `agents/` - custom subagents (`software-architect`, `build-validator`, `research`)
 
 Both work and personal accounts use these via symlink.
+
+## Claude Instructions
+
+When working in this repo, always make config changes to the stow-able source locations:
+
+| Config Type | Write to (this repo) | NOT to |
+|-------------|---------------------|--------|
+| Claude agents | `claude/.claude/agents/` | `~/.claude/agents/` |
+| Claude skills | `claude/.claude/skills/` | `~/.claude/skills/` |
+| Claude settings | `claude/.claude/settings.json` | `~/.claude/settings.json` |
+| Neovim config | `nvim/.config/nvim/` | `~/.config/nvim/` |
+| Zsh config | `zsh/.zshrc` | `~/.zshrc` |
+
+After changes, run `stow -R <package>` to update symlinks.
