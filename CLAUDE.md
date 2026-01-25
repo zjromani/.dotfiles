@@ -8,7 +8,10 @@ Personal dotfiles managed with GNU Stow. Each top-level directory is a stow pack
 nvim/     -> ~/.config/nvim
 zsh/      -> ~/.zshrc
 claude/   -> ~/.claude
-tmux/     -> ~/.tmux.conf (if exists)
+tmux/     -> ~/.tmux.conf
+iterm2/   -> ~/.config/iterm2
+git/      -> ~/.gitconfig
+psql/     -> ~/.psqlrc
 ```
 
 ## Usage
@@ -90,5 +93,7 @@ When working in this repo, always make config changes to the stow-able source lo
 | Claude settings | `claude/.claude/settings.json` | `~/.claude/settings.json` |
 | Neovim config | `nvim/.config/nvim/` | `~/.config/nvim/` |
 | Zsh config | `zsh/.zshrc` | `~/.zshrc` |
+| Tmux config | `tmux/.tmux.conf` | `~/.tmux.conf` |
+| iTerm2 config | `iterm2/.config/iterm2/` | `~/.config/iterm2/` |
 
 After changes, run `stow -R <package>` to update symlinks.
