@@ -1,0 +1,12 @@
+# Stow packages managed by this dotfiles repo
+# Used by both ./install script and ansible automation
+stow_packages:
+  - bin
+  - tmux
+  - zsh
+  - git
+  - nvim
+  - psql
+  - vim
+  - claude
+  - iterm2

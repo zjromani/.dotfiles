@@ -5,7 +5,8 @@ CONFIG_DIR="$HOME/.config"
 BIN_DIR="$DOTFILES_DIR/bin"
 SCRIPTS_DIR="$BIN_DIR/scripts"
 
-STOW_FOLDERS=("bin" "tmux" "zsh" "git" "nvim" "psql" "vim" "claude")
+# Read packages from packages.yml manifest
+STOW_FOLDERS=($(grep -E '^\s*-' "$DOTFILES_DIR/packages.yml" | sed 's/.*- //'))
 
 function check_stow_installed() {
     if ! command -v stow &> /dev/null; then
