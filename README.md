@@ -70,6 +70,21 @@ tmux source-file ~/.tmux.conf  # tmux (or prefix + r)
 # iTerm2 will auto-reload from ~/.config/iterm2/
 ```
 
+## Adding New Packages
+
+Stow packages are managed via `packages.yml`. To add a new package:
+
+1. Create the package directory (e.g., `alacritty/`)
+2. Add it to `packages.yml`:
+   ```yaml
+   stow_packages:
+     - alacritty
+   ```
+3. Commit and push
+4. Run `ansible-playbook update.yml` on other machines
+
+The install script and Ansible automation both read from this manifest, ensuring they stay in sync.
+
 ## Configuration Details
 
 ### iTerm2
