@@ -1,7 +1,7 @@
 ---
 name: session-manager
 description: "Use this agent when you need to pause work, create checkpoints, resume from previous sessions, or manage long-running workflows that span multiple conversations. It handles state persistence, context compaction, and session resumption."
-model: sonnet
+model: opus
 color: yellow
 ---
 
