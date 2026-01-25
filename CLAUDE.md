@@ -29,6 +29,46 @@ cd ~/.dotfiles && stow -R nvim
 - Each package mirrors the home directory structure
 - Use `.config/` subdirectory for XDG-compliant apps
 - Keep secrets in `~/.zshenv_private` (not tracked)
+- **External dependencies** (plugins, themes) should be documented in this file
+- **When adding external dependencies**: Update ansible playbook to automate installation
+
+## Multi-Machine Synchronization
+
+When dotfiles are updated on one machine, sync to others:
+
+1. **Pull and re-stow**
+   ```bash
+   cd ~/.dotfiles && git pull origin master
+   # Re-stow affected packages
+   stow -R tmux nvim zsh claude  # or specific packages
+   ```
+
+2. **Install/update dependencies** (not tracked in repo)
+   - Tmux catppuccin: `git clone https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin`
+   - Nvim plugins: `nvim +PackerSync`
+
+3. **Reload configs**
+   ```bash
+   exec $SHELL                    # zsh
+   tmux source-file ~/.tmux.conf  # tmux
+   ```
+
+### Dependency Management
+
+External dependencies (plugins, themes) not tracked in this repo:
+
+- **Tmux Plugins**: `~/.config/tmux/plugins/catppuccin/` - Install via git clone
+- **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer
+- **When adding dependencies**: Update `~/me/ansible` to automate installation
+
+## Before Committing
+
+When making changes that affect multiple machines:
+
+1. Test locally first
+2. Document any new external dependencies
+3. Update Ansible tasks for new dependencies
+4. Consider: Will this work on fresh installs?
 
 ## Claude Config
 
