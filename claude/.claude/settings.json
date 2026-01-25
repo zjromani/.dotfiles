@@ -34,5 +34,6 @@
       "Bash(heroku config*)"
     ],
     "deny": []
-  }
+  },
+  "model": "sonnet"
 }
