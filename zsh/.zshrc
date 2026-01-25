@@ -90,7 +90,6 @@ alias guards="bundle exec guard -G Guardfile.spring"
 alias hrailsc='h run rails console --app he-api'
 alias rs='rails s'
 alias rc='rails c'
-alias glog='git log --oneline --decorate --graph --since="3 weeks ago" --date=relative --pretty=format:"%C(yellow)%h %C(cyan)(%ar) %C(green)%an %C(auto)%d %C(reset)%s %C(magenta)https://github.com/HotelEngine/engine-booking-api/commit/%H%C(reset)"'
 alias gpr='git pull-request -o'
 alias grec='git branch --sort=committerdate'
 alias topo='top -o mem'
