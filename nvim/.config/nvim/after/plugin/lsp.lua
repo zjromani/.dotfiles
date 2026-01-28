@@ -35,11 +35,17 @@ require('mason-lspconfig').setup({
   },
 })
 
--- LSP server configurations using native vim.lsp.config (Neovim 0.11+)
-local servers = { 'eslint', 'kotlin_language_server', 'buf_ls', 'lua_ls', 'ts_ls' }
-for _, server in ipairs(servers) do
-  vim.lsp.enable(server)
-end
+-- LSP server setup for Neovim 0.11+
+-- Enable servers after Neovim fully initializes to avoid URI errors
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    local servers = { 'eslint', 'kotlin_language_server', 'buf_ls', 'lua_ls', 'ts_ls' }
+    for _, server in ipairs(servers) do
+      -- Safely enable each server using default configs
+      pcall(vim.lsp.enable, server)
+    end
+  end,
+})
 
 -- Completion setup
 local cmp = require('cmp')
