@@ -60,8 +60,10 @@ When dotfiles are updated on one machine, sync to others:
 
 External dependencies (plugins, themes) not tracked in this repo:
 
+- **Starship**: `brew install starship` - Cross-shell prompt
 - **Tmux Plugins**: `~/.config/tmux/plugins/catppuccin/` - Install via git clone
-- **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer
+- **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer (Catppuccin theme + lualine)
+- **Nerd Font**: JetBrains Mono Nerd Font - Set in iTerm2 (Settings > Profiles > Text > Font)
 - **When adding dependencies**: Update `~/me/ansible` to automate installation
 
 ## Before Committing

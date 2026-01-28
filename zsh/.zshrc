@@ -15,7 +15,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME=""
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -211,3 +211,6 @@ if ! command -v python >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; th
   alias python=python3
 fi
 export PATH="$HOME/.local/bin:$PATH"
+
+# Starship prompt
+eval "$(starship init zsh)"

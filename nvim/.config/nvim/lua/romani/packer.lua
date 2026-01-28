@@ -23,11 +23,28 @@ return require('packer').startup(function(use)
   }
 
   use {
-    "loctvl842/monokai-pro.nvim",
-    as = "monokai-pro",
+    "catppuccin/nvim",
+    as = "catppuccin",
     config = function()
-      require("monokai-pro").setup()
+      require("catppuccin").setup({
+        flavour = "mocha",
+        integrations = {
+          cmp = true,
+          treesitter = true,
+          harpoon = true,
+          telescope = { enabled = true },
+          mason = true,
+          native_lsp = {
+            enabled = true,
+          },
+        },
+      })
     end
+  }
+
+  use {
+    "nvim-lualine/lualine.nvim",
+    requires = { "nvim-tree/nvim-web-devicons" },
   }
 
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})
