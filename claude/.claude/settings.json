@@ -67,12 +67,14 @@
       "Bash(terraform fmt*)",
       "Bash(heroku logs*)",
       "Bash(heroku ps*)",
-      "Bash(heroku config*)"
+      "Bash(heroku config*)",
+      "WebSearch",
+      "WebFetch",
+      "mcp__*"
     ],
     "deny": [
       "Bash(git rebase*)",
       "Bash(git push*)"
     ]
-  },
-  "model": "sonnet"
+  }
 }
