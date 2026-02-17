@@ -77,5 +77,6 @@
       "Bash(git push*)"
     ]
   },
-  "effortLevel": "low"
+  "effortLevel": "low",
+  "model": "sonnet"
 }

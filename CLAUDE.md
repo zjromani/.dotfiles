@@ -87,6 +87,7 @@ Both work and personal accounts use these via symlink.
 
 The `cursor/` package provides shared Cursor configuration:
 - `skills/` - reusable Cursor agent skills in `~/.cursor/skills/`
+- Current skills include `software-design-architect` and `elia-go-faster-review`
 - Keep Cursor skills in dotfiles at `cursor/.cursor/skills/` (not in home directly)
 
 ## Claude Instructions
