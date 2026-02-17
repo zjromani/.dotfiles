@@ -8,6 +8,7 @@ Personal dotfiles managed with GNU Stow. Each top-level directory is a stow pack
 nvim/     -> ~/.config/nvim
 zsh/      -> ~/.zshrc
 claude/   -> ~/.claude
+cursor/   -> ~/.cursor
 tmux/     -> ~/.tmux.conf
 iterm2/   -> ~/.config/iterm2
 git/      -> ~/.gitconfig
@@ -84,6 +85,10 @@ The `claude/` package provides shared Claude Code configuration:
 
 Both work and personal accounts use these via symlink.
 
+The `cursor/` package provides shared Cursor configuration:
+- `skills/` - reusable Cursor agent skills in `~/.cursor/skills/`
+- Keep Cursor skills in dotfiles at `cursor/.cursor/skills/` (not in home directly)
+
 ## Claude Instructions
 
 When working in this repo, always make config changes to the stow-able source locations:
@@ -93,6 +98,7 @@ When working in this repo, always make config changes to the stow-able source lo
 | Claude agents | `claude/.claude/agents/` | `~/.claude/agents/` |
 | Claude skills | `claude/.claude/skills/` | `~/.claude/skills/` |
 | Claude settings | `claude/.claude/settings.json` | `~/.claude/settings.json` |
+| Cursor skills | `cursor/.cursor/skills/` | `~/.cursor/skills/` |
 | Neovim config | `nvim/.config/nvim/` | `~/.config/nvim/` |
 | Zsh config | `zsh/.zshrc` | `~/.zshrc` |
 | Tmux config | `tmux/.tmux.conf` | `~/.tmux.conf` |

@@ -9,4 +9,5 @@ stow_packages:
   - psql
   - vim
   - claude
+  - cursor
   - iterm2

@@ -33,6 +33,7 @@ cd ~/.dotfiles
 stow nvim
 stow zsh
 stow tmux
+stow cursor
 stow iterm2
 stow git
 stow psql
@@ -62,7 +63,7 @@ This will:
 cd ~/.dotfiles && git pull origin master
 
 # Re-stow affected packages
-stow -R tmux nvim zsh iterm2
+stow -R tmux nvim zsh cursor iterm2
 
 # Reload configs
 exec $SHELL                    # zsh
