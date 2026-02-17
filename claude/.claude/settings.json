@@ -76,5 +76,7 @@
       "Bash(git rebase*)",
       "Bash(git push*)"
     ]
-  }
+  },
+  "effortLevel": "low",
+  "model": "sonnet"
 }
