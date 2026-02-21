@@ -1,11 +1,11 @@
 ---
 name: spec-writer
-description: Transforms a feature idea, product requirement, or system behavior into a specification rigorous enough for AI agents to implement. Use when a developer or engineering leader needs to write a spec for a feature, service, or system — especially before handing work to an AI coding agent. Draws on the GitHub Spec Kit, Addy Osmani's spec-writing framework, and Nate B. Jones's Level 4-5 behavioral contract patterns.
+description: "Turns vague intent into agent-grade specifications. Reach for this when plan-gate blocks you — or proactively for large, high-stakes work where you already know the idea is fuzzy. Draws on the GitHub Spec Kit, Addy Osmani's spec-writing framework, and Nate B. Jones's Level 4-5 behavioral contract patterns."
 ---
 
 # Spec Writer
 
-Turns vague intent into agent-grade specifications. The bottleneck in AI-assisted development has shifted from implementation speed to specification quality. Ambiguous specs produce ambiguous software. AI agents don't ask clarifying questions — they make assumptions. This skill closes that gap.
+Turns vague intent into agent-grade specifications. Most of the time, you hit plan-gate first — it's the entry point for any planning session. Spec-writer is what you reach for when the gate tells you the idea needs more work, or proactively when you already know the idea is large and fuzzy enough that jumping to plan mode would be premature. The bottleneck in AI-assisted development has shifted from implementation speed to specification quality. Ambiguous specs produce ambiguous software. AI agents don't ask clarifying questions — they make assumptions. This skill closes that gap.
 
 ## Core Principle
 

@@ -1,11 +1,11 @@
 ---
 name: plan-gate
-description: "Quality gate for plan mode. Triggers whenever the user enters plan mode or asks Claude to plan a technical task. Evaluates the prompt/spec before any planning or execution begins. Challenges insufficient specifications and requires the user to either improve them or explicitly override. This skill prevents the most common AI development failure: jumping into implementation before the specification is solid enough to guide it."
+description: "First-touch quality gate for plan mode. Fires whenever the user enters plan mode or asks Claude to plan a task. Makes a binary call: spec is solid enough to plan, or it isn't. If it isn't, offers to invoke spec-writer as remediation. Prevents the most common AI development failure — jumping into implementation before the specification is solid enough to guide it."
 ---
 
 # Plan Gate
 
-A quality checkpoint that runs before any planning or execution begins. The goal is to catch underspecified prompts before they produce wrong output — which is always more expensive to fix than spending 5 minutes sharpening the spec upfront.
+The entry point for every planning session. When the user enters plan mode or asks Claude to plan something, this fires first — before any exploration or design work begins. It makes a single binary call: is the spec solid enough to produce a useful plan, or isn't it? If it isn't, the user can answer a few targeted questions or invoke spec-writer to build a better spec before planning starts. The goal is to catch underspecified prompts before they produce wrong output — which is always more expensive to fix than spending 5 minutes sharpening the spec upfront.
 
 The METR study found experienced developers were 19% *slower* with AI tools while believing they were 20% faster. The gap is almost always poor specifications producing rework. This gate exists to close that gap.
 
