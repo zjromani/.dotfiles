@@ -1,29 +1,31 @@
 #! /usr/bin/env bash
 
 shopt -s nullglob dotglob
-dirs=(~/*/ ~/me/*/ ~/work/*/)
+dirs=(~/*/ ~/me/*/ ~/work/*/ /flights/*/)
 shopt -u nullglob dotglob
 
-# Get existing tmux sessions
 existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
 
-# Combine directories and existing sessions
 session=$(
     {
-        printf '%s\n' "${dirs[@]%/}" | grep -v "$HOME/Public"
+        printf '%s\n' "${dirs[@]%/}" \
+            | grep -vE "/(Downloads|Documents|Music|Movies|Pictures|Desktop|Library|Public|Applications|\.Trash|\.)"
         [ -n "$existing_sessions" ] && printf '%s\n' "$existing_sessions"
-    } | fzf
+    } | fzf --no-sort --tiebreak=index --height=40%
 )
 
 [ -z "$session" ] && exit 0
 
-session_name=$(basename "$session" | tr . _)
+# For /flights paths, include parent dir in session name for context
+if [[ "$session" == /flights/* ]]; then
+    session_name="flights_$(basename "$session")"
+else
+    session_name=$(basename "$session")
+fi
+session_name=$(echo "$session_name" | tr . _)
 
 if ! tmux has-session -t "$session_name" 2>/dev/null; then
     tmux new-session -s "$session_name" -c "$session" -d
 fi
 
 tmux switch-client -t "$session_name"
-
-
-
