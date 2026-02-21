@@ -4,7 +4,9 @@ set -euo pipefail
 DOTFILES="$(cd "$(dirname "$0")/../.." && pwd)"
 SKILLS_SRC="$DOTFILES/claude/.claude/skills"
 SKILLS_DEST="$DOTFILES/cursor/.cursor/skills"
+HOOKS_DIR="$DOTFILES/.git/hooks"
 
+# Sync Cursor skill symlinks
 for skill_dir in "$SKILLS_SRC"/*/; do
   name="$(basename "$skill_dir")"
   target="$SKILLS_DEST/$name"
@@ -13,3 +15,19 @@ for skill_dir in "$SKILLS_SRC"/*/; do
     echo "Linked: $name"
   fi
 done
+
+# Install git hooks
+install_hook() {
+  local hook="$1"
+  local hook_path="$HOOKS_DIR/$hook"
+  local body="$2"
+  if [ ! -f "$hook_path" ]; then
+    printf '%s\n' '#!/usr/bin/env bash' "$body" > "$hook_path"
+    chmod +x "$hook_path"
+    echo "Installed hook: $hook"
+  fi
+}
+
+install_hook "post-merge"    '"$(git rev-parse --show-toplevel)/bin/scripts/sync-cursor-skills"'
+install_hook "post-checkout" '"$(git rev-parse --show-toplevel)/bin/scripts/sync-cursor-skills"'
+install_hook "pre-push"      '"$(git rev-parse --show-toplevel)/bin/scripts/validate-ansible-sync"'

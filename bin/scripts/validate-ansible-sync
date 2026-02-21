@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Validates that dotfiles and ~/me/ansible stay in sync.
+# Run manually or fires automatically as a pre-push hook.
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "$0")/../.." && pwd)"
+ANSIBLE="$HOME/me/ansible"
+PACKAGES_YML="$DOTFILES/packages.yml"
+ERRORS=0
+
+fail() { echo "  ✗ $1"; ERRORS=$((ERRORS + 1)); }
+ok()   { echo "  ✓ $1"; }
+
+echo "==> Validating dotfiles ↔ ansible sync"
+
+# 1. Every package in packages.yml has a directory
+if command -v python3 &>/dev/null; then
+  while IFS= read -r pkg; do
+    pkg="$(echo "$pkg" | tr -d ' -')"
+    [[ -z "$pkg" || "$pkg" == "stow_packages:" ]] && continue
+    if [ -d "$DOTFILES/$pkg" ]; then
+      ok "packages.yml: $pkg/ exists"
+    else
+      fail "packages.yml lists '$pkg' but $DOTFILES/$pkg/ does not exist"
+    fi
+  done < <(grep -E '^\s+-\s+\w+' "$PACKAGES_YML" | sed 's/.*- //')
+fi
+
+# 2. ansible task files reference sync-cursor-skills
+for task_file in \
+  "$ANSIBLE/tasks/dotfiles.yml" \
+  "$ANSIBLE/tasks/dotfiles-update.yml"; do
+  if [ ! -f "$task_file" ]; then
+    fail "Ansible task file missing: $task_file"
+  elif grep -q "sync-cursor-skills" "$task_file"; then
+    ok "ansible $(basename "$task_file") references sync-cursor-skills"
+  else
+    fail "ansible $(basename "$task_file") does NOT reference sync-cursor-skills — add the task"
+  fi
+done
+
+# 3. Cursor skill symlinks are current
+SKILLS_SRC="$DOTFILES/claude/.claude/skills"
+SKILLS_DEST="$DOTFILES/cursor/.cursor/skills"
+if [ -d "$SKILLS_SRC" ]; then
+  missing=0
+  for skill_dir in "$SKILLS_SRC"/*/; do
+    name="$(basename "$skill_dir")"
+    if [ ! -L "$SKILLS_DEST/$name" ]; then
+      fail "Cursor symlink missing for skill: $name (run bin/scripts/sync-cursor-skills)"
+      missing=1
+    fi
+  done
+  [ "$missing" -eq 0 ] && ok "all Cursor skill symlinks are current"
+fi
+
+echo ""
+if [ "$ERRORS" -gt 0 ]; then
+  echo "==> $ERRORS issue(s) found. Fix before pushing."
+  exit 1
+else
+  echo "==> All checks passed."
+fi

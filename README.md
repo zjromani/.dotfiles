@@ -10,10 +10,13 @@ Personal dotfiles managed with GNU Stow and automated with Ansible. Includes con
 # Clone dotfiles
 git clone https://github.com/zjromani/.dotfiles.git ~/.dotfiles
 
+# One-time post-clone step: install Cursor skill symlinks and git hooks
+~/.dotfiles/bin/scripts/sync-cursor-skills
+
 # Clone and run ansible playbook (handles everything)
 git clone <your-ansible-repo-url> ~/me/ansible
 cd ~/me/ansible
-ansible-playbook local.yml
+ansible-playbook local.yml --ask-vault-pass --ask-become-pass
 ```
 
 The Ansible playbook will:
@@ -37,6 +40,9 @@ stow cursor
 stow iterm2
 stow git
 stow psql
+stow claude
+stow bin
+stow vim
 ```
 
 ## Syncing Across Machines
@@ -119,9 +125,38 @@ Then, add your sensitive environment variables to this file. The `.zshrc` config
 
 External dependencies (plugins, themes) not tracked in this repo:
 
+- **Starship**: `brew install starship` - Cross-shell prompt
 - **Tmux Plugins**: `~/.config/tmux/plugins/catppuccin/` - Installed via git by Ansible
 - **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer
 - **Fonts**: JetBrainsMono Nerd Font - Installed via Homebrew by Ansible
 
 When adding new dependencies, update `~/me/ansible` to automate installation.
+
+## Claude & Cursor Skills
+
+The `claude/` stow package provides shared Claude Code configuration and skills used by both Claude and Cursor:
+
+- `claude/.claude/settings.json` - global permissions and env vars
+- `claude/.claude/skills/` - **single source of truth** for all skills (Claude + Cursor)
+- `claude/.claude/agents/` - custom subagents (`software-architect`, `build-validator`, `research`)
+
+Cursor skill symlinks (`cursor/.cursor/skills/*`) point back to `claude/.claude/skills/*` via relative symlinks. The `bin/scripts/sync-cursor-skills` script manages these.
+
+### Fresh Clone Setup
+
+After cloning, run once to install Cursor symlinks and git hooks:
+
+```bash
+~/.dotfiles/bin/scripts/sync-cursor-skills
+```
+
+The git `post-merge` and `post-checkout` hooks call this automatically on subsequent pulls — but the hooks themselves are not tracked in git and must be bootstrapped with the above command.
+
+> **Note**: Ansible's `dotfiles-update.yml` runs `sync-cursor-skills` automatically, so machines managed by Ansible stay in sync.
+
+### Adding a New Skill
+
+1. Drop a directory in `claude/.claude/skills/`
+2. Run `bin/scripts/sync-cursor-skills` (or `git pull` if hooks are installed)
+3. The Cursor symlink is created automatically
 
