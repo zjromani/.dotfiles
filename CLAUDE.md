@@ -80,15 +80,25 @@ When making changes that affect multiple machines:
 
 The `claude/` package provides shared Claude Code configuration:
 - `settings.json` - global permissions and env vars
-- `skills/` - reusable workflows (`/commit`, `/pr`, `/review`)
+- `skills/` - single source of truth for all skills (Claude + Cursor)
 - `agents/` - custom subagents (`software-architect`, `build-validator`, `research`)
 
 Both work and personal accounts use these via symlink.
 
-The `cursor/` package provides shared Cursor configuration:
-- `skills/` - reusable Cursor agent skills in `~/.cursor/skills/`
-- Current skills include `software-design-architect` and `elia-go-faster-review`
-- Keep Cursor skills in dotfiles at `cursor/.cursor/skills/` (not in home directly)
+### Skills (shared between Claude and Cursor)
+
+All skills live in `claude/.claude/skills/`. Cursor skills are symlinks pointing back:
+
+| Skill | Description |
+|-------|-------------|
+| `commit` | Atomic git commits with past-tense messages |
+| `pr` | GitHub pull requests with summary + test plan |
+| `review` | Code review with severity calibration |
+| `zach-editor` | Edit text into Zach's voice |
+| `one-way-door-review` | Architecture review prioritizing irreversible decisions |
+| `elia-go-faster-review` | Speed-lens execution review |
+
+Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` via relative symlinks.
 
 ## Claude Instructions
 
@@ -99,7 +109,7 @@ When working in this repo, always make config changes to the stow-able source lo
 | Claude agents | `claude/.claude/agents/` | `~/.claude/agents/` |
 | Claude skills | `claude/.claude/skills/` | `~/.claude/skills/` |
 | Claude settings | `claude/.claude/settings.json` | `~/.claude/settings.json` |
-| Cursor skills | `cursor/.cursor/skills/` | `~/.cursor/skills/` |
+| Cursor skills | `claude/.claude/skills/` (canonical) | `~/.cursor/skills/` |
 | Neovim config | `nvim/.config/nvim/` | `~/.config/nvim/` |
 | Zsh config | `zsh/.zshrc` | `~/.zshrc` |
 | Tmux config | `tmux/.tmux.conf` | `~/.tmux.conf` |

@@ -1,3 +1,7 @@
+---
+name: review
+description: Review code changes for correctness, security, performance, and maintainability. Use when the user wants feedback on a PR diff or staged changes.
+---
 # Review Skill
 
 Review code changes for a pull request or staged changes.
@@ -45,6 +49,12 @@ Review code changes for a pull request or staged changes.
 ## Verdict
 [Approve / Request Changes / Needs Discussion]
 ```
+
+## Severity Calibration
+
+- **Critical**: Bugs that will hit production, security vulnerabilities, data loss risks. Must fix before merge.
+- **Major**: Logic errors in non-obvious paths, missing validation on external input, performance issues at scale. Should fix before merge.
+- **Minor**: Style nits, naming suggestions, small readability improvements. Nice to fix, not blocking.
 
 ## Guidelines
 

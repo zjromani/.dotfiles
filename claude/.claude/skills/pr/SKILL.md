@@ -1,3 +1,7 @@
+---
+name: pr
+description: Create a GitHub pull request with a concise summary and test plan. Use when the user wants to open a PR for the current branch.
+---
 # PR Skill
 
 Create a GitHub pull request. Prioritize concision over grammar.

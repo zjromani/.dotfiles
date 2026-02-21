@@ -1,3 +1,7 @@
+---
+name: commit
+description: Create a git commit with a well-formatted, atomic commit message. Use when the user wants to commit staged or unstaged changes.
+---
 # Commit Skill
 
 Create a git commit with a well-formatted message.

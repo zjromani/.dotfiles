@@ -1,5 +1,5 @@
 ---
-name: software-design-architect
+name: one-way-door-review
 description: Review software design plans with a one-way-door-first architecture lens. Use when evaluating design docs, ADRs, system proposals, tradeoffs, rollout strategy, or when the user asks for architecture feedback.
 ---
 # Software Design Architect

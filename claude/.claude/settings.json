@@ -78,5 +78,5 @@
     ]
   },
   "effortLevel": "low",
-  "model": "sonnet"
+  "skipDangerousModePermissionPrompt": true
 }
