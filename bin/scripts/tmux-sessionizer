@@ -1,8 +1,16 @@
 #! /usr/bin/env bash
 
 if [[ "$1" == "--worktrees" ]]; then
+  extra_roots=()
+  if [[ -n "$SESSIONIZER_EXTRA_DIRS" ]]; then
+    IFS=' ' read -r -a extra_roots <<< "$SESSIONIZER_EXTRA_DIRS"
+  fi
+
   shopt -s nullglob dotglob
-  search_dirs=(~/*/ ~/me/*/ ~/work/*/ /flights/*/)
+  search_dirs=(~/*/ ~/.dotfiles/*/ ~/me/*/ ~/work/*/)
+  for root in "${extra_roots[@]}"; do
+    search_dirs+=("$root"/*/)
+  done
   shopt -u nullglob dotglob
 
   worktree_paths=()
@@ -39,8 +47,18 @@ if [[ "$1" == "--worktrees" ]]; then
   exit 0
 fi
 
+extra_roots=()
+if [[ -n "$SESSIONIZER_EXTRA_DIRS" ]]; then
+  IFS=' ' read -r -a extra_roots <<< "$SESSIONIZER_EXTRA_DIRS"
+fi
+
 shopt -s nullglob dotglob
-dirs=(~/*/ ~/me/*/ ~/work/*/ /flights/*/)
+base_dirs=(~/*/ ~/.dotfiles/*/ ~/me/*/ ~/work/*/)
+extra_dirs=()
+for root in "${extra_roots[@]}"; do
+  extra_dirs+=("$root"/*/)
+done
+dirs=("${base_dirs[@]}" "${extra_dirs[@]}")
 shopt -u nullglob dotglob
 
 existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
@@ -55,12 +73,13 @@ session=$(
 
 [ -z "$session" ] && exit 0
 
-# For /flights paths, include parent dir in session name for context
-if [[ "$session" == /flights/* ]]; then
-    session_name="flights_$(basename "$session")"
-else
-    session_name=$(basename "$session")
-fi
+session_name=$(basename "$session")
+for root in "${extra_roots[@]}"; do
+  if [[ "$session" == "$root"/* ]]; then
+    session_name="$(basename "$root")_$(basename "$session")"
+    break
+  fi
+done
 session_name=$(echo "$session_name" | tr . _)
 
 if ! tmux has-session -t "$session_name" 2>/dev/null; then
