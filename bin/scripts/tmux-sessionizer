@@ -6,12 +6,14 @@ if [[ "$1" == "--worktrees" ]]; then
     IFS=' ' read -r -a extra_roots <<< "$SESSIONIZER_EXTRA_DIRS"
   fi
 
-  shopt -s nullglob dotglob
-  search_dirs=(~/*/ ~/.dotfiles/*/ ~/me/*/ ~/work/*/)
+  shopt -s nullglob
+  home_dirs=(~/*/)
+  shopt -u nullglob
+  search_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/work/*/)
   for root in "${extra_roots[@]}"; do
     search_dirs+=("$root"/*/)
   done
-  shopt -u nullglob dotglob
+  shopt -u nullglob
 
   worktree_paths=()
   for dir in "${search_dirs[@]%/}"; do
@@ -52,14 +54,16 @@ if [[ -n "$SESSIONIZER_EXTRA_DIRS" ]]; then
   IFS=' ' read -r -a extra_roots <<< "$SESSIONIZER_EXTRA_DIRS"
 fi
 
-shopt -s nullglob dotglob
-base_dirs=(~/*/ ~/.dotfiles/*/ ~/me/*/ ~/work/*/)
+shopt -s nullglob
+home_dirs=(~/*/)
+shopt -u nullglob
+base_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/work/*/)
 extra_dirs=()
 for root in "${extra_roots[@]}"; do
   extra_dirs+=("$root"/*/)
 done
 dirs=("${base_dirs[@]}" "${extra_dirs[@]}")
-shopt -u nullglob dotglob
+shopt -u nullglob
 
 existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
 
