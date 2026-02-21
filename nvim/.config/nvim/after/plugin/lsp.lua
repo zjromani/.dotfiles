@@ -48,25 +48,32 @@ vim.api.nvim_create_autocmd('VimEnter', {
 })
 
 -- Completion setup
-local cmp = require('cmp')
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
+require('blink.cmp').setup({
+  keymap = {
+    preset = 'none',
+    ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+    ['<C-y>'] = { 'select_and_accept' },
+    ['<C-n>'] = { 'select_next', 'fallback' },
+    ['<C-p>'] = { 'select_prev', 'fallback' },
+    ['<C-e>'] = { 'hide', 'fallback' },
   },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-Space>'] = cmp.mapping.complete(),
-  }),
+  appearance = {
+    use_nvim_cmp_as_default = false,
+    nerd_font_variant = 'mono',
+  },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'buffer' },
-    { name = 'path' },
-    { name = 'luasnip' },
-  }
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
+  },
+  completion = {
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 500,
+    },
+    trigger = {
+      -- Only show after typing at least 1 char, reduces noise
+      show_on_keyword = true,
+      show_on_trigger_character = true,
+    },
+  },
+  snippets = { preset = 'luasnip' },
 })

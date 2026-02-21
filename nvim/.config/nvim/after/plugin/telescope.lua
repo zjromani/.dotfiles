@@ -13,7 +13,6 @@ require('telescope').setup({
   },
 })
 
-vim.keymap.set('n', '<leader><leader>f', builtin.find_files, {})
 vim.keymap.set('n', '<C-p>', builtin.find_files, {})
 vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
 vim.keymap.set('n', '<leader><leader>g', builtin.lsp_references, {})
