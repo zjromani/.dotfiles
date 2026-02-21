@@ -1,5 +1,44 @@
 #! /usr/bin/env bash
 
+if [[ "$1" == "--worktrees" ]]; then
+  shopt -s nullglob dotglob
+  search_dirs=(~/*/ ~/me/*/ ~/work/*/ /flights/*/)
+  shopt -u nullglob dotglob
+
+  worktree_paths=()
+  for dir in "${search_dirs[@]%/}"; do
+    # Find git repos one level deep
+    for repo in "$dir"/*/; do
+      [[ -d "$repo/.git" ]] || continue
+      while IFS= read -r line; do
+        [[ "$line" == worktree* ]] && worktree_paths+=("${line#worktree }")
+      done < <(git -C "$repo" worktree list --porcelain 2>/dev/null)
+    done
+    # Also check if dir itself is a git repo
+    if [[ -d "$dir/.git" ]]; then
+      while IFS= read -r line; do
+        [[ "$line" == worktree* ]] && worktree_paths+=("${line#worktree }")
+      done < <(git -C "$dir" worktree list --porcelain 2>/dev/null)
+    fi
+  done
+
+  selected=$(printf '%s\n' "${worktree_paths[@]}" | sort -u | fzf --no-sort --tiebreak=index --height=40%)
+  [ -z "$selected" ] && exit 0
+
+  # Session name: <repo>_<branch> to avoid collisions
+  repo_name=$(basename "$(git -C "$selected" rev-parse --show-toplevel 2>/dev/null)")
+  branch=$(git -C "$selected" rev-parse --abbrev-ref HEAD 2>/dev/null | tr '/' '_')
+  session_name="${repo_name}_${branch}"
+  session_name=$(echo "$session_name" | tr . _)
+
+  if ! tmux has-session -t "$session_name" 2>/dev/null; then
+    tmux new-session -s "$session_name" -c "$selected" -d
+  fi
+
+  tmux switch-client -t "$session_name"
+  exit 0
+fi
+
 shopt -s nullglob dotglob
 dirs=(~/*/ ~/me/*/ ~/work/*/ /flights/*/)
 shopt -u nullglob dotglob
