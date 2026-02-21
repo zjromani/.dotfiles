@@ -1,15 +1,15 @@
 #!/bin/bash
 
-JIRA_URL="https://hotelengine.atlassian.net"
-JIRA_USERNAME="${WORK_EMAIL}"
-JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+JIRA_URL="${JIRA_URL:?Error: JIRA_URL not set}"
+JIRA_USERNAME="${WORK_EMAIL:?Error: WORK_EMAIL not set}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN:?Error: JIRA_API_TOKEN not set}"
 
-PROJECT_KEY="BOOK"
+PROJECT_KEY="${JIRA_PROJECT_KEY:-BOOK}"
 ISSUE_TYPE="Task"
 CUSTOM_FIELD_TYPE_ID="customfield_10045"
 CUSTOM_FIELD_TYPE_VALUE="Infrastructure/Tech Debt"
 CUSTOM_FIELD_TEAM_ID="customfield_10001"
-CUSTOM_FIELD_TEAM_VALUE="2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8"
+CUSTOM_FIELD_TEAM_VALUE="${JIRA_TEAM_ID:?Error: JIRA_TEAM_ID not set}"
 
 # Issue summary and description (passed as arguments)
 SUMMARY=$1

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-JIRA_URL="https://hotelengine.atlassian.net"
-JIRA_USERNAME="${WORK_EMAIL}"
-JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+JIRA_URL="${JIRA_URL:?Error: JIRA_URL not set}"
+JIRA_USERNAME="${WORK_EMAIL:?Error: WORK_EMAIL not set}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN:?Error: JIRA_API_TOKEN not set}"
 
-PROJECT_KEY="BOOK"
+PROJECT_KEY="${JIRA_PROJECT_KEY:-BOOK}"
 ISSUE_TYPE="Corrective Action"
 CUSTOM_FIELD_TYPE_ID="customfield_10045"
 CUSTOM_FIELD_TYPE_VALUE="New Feature"  # Confirm this value in Jira if needed

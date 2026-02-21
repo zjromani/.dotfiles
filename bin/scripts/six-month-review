@@ -1,11 +1,11 @@
 #!/bin/bash
 
-JIRA_URL="https://hotelengine.atlassian.net"
-JIRA_USERNAME="zach.romani@hotelengine.com"
-JIRA_API_TOKEN="${JIRA_API_TOKEN}"
-PROJECT_KEY="BOOK"
+JIRA_URL="${JIRA_URL:?Error: JIRA_URL not set}"
+JIRA_USERNAME="${WORK_EMAIL:?Error: WORK_EMAIL not set}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN:?Error: JIRA_API_TOKEN not set}"
+PROJECT_KEY="${JIRA_PROJECT_KEY:-BOOK}"
 
-JQL='Project in ("SAPI - Booking") AND "Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 AND updated >= -7d ORDER BY updated DESC'
+JQL="Project in (\"SAPI - Booking\") AND \"Team[Team]\" = ${JIRA_TEAM_ID:?Error: JIRA_TEAM_ID not set} AND updated >= -7d ORDER BY updated DESC"
 
 FIELDS='["key","summary","status","assignee","description","created","updated","resolution","priority","issuetype","reporter","customfield_10000","customfield_10041"]' # customfield_10041 is the field ID for Acceptance Criteria
 
@@ -109,7 +109,7 @@ done
 echo "## Git Commits from the Last 7 Days" >> ${RELEASE_NOTES_FILE}
 echo "" >> ${RELEASE_NOTES_FILE}
 
-git log --oneline --since="8 months ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
+git log --oneline --since="8 months ago" --pretty=format:"%h %an %s %n${GITHUB_REPO_URL}/commit/%H" --name-status >> ${RELEASE_NOTES_FILE}
 
 cat ${RELEASE_NOTES_FILE} | pbcopy
 

@@ -5,9 +5,9 @@
 # CommonMark spec: https://spec.commonmark.org/
 
 # Jira connection details.
-JIRA_URL="https://hotelengine.atlassian.net"
-JIRA_USERNAME="zach.romani@hotelengine.com"
-JIRA_API_TOKEN="${JIRA_API_TOKEN}"
+JIRA_URL="${JIRA_URL:?Error: JIRA_URL not set}"
+JIRA_USERNAME="${WORK_EMAIL:?Error: WORK_EMAIL not set}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN:?Error: JIRA_API_TOKEN not set}"
 
 # Fields for the API call.
 # customfield_10041 is the field ID for Acceptance Criteria.
@@ -16,14 +16,14 @@ FIELDS='["key","summary","status","assignee","description","created","updated","
 # Define team names and their corresponding queries.
 teams=( "booking" "content" "search" "sint" "blue" "green" "shield" "pricing" )
 queries=(
-'("Team[Team]" = 2e5f4886-3d88-4bf7-bdfb-c8b63752b1a8 OR project = "SAPI - Booking") and type != MVP AND updated >= -7d ORDER BY updated DESC'
-'project = "SAPI - Content" and "Team[Team]" = fc09d2a7-de13-4b20-878d-1c3fb4346333 AND updated >= -7d ORDER BY updated DESC'
+"(\"Team[Team]\" = ${JIRA_BOOKING_TEAM_ID:?Error: JIRA_BOOKING_TEAM_ID not set} OR project = \"SAPI - Booking\") and type != MVP AND updated >= -7d ORDER BY updated DESC"
+"project = \"SAPI - Content\" and \"Team[Team]\" = ${JIRA_CONTENT_TEAM_ID:?Error: JIRA_CONTENT_TEAM_ID not set} AND updated >= -7d ORDER BY updated DESC"
 'project = "SAPI - Search" AND updated >= -7d ORDER BY updated DESC'
 'project = SINT AND updated >= -7d ORDER BY updated DESC'
-'project = "SAPI - Integrations" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND ("Team[Team]" = 265dd5c4-2ffc-4c85-9395-f51713d57083 OR Labels = Shield OR (parent in (SINT-2485, SINT-2545))) AND updated >= -7d ORDER BY updated DESC'
-'project = "SAPI - Integrations" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND ("Team[Team]" = 87bd5447-29ea-40ae-9535-2d238b19e4d5 OR Assignee in (712020:5d4d1e38-3259-48b6-9e55-f6bcf2f78251,712020:3b7493e2-50ef-4ff1-b181-0c5ee7321fb6,712020:d0cbeb71-2b93-4b0f-adea-8f002dd226e7,712020:0660da7b-b2e7-408d-9b37-1ded20404786) OR labels = Shield OR (parent in (SINT-2485, SINT-2545) AND assignee = empty)) AND updated >= -7d ORDER BY updated DESC'
+"project = \"SAPI - Integrations\" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND (\"Team[Team]\" = ${JIRA_BLUE_TEAM_ID:?Error: JIRA_BLUE_TEAM_ID not set} OR Labels = Shield OR (parent in (SINT-2485, SINT-2545))) AND updated >= -7d ORDER BY updated DESC"
+"project = \"SAPI - Integrations\" AND issuetype not in (epic, MVP) AND (resolved is empty OR resolved > -3d) AND (\"Team[Team]\" = ${JIRA_GREEN_TEAM_ID:?Error: JIRA_GREEN_TEAM_ID not set} OR Assignee in (${JIRA_GREEN_TEAM_ASSIGNEES:?Error: JIRA_GREEN_TEAM_ASSIGNEES not set}) OR labels = Shield OR (parent in (SINT-2485, SINT-2545) AND assignee = empty)) AND updated >= -7d ORDER BY updated DESC"
 'project = "SINT" AND issuetype not in (epic, MVP, Sub-task) AND labels = Shield AND (resolved is empty OR resolved > -3d) AND updated >= -7d ORDER BY updated DESC'
-'("Team[Team]" in (bcdd3c92-c083-4682-9978-f280b81e08f6-17, og-ed8a5b3f-90ca-4750-b597-c2ca7fd60b47) OR project = "SAPI - Pricing") AND updated >= -7d ORDER BY updated DESC'
+"(\"Team[Team]\" in (${JIRA_PRICING_TEAM_ID:?Error: JIRA_PRICING_TEAM_ID not set}, ${JIRA_PRICING_TEAM_ID_2:?Error: JIRA_PRICING_TEAM_ID_2 not set}) OR project = \"SAPI - Pricing\") AND updated >= -7d ORDER BY updated DESC"
 )
 
 # Create a temporary file for release notes.
@@ -155,7 +155,7 @@ echo "## Git Commits from the Last 7 Days" >> "${RELEASE_NOTES_FILE}"
 echo "" >> "${RELEASE_NOTES_FILE}"
 
 # Append Git commits to the release notes.
-git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %nhttps://github.com/HotelEngine/engine-booking-api/commit/%H" --name-status --pretty >> "${RELEASE_NOTES_FILE}"
+git log --oneline --since="7 days ago" --pretty=format:"%h %an %s %n${GITHUB_REPO_URL}/commit/%H" --name-status --pretty >> "${RELEASE_NOTES_FILE}"
 
 # Copy release notes to clipboard (macOS pbcopy).
 cat "${RELEASE_NOTES_FILE}" | pbcopy

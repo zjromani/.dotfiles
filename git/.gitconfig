@@ -1,6 +1,9 @@
 [user]
 	name = Zach Romani
 	email = zach.romani@hotelengine.com
+	# Set name and email locally per-machine:
+	#   git config --global user.name "Your Name"
+	#   git config --global user.email "you@example.com"
 [pull]
 	rebase = true
 [core]
@@ -12,40 +15,3 @@
 	defaultBranch = main
 [url "git@github.com:"]
     insteadOf = https://github.com/
-[maintenance]
-	repo = /Users/zachromani/work/engine-booking-api
-	repo = /Users/zachromani/work/engine-booking-deploy
-	repo = /Users/zachromani/work/engine-public-contracts
-	repo = /Users/zachromani/work/engine-rate-history
-	repo = /Users/zachromani/work/engine-internal-contracts
-	repo = /Users/zachromani/.dotfiles
-	repo = /Users/zachromani/work/engine-search
-	repo = /Users/zachromani/work/microservices
-	repo = /Users/zachromani/work/engine-integrations-supplier-flights-duffel
-	repo = /Users/zachromani/work/partner-api-ingress-config
-	repo = /Users/zachromani/work/structurizr
-	repo = /Users/zachromani/work/engine-partner-api
-	repo = /Users/zachromani/work/engine-content-deploy
-	repo = /Users/zachromani/work/engine-partner-adapter-concur
-	repo = /Users/zachromani/work/partner-api-certs
-	repo = /Users/zachromani/work/engine-private-booking-contracts
-	repo = /Users/zachromani/work/engine-content-api
-	repo = /Users/zachromani/work/architecture-at-engine
-	repo = /Users/zachromani/work/he-relay
-	repo = /Users/zachromani/work/mcp-server
-	repo = /Users/zachromani/work/v4.perf-tests
-	repo = /Users/zachromani/work/issuing
-	repo = /Users/zachromani/work/engine-partner-api-staging
-	repo = /Users/zachromani/work/he-api
-	repo = /Users/zachromani/work/engine-pricing
-	repo = /Users/zachromani/work/engine-rate-history-deploy
-	repo = /Users/zachromani/work/engine-internal-booking-contracts
-	repo = /Users/zachromani/work/engine-private-content-contracts
-	repo = /Users/zachromani/work/fx-service
-	repo = /Users/zachromani/work/members
-	repo = /Users/zachromani/work/flights-search-service
-	repo = /Users/zachromani/work/engine-integrations-supplier-flights-amadeus
-	repo = /Users/zachromani/work/engine-supplier-integration-gateway
-	repo = /Users/zachromani/work/flights-e2e-testing
-	repo = /Users/zachromani/work/frontend-core
-	repo = /Users/zachromani/work/proto-magic

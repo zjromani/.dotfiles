@@ -71,22 +71,13 @@ alias jc="jira-add-content"
 
 alias unfuck-turbo="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
 alias zrc="nvim ~/.zshrc"
-alias pghe="psql he_api"
 alias sourcez="source ~/.zshrc"
 alias rpid="lsof -wni tcp:3000"
-alias he_dev="osascript ~/.dotfiles/iterm_scripts/he_dev.scpt"
-alias he_debug="osascript ~/.dotfiles/iterm_scripts/he_debug.scpt"
 alias dots="~/.dotfiles"
 alias t="bundle exec rspec"
 alias sp="spring rspec"
 alias h="heroku"
-#alias rprodsql="heroku pg:psql postgresql-clear-51558 --app he-api"
 alias guards="bundle exec guard -G Guardfile.spring"
-#alias wprodsql="heroku pg:psql postgresql-parallel-53332 --app he-public-api"
-#alias rstagesql="heroku pg:psql postgresql-adjacent-00545 --app he-api-staging"
-#alias wstagesql="heroku pg:psql postgresql-horizontal-38842 --app he-api-staging"
-#alias wsandsql="heroku pg:psql postgresql-fitted-33271 --app he-public-api-sandbox"
-alias hrailsc='h run rails console --app he-api'
 alias rs='rails s'
 alias rc='rails c'
 alias gpr='git pull-request -o'
@@ -94,8 +85,6 @@ alias grec='git branch --sort=committerdate'
 alias topo='top -o mem'
 alias rdb='SCHEMA=db/structure-base.sql RAILS_ENV=test rails db:drop db:create db:structure:load'
 alias dev_tail="tail -f log/development.log"
-alias prod_tail="heroku logs -a he-api --tail"
-alias stage_tail="h logs -a he-api-staging --tail"
 alias rake='noglob rake'
 alias desk='~/Desktop/'
 #alias ever='code /Users/$HOME/Desktop/ever'
