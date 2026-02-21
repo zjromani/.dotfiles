@@ -1,6 +1,6 @@
 ---
 name: plan-gate
-description: Quality gate for plan mode. Triggers whenever the user enters plan mode or asks Claude to plan a technical task. Evaluates the prompt/spec before any planning or execution begins. Challenges insufficient specifications and requires the user to either improve them or explicitly override. This skill prevents the most common AI development failure: jumping into implementation before the specification is solid enough to guide it.
+description: "Quality gate for plan mode. Triggers whenever the user enters plan mode or asks Claude to plan a technical task. Evaluates the prompt/spec before any planning or execution begins. Challenges insufficient specifications and requires the user to either improve them or explicitly override. This skill prevents the most common AI development failure: jumping into implementation before the specification is solid enough to guide it."
 ---
 
 # Plan Gate
