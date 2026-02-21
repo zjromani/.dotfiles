@@ -31,8 +31,8 @@ Score the incoming prompt/spec across five dimensions. Each is pass/fail with pa
 ### 1. Intent Clarity (required)
 Can you state in one sentence what this system/feature does and who it's for?
 
-- ✅ Pass: "This is a Slack bot that sends daily digest emails to team leads summarizing unresolved Jira tickets assigned to their team."
-- ⚠️ Partial: "A bot that helps with Jira stuff"
+- ✅ Pass: "This is a background job that sends a daily digest email to managers summarizing open support tickets assigned to their team, grouped by priority."
+- ⚠️ Partial: "A job that helps with tickets"
 - ❌ Fail: "Make it better" / "The usual thing we talked about" / no clear user or outcome stated
 
 ### 2. Behavioral Contract (required)
@@ -45,14 +45,14 @@ Are the expected inputs, outputs, and system behaviors described — especially 
 ### 3. Explicit Boundaries (important)
 Is it clear what this should NOT do? Has scope been constrained?
 
-- ✅ Pass: "This should only handle lodging bookings, not flights or cars" / "Don't add auth — that's handled upstream"
+- ✅ Pass: "This only handles order creation, not fulfillment or returns" / "Don't add auth — that's handled upstream"
 - ⚠️ Partial: Scope is implied but not explicit
 - ❌ Fail: No boundaries stated; scope is wide open and AI will need to make major assumptions
 
 ### 4. Integration Context (important for anything touching external systems)
 Are the systems this interacts with named and described at the contract level?
 
-- ✅ Pass: "Reads from the Amadeus booking API; uses the existing BookingService pattern in /src/services"
+- ✅ Pass: "Reads from the payments API; uses the existing PaymentService pattern in /src/services"
 - ⚠️ Partial: Systems mentioned but no contract details
 - ❌ Fail: Interacts with external systems but none described
 
@@ -208,14 +208,14 @@ Be direct but not condescending. Frame it as: "Before I start planning, I want t
 Then list gaps concisely. Don't lecture. Don't pad.
 
 **Example — weak prompt:**
-> "Build me a modification service for flight bookings"
+> "Build me a modification service for orders"
 
 **Gate response:**
 > Before I plan this out, I need to close a few gaps or I'll end up making assumptions that could send us in the wrong direction:
 >
-> 1. **What does "modification" mean here?** Date changes? Passenger name corrections? Seat upgrades? All of the above?
-> 2. **Who initiates the modification?** The traveler directly, a support agent, or an automated system?
-> 3. **What systems does this touch?** Amadeus? Sabre? The existing BookingService? Are we writing a new service or extending something existing?
+> 1. **What does "modification" mean here?** Quantity changes? Address corrections? Item substitutions? All of the above?
+> 2. **Who initiates the modification?** The customer directly, a support agent, or an automated system?
+> 3. **What systems does this touch?** The existing OrderService? A third-party fulfillment API? Are we writing a new service or extending something existing?
 >
 > Let me take what you've given me and build out a proper spec. I'll start with the user experience and work inward.
 
