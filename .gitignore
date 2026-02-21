@@ -1,4 +1,6 @@
 atom/packages/vim-mode-plus/node_modules/**
 .DS_Store
 nvim/.config/nvim/plugin/packer_compiled.lua
+# Claude Code worktrees (runtime state, not config)
+.claude/worktrees/
 

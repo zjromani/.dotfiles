@@ -31,3 +31,4 @@ install_hook() {
 install_hook "post-merge"    '"$(git rev-parse --show-toplevel)/bin/scripts/sync-cursor-skills"'
 install_hook "post-checkout" '"$(git rev-parse --show-toplevel)/bin/scripts/sync-cursor-skills"'
 install_hook "pre-push"      '"$(git rev-parse --show-toplevel)/bin/scripts/validate-ansible-sync"'
+install_hook "pre-commit"    '"$(git rev-parse --show-toplevel)/bin/scripts/check-secrets"'
