@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "$0")/../.." && pwd)"
+SKILLS_SRC="$DOTFILES/claude/.claude/skills"
+SKILLS_DEST="$DOTFILES/cursor/.cursor/skills"
+
+for skill_dir in "$SKILLS_SRC"/*/; do
+  name="$(basename "$skill_dir")"
+  target="$SKILLS_DEST/$name"
+  if [ ! -L "$target" ]; then
+    ln -s "../../../claude/.claude/skills/$name" "$target"
+    echo "Linked: $name"
+  fi
+done
