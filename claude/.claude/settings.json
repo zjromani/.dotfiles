@@ -77,6 +77,19 @@
       "Bash(git push*)"
     ]
   },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '\\a'"
+          }
+        ]
+      }
+    ]
+  },
   "effortLevel": "low",
   "skipDangerousModePermissionPrompt": true
 }
