@@ -1,11 +1,13 @@
 #!/bin/bash
 
+source ~/.zshenv_private
+
 NOTION_TOKEN="$NOTION_PROJECT_SECRET"
-NOTION_DATABASE_ID="${NOTION_DATABASE_ID:?Error: NOTION_DATABASE_ID not set}"
+NOTION_RESOURCE_DATABASE_ID="${NOTION_RESOURCE_DATABASE_ID:?Error: NOTION_RESOURCE_DATABASE_ID not set}"
 
 JSON_PAYLOAD=$(cat <<EOF
 {
-  "parent": { "database_id": "$NOTION_DATABASE_ID" },
+  "parent": { "database_id": "$NOTION_RESOURCE_DATABASE_ID" },
   "properties": {
     "Name": {
       "title": [
