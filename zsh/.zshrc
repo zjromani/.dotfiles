@@ -41,7 +41,7 @@ DISABLE_AUTO_TITLE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -57,6 +57,26 @@ HIST_STAMPS="yyyy/mm/dd"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+
+# --- Completion config ---
+# Speed: cache completions
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path "$HOME/.zcompcache"
+
+# Grouping + descriptions (shows what each command/option does)
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:messages'     format '%F{purple}-- %d --%f'
+zstyle ':completion:*:warnings'     format '%F{red}-- no matches --%f'
+zstyle ':completion:*' verbose yes
+
+# Colors matching LS_COLORS + menu select (arrow-key navigation)
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+
+# Smart case: lowercase matches upper, _ and - interchangeable
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# --- End completion config ---
 
 export EDITOR='nvim'
 
