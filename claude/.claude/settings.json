@@ -89,7 +89,6 @@
       "Bash(git push*)"
     ]
   },
-  "model": "opus",
   "hooks": {
     "Stop": [
       {
@@ -97,12 +96,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'"
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
           }
         ]
       }
     ]
   },
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "skipDangerousModePermissionPrompt": true
 }
