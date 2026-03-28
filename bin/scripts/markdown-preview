@@ -1,17 +1,42 @@
 #!/bin/bash
-# markdown-preview: trigger :MarkdownPreview in the current tmux pane,
-# then snap iTerm2 left and Chrome right.
+# markdown-preview: smart markdown preview from any tmux context
+#
+# From nvim:          triggers :MarkdownPreview in the current buffer
+# From Claude/shell:  opens the most recent plan file in a new nvim split + preview
 
 PANE_ID="${1:-}"
 
-# Send :MarkdownPreview to nvim running in the target pane
-if [ -n "$PANE_ID" ]; then
-  tmux send-keys -t "$PANE_ID" ":MarkdownPreview" Enter
+# Detect what's running in the calling pane
+if [[ -n "$PANE_ID" ]]; then
+  PANE_CMD=$(tmux display-message -t "$PANE_ID" -p '#{pane_current_command}' 2>/dev/null)
 else
-  tmux send-keys ":MarkdownPreview" Enter
+  PANE_CMD=$(tmux display-message -p '#{pane_current_command}' 2>/dev/null)
 fi
 
-# Give Chrome time to open / focus
+if [[ "$PANE_CMD" == "nvim" || "$PANE_CMD" == "vim" ]]; then
+  # Already in nvim — trigger MarkdownPreview on the current buffer
+  if [[ -n "$PANE_ID" ]]; then
+    tmux send-keys -t "$PANE_ID" ":MarkdownPreview" Enter
+  else
+    tmux send-keys ":MarkdownPreview" Enter
+  fi
+else
+  # Not in nvim (Claude, shell, etc.) — open the most recent plan file
+  PLAN_FILE=$(ls -t "$HOME/.claude/plans/"*.md 2>/dev/null | head -1)
+  if [[ -z "$PLAN_FILE" ]]; then
+    echo "No plan files found in ~/.claude/plans/" >&2
+    exit 1
+  fi
+
+  # Open nvim in a new right-side split with MarkdownPreview auto-triggered
+  if [[ -n "$PANE_ID" ]]; then
+    tmux split-window -h -t "$PANE_ID" -c "$HOME" "nvim '$PLAN_FILE' -c 'MarkdownPreview'"
+  else
+    tmux split-window -h -c "$HOME" "nvim '$PLAN_FILE' -c 'MarkdownPreview'"
+  fi
+fi
+
+# Give the preview time to open in Chrome
 sleep 2
 
 # Snap iTerm2 to left half, Chrome to right half
@@ -29,7 +54,9 @@ end tell
 
 delay 0.2
 
-tell application "Google Chrome"
-  set bounds of front window to {halfWidth, 0, screenWidth, screenHeight}
-end tell
+if application "Google Chrome" is running then
+  tell application "Google Chrome"
+    set bounds of front window to {halfWidth, 0, screenWidth, screenHeight}
+  end tell
+end if
 EOF
