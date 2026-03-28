@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Fast text editor using Anthropic API directly (bypasses Claude Code CLI for speed)
+# Usage: echo "text" | zach-editor  OR  zach-editor "text as arg"
+# Requires: ANTHROPIC_API_KEY in environment, jq
+
+set -euo pipefail
+
+if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  echo "Error: ANTHROPIC_API_KEY not set" >&2
+  exit 1
+fi
+
+# Read input from arg or stdin
+if [[ $# -gt 0 ]]; then
+  INPUT="$1"
+else
+  INPUT="$(cat)"
+fi
+
+if [[ -z "$INPUT" ]]; then
+  echo "Error: no input provided" >&2
+  exit 1
+fi
+
+SYSTEM_PROMPT='Transform raw input into Zach'\''s voice. Primarily for Slack messages and async team communication.
+
+Core Philosophy (from On Writing Well):
+- Simplicity over decoration. Strip sentences to cleanest components. Remove words that serve no function.
+- Authenticity over polish. The goal is to sound like Zach talking, not like a press release. Genuine beats grammatically perfect.
+- Active over passive. Use verbs that do work.
+- Trust the material. Don'\''t over-explain. Assume the reader has context.
+
+Voice Patterns:
+- Short, punchy sentences. 5-10 words average. Fragment-friendly.
+- Direct. No hedging. Conversational but professional.
+- Minimal pleasantries. Jump into the ask.
+- Bullets over prose blocks for multi-part asks.
+- Informal contractions heavy use. Abbreviations OK: "tho", "gonna".
+- No em dashes. Ever. No corporate jargon.
+
+What to Fix:
+- Typos only. "alot" -> "a lot", "tho" -> keep it, "whats" -> "what'\''s"
+- Capitalization: keep lowercase "i" if that'\''s the input style.
+- Clarity: clarify ambiguous pronouns.
+- Bloat: cut words that don'\''t earn their place.
+
+What to Preserve:
+- Directness. Sentence fragments. Short paragraphs. Emoji if present.
+
+What to NEVER Do:
+- Add formality or corporate language
+- Soften direct asks
+- Convert bullets to paragraphs
+- Add unnecessary context
+- Make it sound like AI wrote it
+- Use em dashes
+
+Output ONLY the edited text. No preamble, no explanation, no quotes around the output.'
+
+PAYLOAD=$(jq -n \
+  --arg system "$SYSTEM_PROMPT" \
+  --arg text "$INPUT" \
+  '{
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 1024,
+    system: $system,
+    messages: [{role: "user", content: $text}]
+  }')
+
+curl -s \
+  --max-time 10 \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "content-type: application/json" \
+  -d "$PAYLOAD" \
+  "https://api.anthropic.com/v1/messages" \
+  | jq -r '.content[0].text'

@@ -1,0 +1,40 @@
+{
+  "skill_name": "zach-editor",
+  "status": "complete",
+  "current_experiment": 2,
+  "baseline_score": 96.7,
+  "best_score": 96.7,
+  "experiments": [
+    {
+      "id": 0,
+      "score": 29,
+      "max_score": 30,
+      "pass_rate": 96.7,
+      "status": "baseline",
+      "description": "original skill — no changes"
+    },
+    {
+      "id": 1,
+      "score": 29,
+      "max_score": 30,
+      "pass_rate": 96.7,
+      "status": "discard",
+      "description": "added explicit length constraint to bloat rule — no improvement"
+    },
+    {
+      "id": 2,
+      "score": 29,
+      "max_score": 30,
+      "pass_rate": 96.7,
+      "status": "discard",
+      "description": "added anti-pattern for imperative-to-question conversion — no improvement"
+    }
+  ],
+  "eval_breakdown": [
+    {"name": "Human-sounding", "pass_count": 18, "total": 18},
+    {"name": "No em dashes", "pass_count": 18, "total": 18},
+    {"name": "No bloat", "pass_count": 15, "total": 18},
+    {"name": "Directness preserved", "pass_count": 18, "total": 18},
+    {"name": "Informal tone preserved", "pass_count": 18, "total": 18}
+  ]
+}
