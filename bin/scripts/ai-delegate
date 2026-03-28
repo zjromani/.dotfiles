@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Usage: ai-delegate <slug> [url]
+#   slug: short task name → becomes tmux window name + Things task title
+#   url:  source link (Slack, email, etc.) — defaults to clipboard if omitted
+#
+# Creates a Things3 task set for Today + opens a 3-pane tmux layout with Claude.
+# Logs to ~/.ai-delegate.log for later lookup.
+
+if [[ $# -lt 1 ]]; then
+  echo "Usage: ai-delegate <slug> [url]" >&2
+  exit 1
+fi
+
+SLUG="$1"
+URL="${2:-$(pbpaste)}"
+
+# Sanitize slug: lowercase, spaces → hyphens, strip anything not alphanumeric/hyphen
+WINDOW_NAME=$(echo "$SLUG" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
+
+if [[ -z "$WINDOW_NAME" ]]; then
+  echo "Error: empty window name after sanitization" >&2
+  exit 1
+fi
+
+echo "slug=$SLUG window=$WINDOW_NAME"
+
+# 1. Create Things task in "🤖ai delegated" area (list-id), set for Today
+# Area ID obtained via: osascript -e 'tell application "Things3" to return id of first area whose name contains "ai delegated"'
+AI_DELEGATE_AREA_ID="FE8osnayK2HWjTcuR2dXRw"
+ENCODED_TITLE=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$SLUG")
+ENCODED_NOTES=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$URL")
+THINGS_URL="things:///add?title=${ENCODED_TITLE}&notes=${ENCODED_NOTES}&list-id=${AI_DELEGATE_AREA_ID}&when=today&tags=.work"
+/usr/bin/open "$THINGS_URL" && echo "Things: task created" || echo "Things: FAILED"
+
+# 2. Tmux: prefer 'flights' session, fall back to most recently attached
+if tmux has-session -t "flights" 2>/dev/null; then
+  CURRENT_SESSION="flights"
+  echo "tmux: using flights session"
+elif [[ -n "${TMUX:-}" ]]; then
+  CURRENT_SESSION=$(tmux display-message -p '#S')
+  echo "tmux: using current session $CURRENT_SESSION"
+else
+  CURRENT_SESSION=$(tmux list-sessions -F '#{session_last_attached} #{session_name}' 2>/dev/null \
+    | sort -rn | head -1 | awk '{print $2}')
+  if [[ -z "$CURRENT_SESSION" ]]; then
+    echo "tmux: no sessions found — skipping window creation"
+    exit 0
+  fi
+  echo "tmux: using most recent session $CURRENT_SESSION"
+fi
+
+WORK_DIR="$HOME/flights"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/work"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"
+
+# New window + 3-pane layout: large left (claude) | right-top | right-bottom
+tmux new-window -t "${CURRENT_SESSION}:" -n "$WINDOW_NAME" -c "$WORK_DIR"
+tmux split-window -t "${CURRENT_SESSION}:${WINDOW_NAME}" -h -c "$WORK_DIR"
+tmux split-window -t "${CURRENT_SESSION}:${WINDOW_NAME}.1" -v -c "$WORK_DIR"
+tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "claude" Enter
+
+# Focus the Claude pane (left/pane 0)
+tmux select-pane -t "${CURRENT_SESSION}:${WINDOW_NAME}.0"
+
+# After Claude initializes: rename session + seed with clipboard context via /investigate
+(
+  sleep 3
+  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/rename ${WINDOW_NAME}" Enter
+  sleep 0.5
+  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/investigate ${URL}" Enter
+) &
+
+# 3. Log
+printf '%s\t%s\t%s\t%s\n' \
+  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  "$WINDOW_NAME" \
+  "$URL" \
+  "session:${CURRENT_SESSION}" >> "$HOME/.ai-delegate.log"
+
+echo "Done: '$WINDOW_NAME' → Things + tmux:$CURRENT_SESSION"
