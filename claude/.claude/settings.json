@@ -1,6 +1,9 @@
 {
-  "env": {},
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
+    "defaultMode": "auto",
     "allow": [
       "Bash(git status*)",
       "Bash(git diff*)",
@@ -28,6 +31,7 @@
       "Bash(git cherry-pick*)",
       "Bash(git blame*)",
       "Bash(git bisect*)",
+      "Bash(git push*)",
       "Bash(gh pr view*)",
       "Bash(gh pr list*)",
       "Bash(gh pr checks*)",
@@ -63,6 +67,9 @@
       "Bash(cut*)",
       "Bash(awk*)",
       "Bash(sed*)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(pwd*)",
       "Bash(npm test*)",
       "Bash(npm run test*)",
       "Bash(npm run build*)",
@@ -85,10 +92,10 @@
       "mcp__*"
     ],
     "deny": [
-      "Bash(git rebase*)",
-      "Bash(git push*)"
+      "Bash(git rebase*)"
     ]
   },
+  "model": "opus[1m]",
   "hooks": {
     "Stop": [
       {
@@ -96,7 +103,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'; SESSION=$(tmux display-message -p '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
           }
         ]
       }
@@ -107,12 +114,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'; SESSION=$(tmux display-message -p '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
           }
         ]
       }
     ]
   },
-  "effortLevel": "medium",
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "medium"
 }
