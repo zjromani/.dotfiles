@@ -28,35 +28,28 @@ else
     exit 1
   fi
 
-  # Open nvim in a new right-side split with MarkdownPreview auto-triggered
-  if [[ -n "$PANE_ID" ]]; then
-    tmux split-window -h -t "$PANE_ID" -c "$HOME" "nvim '$PLAN_FILE' -c 'MarkdownPreview'"
-  else
-    tmux split-window -h -c "$HOME" "nvim '$PLAN_FILE' -c 'MarkdownPreview'"
-  fi
+  # Open nvim in a new window with MarkdownPreview auto-triggered
+  tmux new-window -c "$HOME" "nvim '$PLAN_FILE' -c 'MarkdownPreview'"
 fi
 
 # Give the preview time to open in Chrome
-sleep 2
+sleep 1
 
-# Snap iTerm2 to left half, Chrome to right half
-osascript <<'EOF'
+# Snap iTerm2 to left half, Chrome to right half via BetterSnap shortcuts
+osascript <<'EOF' || true
+tell application "iTerm2" to activate
+delay 0.15
 tell application "System Events"
-  set screenWidth to item 1 of (size of first desktop)
-  set screenHeight to item 2 of (size of first desktop)
+  keystroke (ASCII character 28) using {command down, control down}
 end tell
 
-set halfWidth to (screenWidth / 2) as integer
-
-tell application "iTerm2"
-  set bounds of front window to {0, 0, halfWidth, screenHeight}
-end tell
-
-delay 0.2
+delay 0.15
 
 if application "Google Chrome" is running then
-  tell application "Google Chrome"
-    set bounds of front window to {halfWidth, 0, screenWidth, screenHeight}
+  tell application "Google Chrome" to activate
+  delay 0.15
+  tell application "System Events"
+    keystroke (ASCII character 29) using {command down, control down}
   end tell
 end if
 EOF
