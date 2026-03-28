@@ -69,6 +69,15 @@ return require('packer').startup(function(use)
     run = function() vim.fn["mkdp#util#install"]() end,
   })
 
+  -- Markdown editing ergonomics: list continuation, heading nav, inline style toggling
+  use({
+    "tadmccorkle/markdown.nvim",
+    ft = "markdown",
+    config = function()
+      require("markdown").setup({})
+    end,
+  })
+
   use {
     "coder/claudecode.nvim",
     config = function()

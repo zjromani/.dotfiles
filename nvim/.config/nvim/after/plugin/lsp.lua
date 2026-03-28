@@ -49,6 +49,9 @@ vim.api.nvim_create_autocmd('VimEnter', {
 
 -- Completion setup
 require('blink.cmp').setup({
+  enabled = function()
+    return not vim.tbl_contains({ 'markdown' }, vim.bo.filetype)
+  end,
   keymap = {
     preset = 'none',
     ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },

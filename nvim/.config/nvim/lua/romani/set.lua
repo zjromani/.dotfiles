@@ -30,3 +30,6 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
+-- markdown-preview: use dark theme instead of inheriting colorscheme name
+vim.g.mkdp_theme = 'dark'
+
