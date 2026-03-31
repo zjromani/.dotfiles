@@ -11,9 +11,17 @@ require('telescope').setup({
       ".DS_Store",        -- macOS metadata
     },
   },
+  pickers = {
+    find_files = {
+      find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
+    },
+  },
 })
 
-vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+-- Use frecency for Ctrl+P: ranks files by recency + frequency of use
+vim.keymap.set('n', '<C-p>', function()
+  require('telescope').extensions.frecency.frecency()
+end, {})
 vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
 vim.keymap.set('n', '<leader><leader>g', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader><leader>s', function()
