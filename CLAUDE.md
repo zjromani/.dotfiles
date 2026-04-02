@@ -79,7 +79,7 @@ When making changes that affect multiple machines:
 ## Claude Config
 
 The `claude/` package provides shared Claude Code configuration:
-- `settings.json` - global permissions and env vars
+- `settings.json` - **gitignored, not stowed** — Claude Code manages this directly per machine
 - `skills/` - single source of truth for all skills (Claude + Cursor)
 - `agents/` - custom subagents (`software-architect`, `build-validator`, `research`)
 
@@ -112,7 +112,7 @@ When working in this repo, always make config changes to the stow-able source lo
 |-------------|---------------------|--------|
 | Claude agents | `claude/.claude/agents/` | `~/.claude/agents/` |
 | Claude skills | `claude/.claude/skills/` | `~/.claude/skills/` |
-| Claude settings | `claude/.claude/settings.json` | `~/.claude/settings.json` |
+| Claude settings | `~/.claude/settings.json` directly | (gitignored, not in dotfiles) |
 | Cursor skills | `claude/.claude/skills/` (canonical) | `~/.cursor/skills/` |
 | Neovim config | `nvim/.config/nvim/` | `~/.config/nvim/` |
 | Zsh config | `zsh/.zshrc` | `~/.zshrc` |

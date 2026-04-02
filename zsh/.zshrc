@@ -223,3 +223,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Starship prompt
 eval "$(starship init zsh)"
+
+# bun completions
+[ -s "/Users/zachromani/.bun/_bun" ] && source "/Users/zachromani/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
