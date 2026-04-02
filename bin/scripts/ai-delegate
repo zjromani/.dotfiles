@@ -63,10 +63,14 @@ tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "claude" Enter
 # Focus the Claude pane (left/pane 0)
 tmux select-pane -t "${CURRENT_SESSION}:${WINDOW_NAME}.0"
 
-# After Claude initializes: rename session + seed with clipboard context via /investigate
+# After Claude initializes: rename session + set random color + seed with clipboard context via /investigate
 (
+  COLORS=(red blue green yellow purple orange pink cyan)
+  RANDOM_COLOR="${COLORS[RANDOM % ${#COLORS[@]}]}"
   sleep 3
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/rename ${WINDOW_NAME}" Enter
+  sleep 0.5
+  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/color ${RANDOM_COLOR}" Enter
   sleep 0.5
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/investigate ${URL}" Enter
 ) &
