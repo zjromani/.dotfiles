@@ -1,10 +1,9 @@
 ---
 name: research
 description: "Use this agent for research tasks requiring web search, document analysis, fact verification, or synthesizing information into structured reports. It tracks sources, verifies claims, and delivers findings with proper citations."
-model: opus
+model: sonnet
 color: blue
 ---
-
 <example>
 Context: User needs to understand a technology or compare options.
 user: "What are the pros and cons of SQLite vs DuckDB for our analytics?"
