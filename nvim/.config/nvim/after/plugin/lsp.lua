@@ -33,6 +33,10 @@ require('mason-lspconfig').setup({
     'kotlin_language_server',
     'buf_ls',
   },
+  -- ast_grep requires a sgconfig.yml project file; exclude to avoid startup errors
+  automatic_enable = {
+    exclude = { 'ast_grep' },
+  },
 })
 
 -- LSP server setup for Neovim 0.11+
