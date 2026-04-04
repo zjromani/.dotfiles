@@ -3,6 +3,4 @@ atom/packages/vim-mode-plus/node_modules/**
 nvim/.config/nvim/plugin/packer_compiled.lua
 # Claude Code worktrees (runtime state, not config)
 .claude/worktrees/
-# Machine-specific Claude settings (managed directly by Claude Code, not stowed)
-claude/.claude/settings.json
 

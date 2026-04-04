@@ -1,0 +1,175 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(git remote*)",
+      "Bash(git fetch*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git restore*)",
+      "Bash(git merge*)",
+      "Bash(git pull*)",
+      "Bash(git reset*)",
+      "Bash(git tag*)",
+      "Bash(git stash*)",
+      "Bash(git clean*)",
+      "Bash(git rm*)",
+      "Bash(git mv*)",
+      "Bash(git config*)",
+      "Bash(git submodule*)",
+      "Bash(git worktree*)",
+      "Bash(git cherry-pick*)",
+      "Bash(git blame*)",
+      "Bash(git bisect*)",
+      "Bash(git push*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh pr diff*)",
+      "Bash(gh issue view*)",
+      "Bash(gh issue list*)",
+      "Bash(gh repo view*)",
+      "Bash(gh repo list*)",
+      "Bash(gh run view*)",
+      "Bash(gh run list*)",
+      "Bash(gh run watch*)",
+      "Bash(gh release view*)",
+      "Bash(gh release list*)",
+      "Bash(gh search *)",
+      "Bash(gh api *)",
+      "Bash(gh status*)",
+      "Bash(gh auth status*)",
+      "Bash(find*)",
+      "Bash(grep*)",
+      "Bash(rg*)",
+      "Bash(cat*)",
+      "Bash(head*)",
+      "Bash(tail*)",
+      "Bash(less*)",
+      "Bash(more*)",
+      "Bash(ls*)",
+      "Bash(tree*)",
+      "Bash(file*)",
+      "Bash(stat*)",
+      "Bash(wc*)",
+      "Bash(sort*)",
+      "Bash(uniq*)",
+      "Bash(cut*)",
+      "Bash(awk*)",
+      "Bash(sed*)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(pwd*)",
+      "Bash(npm test*)",
+      "Bash(npm run test*)",
+      "Bash(npm run build*)",
+      "Bash(npm run lint*)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(bundle exec rspec*)",
+      "Bash(bundle exec rubocop*)",
+      "Bash(rails routes*)",
+      "Bash(kubectl get*)",
+      "Bash(kubectl describe*)",
+      "Bash(kubectl logs*)",
+      "Bash(terraform plan*)",
+      "Bash(terraform validate*)",
+      "Bash(terraform fmt*)",
+      "Bash(heroku logs*)",
+      "Bash(heroku ps*)",
+      "Bash(heroku config*)",
+      "WebSearch",
+      "WebFetch",
+      "mcp__*",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git config:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(test:*)",
+      "Bash(git -C /Users/zachromani/.dotfiles log --oneline -10)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff cbd86a3^..cbd86a3 -- tmux/.tmux.conf)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff 2a79b8b^..2a79b8b -- nvim/.config/nvim/after/plugin/telescope.lua)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff 0a44eb0^..0a44eb0 -- zsh/.zshrc)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff e18c50f^..e18c50f -- tmux/.tmux.conf)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff 3239a10^..3239a10 --stat)",
+      "Bash(git -C /Users/zachromani/.dotfiles diff 276f340^..276f340 -- claude/.claude/settings.json)",
+      "Bash(git -C /Users/zachromani/.config/tmux/plugins/catppuccin remote -v)",
+      "Bash(ansible-playbook:*)",
+      "Bash(git -C /Users/zachromani/.dotfiles log --oneline -20)",
+      "Bash(git -C /Users/zachromani/.dotfiles log --oneline)",
+      "Bash(git -C /Users/zachromani/.dotfiles log --all --graph --oneline)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(git fetch:*)",
+      "Bash(git remote:*)",
+      "Bash(git stash list)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git blame:*)",
+      "Bash(defaults read:*)",
+      "mcp__plugin_telegram_telegram__reply",
+      "mcp__claude_ai_Gmail__gmail_search_messages",
+      "Skill(last30days:2.9.5)"
+    ],
+    "deny": [
+      "Bash(git rebase*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "telegram@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "last30days@last30days-skill": true
+  },
+  "extraKnownMarketplaces": {
+    "last30days-skill": {
+      "source": {
+        "source": "github",
+        "repo": "mvanhorn/last30days-skill"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "voiceEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true,
+  "theme": "ansi"
+}

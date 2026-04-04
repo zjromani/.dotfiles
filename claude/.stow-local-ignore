@@ -1,2 +1,0 @@
-# Don't stow settings.json — it's gitignored and managed directly by Claude Code
-.claude/settings.json
