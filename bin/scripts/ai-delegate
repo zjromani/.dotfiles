@@ -29,7 +29,7 @@ echo "slug=$SLUG window=$WINDOW_NAME"
 AI_DELEGATE_AREA_ID="FE8osnayK2HWjTcuR2dXRw"
 ENCODED_TITLE=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$SLUG")
 ENCODED_NOTES=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$URL")
-THINGS_URL="things:///add?title=${ENCODED_TITLE}&notes=${ENCODED_NOTES}&list-id=${AI_DELEGATE_AREA_ID}&when=today&tags=.work&tags=.ai"
+THINGS_URL="things:///add?title=${ENCODED_TITLE}&notes=${ENCODED_NOTES}&list-id=${AI_DELEGATE_AREA_ID}&when=today&tags=.work%2C.ai"
 /usr/bin/open "$THINGS_URL" && echo "Things: task created" || echo "Things: FAILED"
 
 # 2. Tmux: prefer 'flights' session, fall back to most recently attached

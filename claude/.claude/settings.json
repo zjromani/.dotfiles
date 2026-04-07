@@ -88,41 +88,7 @@
       "Bash(heroku config*)",
       "WebSearch",
       "WebFetch",
-      "mcp__*",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "WebFetch(domain:github.com)",
-      "Bash(git config:*)",
-      "Bash(git check-ignore:*)",
-      "Bash(rg:*)",
-      "Bash(find:*)",
-      "Bash(test:*)",
-      "Bash(git -C /Users/zachromani/.dotfiles log --oneline -10)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff cbd86a3^..cbd86a3 -- tmux/.tmux.conf)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff 2a79b8b^..2a79b8b -- nvim/.config/nvim/after/plugin/telescope.lua)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff 0a44eb0^..0a44eb0 -- zsh/.zshrc)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff e18c50f^..e18c50f -- tmux/.tmux.conf)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff 3239a10^..3239a10 --stat)",
-      "Bash(git -C /Users/zachromani/.dotfiles diff 276f340^..276f340 -- claude/.claude/settings.json)",
-      "Bash(git -C /Users/zachromani/.config/tmux/plugins/catppuccin remote -v)",
-      "Bash(ansible-playbook:*)",
-      "Bash(git -C /Users/zachromani/.dotfiles log --oneline -20)",
-      "Bash(git -C /Users/zachromani/.dotfiles log --oneline)",
-      "Bash(git -C /Users/zachromani/.dotfiles log --all --graph --oneline)",
-      "Bash(git status)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(git branch:*)",
-      "Bash(git show:*)",
-      "Bash(git fetch:*)",
-      "Bash(git remote:*)",
-      "Bash(git stash list)",
-      "Bash(git rev-parse:*)",
-      "Bash(git ls-files:*)",
-      "Bash(git blame:*)",
-      "Bash(defaults read:*)",
-      "mcp__plugin_telegram_telegram__reply",
-      "mcp__claude_ai_Gmail__gmail_search_messages"
+      "mcp__*"
     ],
     "deny": [
       "Bash(git rebase*)"
@@ -130,39 +96,6 @@
     "defaultMode": "auto"
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/session-start.sh"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/pre-compact.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/trim-bash-output.sh"
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "matcher": "",
@@ -186,13 +119,6 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "telegram@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
-  },
   "effortLevel": "medium",
-  "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true,
-  "theme": "ansi"
+  "skipAutoPermissionPrompt": true
 }
