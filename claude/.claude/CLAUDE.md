@@ -15,6 +15,11 @@
 - Never amend pushed commits. Create a new commit instead.
 - Never use --no-verify unless explicitly asked.
 
+## Task Tracking
+- For any work with more than one step, create tasks upfront using TaskCreate before starting.
+- Mark each task complete as soon as it's done — don't batch completions.
+- Single-step or purely conversational requests don't need tasks.
+
 ## Session Hygiene
 - Before context compresses, emit a checkpoint: current task/status, decisions made this session, open questions, immediate next step.
 - Use RESUME.md in project directories for session continuity.
