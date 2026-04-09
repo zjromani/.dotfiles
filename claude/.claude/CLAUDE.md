@@ -15,6 +15,11 @@
 - Never amend pushed commits. Create a new commit instead.
 - Never use --no-verify unless explicitly asked.
 
+## Evidence & Linking
+- Always include GitHub links (commits, PRs, issues, file lines) as evidence when investigating or explaining findings.
+- Any message drafted for Slack, Confluence, Jira, or similar must include relevant GitHub links — never make claims without linking the proof.
+- When referencing code behavior, bugs, or changes: link to the specific commit, PR, or file+line, not just describe it.
+
 ## Task Tracking
 - For any work with more than one step, create tasks upfront using TaskCreate before starting.
 - Mark each task complete as soon as it's done — don't batch completions.
