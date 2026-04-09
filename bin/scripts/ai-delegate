@@ -69,9 +69,9 @@ tmux select-pane -t "${CURRENT_SESSION}:${WINDOW_NAME}.0"
   RANDOM_COLOR="${COLORS[RANDOM % ${#COLORS[@]}]}"
   sleep 3
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/rename ${WINDOW_NAME}" Enter
-  sleep 0.5
+  sleep 1.5
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/color ${RANDOM_COLOR}" Enter
-  sleep 0.5
+  sleep 1.5
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/investigate ${URL}" Enter
 ) &
 
