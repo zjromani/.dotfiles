@@ -12,7 +12,8 @@ if [[ $# -lt 1 ]]; then
 fi
 
 SLUG="$1"
-URL="${2:-$(pbpaste)}"
+# Take first line only — pbpaste may contain multiline content
+URL=$(printf '%s' "${2:-$(pbpaste)}" | head -1 | tr -d '\r\n')
 
 # Sanitize slug: lowercase, spaces → hyphens, strip anything not alphanumeric/hyphen
 WINDOW_NAME=$(echo "$SLUG" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
@@ -72,7 +73,11 @@ tmux select-pane -t "${CURRENT_SESSION}:${WINDOW_NAME}.0"
   sleep 3
   tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/color ${RANDOM_COLOR}" Enter
   sleep 3
-  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/investigate ${URL}" Enter
+  # Use paste-buffer -p (no bracketed paste) so Claude receives it as typed, not pasted
+  printf '/investigate %s' "${URL}" | tmux load-buffer -
+  tmux paste-buffer -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" -p
+  sleep 0.5
+  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "" Enter
 ) &
 
 # 3. Log
