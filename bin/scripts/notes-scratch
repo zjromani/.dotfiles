@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+WEEK=$(date +%Y-W%V)
+FILE="$HOME/flights/scratch-pad/$WEEK.md"
+TODAY_HEADER="## $(date '+%a %b %-d')"
+
+# Create directory and file with today's header, or append today's header if missing
+mkdir -p "$HOME/flights/scratch-pad"
+if [ ! -f "$FILE" ]; then
+  printf '%s\n\n' "$TODAY_HEADER" > "$FILE"
+elif ! grep -qF "$TODAY_HEADER" "$FILE"; then
+  printf '\n%s\n\n' "$TODAY_HEADER" >> "$FILE"
+fi
+
+# Switch to existing notes session, or create one and open nvim
+if tmux has-session -t notes 2>/dev/null; then
+  tmux switch-client -t notes
+else
+  tmux new-session -d -s notes -c "$HOME/flights/scratch-pad"
+  tmux send-keys -t notes "nvim + '$FILE'" Enter
+  tmux switch-client -t notes
+fi
