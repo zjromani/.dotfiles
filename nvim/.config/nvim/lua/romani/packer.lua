@@ -78,6 +78,24 @@ return require('packer').startup(function(use)
     end,
   })
 
+  -- Zen/focus writing mode: centers buffer, hides UI chrome
+  use {
+    "folke/zen-mode.nvim",
+    config = function()
+      require("zen-mode").setup({
+        window = {
+          width = 80,
+          options = {
+            number = false,
+            relativenumber = false,
+            signcolumn = "no",
+            colorcolumn = "",
+          },
+        },
+      })
+    end
+  }
+
   use {
     "coder/claudecode.nvim",
     config = function()
