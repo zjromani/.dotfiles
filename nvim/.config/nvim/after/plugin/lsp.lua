@@ -27,12 +27,27 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Mason setup
 require('mason').setup()
+
+-- Install non-LSP tools (formatters, linters) via mason directly
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = function()
+    local registry = require('mason-registry')
+    local tools = { 'markdownlint-cli2' }
+    for _, tool in ipairs(tools) do
+      local ok, pkg = pcall(registry.get_package, tool)
+      if ok and not pkg:is_installed() then
+        pkg:install()
+      end
+    end
+  end,
+})
+
 require('mason-lspconfig').setup({
   ensure_installed = {
     'eslint',
     'kotlin_language_server',
     'buf_ls',
-    'markdownlint-cli2',
   },
   -- ast_grep requires a sgconfig.yml project file; exclude to avoid startup errors
   automatic_enable = {
