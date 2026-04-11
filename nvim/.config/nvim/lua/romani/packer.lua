@@ -78,6 +78,22 @@ return require('packer').startup(function(use)
     end,
   })
 
+  -- Format on save (markdown via markdownlint-cli2)
+  use {
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          markdown = { "markdownlint-cli2" },
+        },
+        format_on_save = {
+          timeout_ms = 2000,
+          lsp_fallback = false,
+        },
+      })
+    end
+  }
+
   -- Zen/focus writing mode: centers buffer, hides UI chrome
   use {
     "folke/zen-mode.nvim",

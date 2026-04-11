@@ -32,6 +32,7 @@ require('mason-lspconfig').setup({
     'eslint',
     'kotlin_language_server',
     'buf_ls',
+    'markdownlint-cli2',
   },
   -- ast_grep requires a sgconfig.yml project file; exclude to avoid startup errors
   automatic_enable = {
