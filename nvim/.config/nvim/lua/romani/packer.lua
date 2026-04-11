@@ -91,6 +91,11 @@ return require('packer').startup(function(use)
           lsp_fallback = false,
         },
       })
+
+      -- Replace the LSP-only <leader>f with conform (falls back to LSP for other filetypes)
+      vim.keymap.set({ "n", "v" }, "<leader>f", function()
+        require("conform").format({ async = true, lsp_fallback = true })
+      end, { desc = "Format buffer" })
     end
   }
 
