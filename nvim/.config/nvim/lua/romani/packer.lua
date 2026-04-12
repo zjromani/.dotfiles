@@ -96,11 +96,4 @@ return require('packer').startup(function(use)
     end
   }
 
-  use {
-    "coder/claudecode.nvim",
-    config = function()
-      require("claudecode").setup()
-    end
-  }
-
 end)

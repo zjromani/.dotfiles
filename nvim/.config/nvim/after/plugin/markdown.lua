@@ -9,9 +9,8 @@ vim.api.nvim_create_autocmd("FileType", {
     -- Don't hard-wrap lines as you type
     vim.opt_local.textwidth = 0
 
-    -- Hide syntax markers (** __ ` etc) so you see cleaner text while writing
-    -- Set to 1 to keep markers visible when cursor is on the line; 2 to always hide
-    vim.opt_local.conceallevel = 2
+    -- Show all raw markdown syntax (**, __, links, etc) — render elsewhere
+    vim.opt_local.conceallevel = 0
 
     -- Move by visual lines (respects soft wrap) instead of logical lines
     vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
