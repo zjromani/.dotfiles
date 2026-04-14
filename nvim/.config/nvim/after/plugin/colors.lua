@@ -8,3 +8,6 @@ function ColorMyPencils(color)
 end
 
 ColorMyPencils()
+
+-- Match zen-mode backdrop to Catppuccin Mocha bg so sidebars don't look black
+vim.api.nvim_set_hl(0, "ZenBg", { bg = "#1e1e2e" })

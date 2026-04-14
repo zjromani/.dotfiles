@@ -105,12 +105,16 @@ return require('packer').startup(function(use)
     config = function()
       require("zen-mode").setup({
         window = {
-          width = 80,
+          width = 0.6, -- 60% of screen keeps side blocks present but not huge
           options = {
-            number = false,
-            relativenumber = false,
             signcolumn = "no",
             colorcolumn = "",
+            foldcolumn = "2", -- left padding inside the writing area
+          },
+        },
+        plugins = {
+          options = {
+            laststatus = 2, -- keep statusline visible in zen mode
           },
         },
       })
