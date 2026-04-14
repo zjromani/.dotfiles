@@ -1,15 +1,28 @@
--- LSP keymaps on attach
+-- LSP keymaps on attach — only map what the server actually supports
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
     local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then return end
+
     local opts = { buffer = bufnr, remap = false }
 
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+    if client.supports_method('textDocument/definition') then
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    end
+    if client.supports_method('textDocument/hover') then
+      vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+    end
+    if client.supports_method('textDocument/codeAction') then
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+    end
+    if client.supports_method('textDocument/rename') then
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    end
+
+    -- diagnostics are local to nvim, not server-specific
     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
     -- Copy diagnostics to clipboard
     vim.keymap.set('n', '<leader>cd', function()
