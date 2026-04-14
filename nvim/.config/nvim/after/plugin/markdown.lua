@@ -9,12 +9,15 @@ vim.api.nvim_create_autocmd("FileType", {
     -- Don't hard-wrap lines as you type
     vim.opt_local.textwidth = 0
 
-    -- Show all raw markdown syntax (**, __, links, etc) — render elsewhere
-    vim.opt_local.conceallevel = 0
-
     -- Move by visual lines (respects soft wrap) instead of logical lines
     vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
     vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
+
+    -- Defer conceallevel so it runs after all other FileType handlers
+    -- (Neovim's built-in ftplugin and plugins may set it to 2)
+    vim.schedule(function()
+      vim.opt_local.conceallevel = 0
+    end)
   end,
 })
 
