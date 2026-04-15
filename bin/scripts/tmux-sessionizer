@@ -65,17 +65,27 @@ done
 dirs=("${base_dirs[@]}" "${extra_dirs[@]}")
 shopt -u nullglob
 
-existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
+# Exclude numeric-only sessions (e.g. "0", the temp sessionizer popup session)
+existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep -vE '^[0-9]+$')
 
 session=$(
     {
-        [ -n "$existing_sessions" ] && printf '%s\n' "$existing_sessions"
+        # Short aliases for quick navigation (type the alias name to jump directly)
+        echo "flights"
+        # Directories before sessions so they appear first
         printf '%s\n' "${dirs[@]%/}" \
             | grep -vE "/(Downloads|Documents|Music|Movies|Pictures|Desktop|Library|Public|Applications|Dropbox|\.Trash)"
+        # Existing named sessions at the bottom
+        [ -n "$existing_sessions" ] && printf '%s\n' "$existing_sessions"
     } | fzf --no-sort --tiebreak=index --height=40%
 )
 
 [ -z "$session" ] && exit 0
+
+# Resolve short aliases to full paths
+case "$session" in
+  flights) session="$HOME/flights" ;;
+esac
 
 session_name=$(basename "$session")
 for root in "${extra_roots[@]}"; do
