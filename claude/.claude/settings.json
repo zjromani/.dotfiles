@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+            "command": "SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude finished\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
           }
         ]
       }
@@ -32,15 +32,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'; SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
+            "command": "SESSION=$(tmux display-message -p -t \"$TMUX_PANE\" '#S / #W' 2>/dev/null || echo 'terminal'); osascript -e \"display notification \\\"Claude needs input\\\" with title \\\"Claude Code\\\" subtitle \\\"$SESSION\\\"\""
           }
         ]
       }
     ]
   },
-  "effortLevel": "medium",
-  "skipAutoPermissionPrompt": true,
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true
-  }
+  },
+  "effortLevel": "medium",
+  "skipAutoPermissionPrompt": true
 }
