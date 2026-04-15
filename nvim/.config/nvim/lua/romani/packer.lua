@@ -96,17 +96,13 @@ return require('packer').startup(function(use)
     end,
   })
 
-  -- Format on save (markdown via markdownlint-cli2)
+  -- Format on save (markdown via markdownlint-cli2, triggered from after/plugin/markdown.lua)
   use {
     "stevearc/conform.nvim",
     config = function()
       require("conform").setup({
         formatters_by_ft = {
           markdown = { "markdownlint-cli2" },
-        },
-        format_on_save = {
-          timeout_ms = 2000,
-          lsp_fallback = false,
         },
       })
 

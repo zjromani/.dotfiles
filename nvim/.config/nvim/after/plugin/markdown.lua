@@ -21,5 +21,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Format on save via conform.nvim (markdownlint-cli2)
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.md",
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf, timeout_ms = 2000 })
+  end,
+})
+
 -- ,z to toggle focus/zen mode (works in any file, most useful in markdown)
 vim.keymap.set("n", "<leader>z", "<cmd>ZenMode<CR>", { desc = "Toggle zen mode" })
