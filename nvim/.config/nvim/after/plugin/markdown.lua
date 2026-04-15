@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Format on save via conform.nvim (markdownlint-cli2)
+-- Format on save via conform.nvim (prettier)
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.md",
   callback = function(args)
