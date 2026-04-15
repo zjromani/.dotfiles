@@ -74,7 +74,25 @@ return require('packer').startup(function(use)
     "tadmccorkle/markdown.nvim",
     ft = "markdown",
     config = function()
-      require("markdown").setup({})
+      require("markdown").setup({
+        -- list continuation (Enter continues bullets/numbers, Shift-Enter breaks out)
+        on_attach = function(bufnr)
+          local opts = { buffer = bufnr, silent = true }
+          -- toggle checkbox: [ ] <-> [x]
+          vim.keymap.set("n", "<leader>tt", "<Plug>(markdown_toggle_task)", opts)
+          -- Tab/S-Tab indent/unindent list items in insert mode
+          vim.keymap.set("i", "<Tab>",   "<Plug>(markdown_indent_list_item)", opts)
+          vim.keymap.set("i", "<S-Tab>", "<Plug>(markdown_unindent_list_item)", opts)
+          -- heading navigation
+          vim.keymap.set("n", "]]", "<Plug>(markdown_next_heading)", opts)
+          vim.keymap.set("n", "[[", "<Plug>(markdown_prev_heading)", opts)
+          -- inline style toggles (normal + visual)
+          vim.keymap.set({ "n", "v" }, "<leader>mb", "<Plug>(markdown_toggle_strong)", opts)
+          vim.keymap.set({ "n", "v" }, "<leader>mi", "<Plug>(markdown_toggle_emphasis)", opts)
+          vim.keymap.set({ "n", "v" }, "<leader>ms", "<Plug>(markdown_toggle_strikethrough)", opts)
+          vim.keymap.set({ "n", "v" }, "<leader>mc", "<Plug>(markdown_toggle_code)", opts)
+        end,
+      })
     end,
   })
 

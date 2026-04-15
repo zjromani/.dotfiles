@@ -30,7 +30,7 @@ vim.keymap.set("n", "<leader>cs", "<cmd>let @*=expand('%')<CR>")
 
 vim.keymap.set("v", "H", "^")
 vim.keymap.set("v", "L", "$")
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":<C-u>silent! '<,'>m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":<C-u>silent! '<,'>m '<-2<CR>gv=gv")
 
 vim.keymap.set("i", "jk", "<Esc>")
