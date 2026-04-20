@@ -55,13 +55,12 @@ WORK_DIR="$HOME/flights"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"
 
-# New window + 3-pane layout: large left (claude) | right-top | right-bottom
+# New window + 2-pane layout: Claude top (80%), shell bottom (20%)
 tmux new-window -t "${CURRENT_SESSION}:" -n "$WINDOW_NAME" -c "$WORK_DIR"
-tmux split-window -t "${CURRENT_SESSION}:${WINDOW_NAME}" -h -c "$WORK_DIR"
-tmux split-window -t "${CURRENT_SESSION}:${WINDOW_NAME}.1" -v -c "$WORK_DIR"
+tmux split-window -t "${CURRENT_SESSION}:${WINDOW_NAME}" -v -p 20 -c "$WORK_DIR"
 tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "claude" Enter
 
-# Focus the Claude pane (left/pane 0)
+# Focus the Claude pane (top/pane 0)
 tmux select-pane -t "${CURRENT_SESSION}:${WINDOW_NAME}.0"
 
 # After Claude initializes: rename session + set random color + seed with clipboard context via /investigate
