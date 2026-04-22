@@ -1,11 +1,12 @@
 palette = "catppuccin_mocha"
+scan_timeout = 10000
+command_timeout = 2000
 
 format = """
 $directory\
 $git_branch\
 $git_status\
 $kubernetes\
-$ruby\
 $nodejs\
 $java\
 $kotlin\
@@ -34,6 +35,7 @@ disabled = false
 style = "bold blue"
 
 [ruby]
+disabled = true
 style = "bold red"
 
 [nodejs]

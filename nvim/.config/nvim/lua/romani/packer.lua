@@ -69,24 +69,42 @@ return require('packer').startup(function(use)
     run = function() vim.fn["mkdp#util#install"]() end,
   })
 
-  -- Markdown editing ergonomics: list continuation, heading nav, inline style toggling
+  -- Auto-continue bullets/numbered lists on Enter; Ctrl-D deletes current bullet
+  use {
+    "dkarter/bullets.vim",
+    ft = "markdown",
+    setup = function()
+      vim.g.bullets_enabled_file_types = { "markdown" }
+      vim.g.bullets_outline_levels = { "num", "abc", "std-" }
+    end,
+  }
+
+  -- Markdown editing ergonomics: heading nav, inline style toggles, checkboxes
   use({
     "tadmccorkle/markdown.nvim",
     ft = "markdown",
     config = function()
       require("markdown").setup({
-        -- list continuation (Enter continues bullets/numbers, Shift-Enter breaks out)
+        -- disable built-in list continuation — bullets.vim owns <CR>
+        mappings = {
+          go_curr_heading = false,
+          go_parent_heading = false,
+          go_next_heading = "]]",
+          go_prev_heading = "[[",
+          inline_surround_toggle = false,
+          inline_surround_toggle_line = false,
+          inline_surround_delete = false,
+          inline_surround_change = false,
+          link_add = false,
+          link_follow = false,
+          go_next_link = false,
+          go_prev_link = false,
+        },
         on_attach = function(bufnr)
           local opts = { buffer = bufnr, silent = true }
-          -- toggle checkbox: [ ] <-> [x]
           vim.keymap.set("n", "<leader>tt", "<Plug>(markdown_toggle_task)", opts)
-          -- Tab/S-Tab indent/unindent list items in insert mode
-          vim.keymap.set("i", "<Tab>",   "<Plug>(markdown_indent_list_item)", opts)
-          vim.keymap.set("i", "<S-Tab>", "<Plug>(markdown_unindent_list_item)", opts)
-          -- heading navigation
           vim.keymap.set("n", "]]", "<Plug>(markdown_next_heading)", opts)
           vim.keymap.set("n", "[[", "<Plug>(markdown_prev_heading)", opts)
-          -- inline style toggles (normal + visual)
           vim.keymap.set({ "n", "v" }, "<leader>mb", "<Plug>(markdown_toggle_strong)", opts)
           vim.keymap.set({ "n", "v" }, "<leader>mi", "<Plug>(markdown_toggle_emphasis)", opts)
           vim.keymap.set({ "n", "v" }, "<leader>ms", "<Plug>(markdown_toggle_strikethrough)", opts)
@@ -119,16 +137,16 @@ return require('packer').startup(function(use)
     config = function()
       require("zen-mode").setup({
         window = {
-          width = 0.6, -- 60% of screen keeps side blocks present but not huge
+          width = 0.6,
           options = {
             signcolumn = "no",
             colorcolumn = "",
-            foldcolumn = "2", -- left padding inside the writing area
+            foldcolumn = "2",
           },
         },
         plugins = {
           options = {
-            laststatus = 2, -- keep statusline visible in zen mode
+            laststatus = 2,
           },
         },
       })

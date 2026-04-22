@@ -2,21 +2,18 @@
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "markdown",
   callback = function()
-    -- Wrap at word boundaries, indent continuation lines
     vim.opt_local.linebreak = true
     vim.opt_local.breakindent = true
-
-    -- Don't hard-wrap lines as you type
     vim.opt_local.textwidth = 0
 
-    -- Move by visual lines (respects soft wrap) instead of logical lines
     vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
     vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
 
-    -- Defer conceallevel so it runs after all other FileType handlers
-    -- (Neovim's built-in ftplugin and plugins may set it to 2)
+    -- Defer so these win over any plugin FileType handlers (including markdown.nvim on_attach)
     vim.schedule(function()
       vim.opt_local.conceallevel = 0
+      -- bullets.vim owns <CR> for list continuation; override anything markdown.nvim set
+      vim.keymap.set("i", "<CR>", "<Plug>(bullets-newline)", { buffer = true, silent = true })
     end)
   end,
 })

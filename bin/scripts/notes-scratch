@@ -6,11 +6,11 @@ FILE="$HOME/flights/daily-brief/$(date +%Y-%m-%d)-brief.md"
 mkdir -p "$HOME/flights/daily-brief"
 [ -f "$FILE" ] || touch "$FILE"
 
-# Switch to existing notes session, or create one and open nvim
-if tmux has-session -t notes 2>/dev/null; then
-  tmux switch-client -t notes
+# Switch to existing daily-brief session, or create one and open nvim
+if tmux has-session -t daily-brief 2>/dev/null; then
+  tmux switch-client -t daily-brief
 else
-  tmux new-session -d -s notes -c "$HOME/flights/daily-brief"
-  tmux send-keys -t notes "nvim + '$FILE'" Enter
-  tmux switch-client -t notes
+  tmux new-session -d -s daily-brief -c "$HOME/flights/daily-brief"
+  tmux send-keys -t daily-brief "nvim + '$FILE'" Enter
+  tmux switch-client -t daily-brief
 fi
