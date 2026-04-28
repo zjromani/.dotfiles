@@ -61,9 +61,9 @@ require('mason-lspconfig').setup({
     'kotlin_language_server',
     'buf_ls',
   },
-  -- ast_grep requires a sgconfig.yml project file; exclude to avoid startup errors
+  -- ast_grep requires a sgconfig.yml project file; harper_ls exits 101 without config
   automatic_enable = {
-    exclude = { 'ast_grep' },
+    exclude = { 'ast_grep', 'harper_ls' },
   },
 })
 
