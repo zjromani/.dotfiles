@@ -103,6 +103,7 @@ alias rs='rails s'
 alias rc='rails c'
 alias gpr='git pull-request -o'
 alias grec='git branch --sort=committerdate'
+alias gwha='git log --format=format: --name-only --since="1 year ago" | sort | uniq -c | sort -nr | head -20'
 alias topo='top -o mem'
 alias rdb='SCHEMA=db/structure-base.sql RAILS_ENV=test rails db:drop db:create db:structure:load'
 alias dev_tail="tail -f log/development.log"
