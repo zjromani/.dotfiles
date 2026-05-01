@@ -60,6 +60,7 @@ require('mason-lspconfig').setup({
     'eslint',
     'kotlin_language_server',
     'buf_ls',
+    'ts_ls',
   },
   -- ast_grep requires a sgconfig.yml project file; harper_ls exits 101 without config
   automatic_enable = {

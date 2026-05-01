@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Usage: exec-circle-query <query text>
+#
+# Searches the Executive Circle newsletter archive via MCP and streams
+# results into a new tmux window in the flights session.
+
+QUERY="$*"
+
+if [[ -z "$QUERY" ]]; then
+  echo "Usage: exec-circle-query <query>" >&2
+  exit 1
+fi
+
+# Resolve tmux session: prefer 'flights', then current, then most recently attached
+if tmux has-session -t "flights" 2>/dev/null; then
+  SESSION="flights"
+elif [[ -n "${TMUX:-}" ]]; then
+  SESSION=$(tmux display-message -p '#S')
+else
+  SESSION=$(tmux list-sessions -F '#{session_last_attached} #{session_name}' 2>/dev/null \
+    | sort -rn | head -1 | awk '{print $2}')
+  if [[ -z "$SESSION" ]]; then
+    echo "exec-circle-query: no tmux sessions found" >&2
+    exit 1
+  fi
+fi
+
+WINDOW_NAME="exec-circle"
+
+WORK_DIR="$HOME/flights"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/work"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
+[[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"
+
+tmux new-window -t "${SESSION}:" -n "$WINDOW_NAME" -c "$WORK_DIR"
+tmux send-keys -t "${SESSION}:${WINDOW_NAME}.0" "claude" Enter
+
+# After Claude initializes, seed with the query via paste-buffer (no bracketed paste)
+(
+  sleep 5
+  printf 'Search the Executive Circle newsletter archive for posts relevant to: "%s". Use search_posts to find matches. For each result include the title, publication date, and a 1-2 sentence summary of the key insight. If a result looks especially relevant, use get_post to retrieve the full content and summarize it more fully.' \
+    "$QUERY" | tmux load-buffer -
+  tmux paste-buffer -t "${SESSION}:${WINDOW_NAME}.0" -p
+  sleep 0.5
+  tmux send-keys -t "${SESSION}:${WINDOW_NAME}.0" "" Enter
+) &
+
+# Switch to the new window and bring iTerm2 to focus
+tmux select-window -t "${SESSION}:${WINDOW_NAME}"
+osascript -e 'tell application "iTerm2" to activate'
+
+echo "exec-circle-query: '${WINDOW_NAME}' → tmux:${SESSION}"

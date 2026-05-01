@@ -41,6 +41,10 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
-  "skipAutoPermissionPrompt": true
+  "effortLevel": "high",
+  "skipAutoPermissionPrompt": true,
+  "verbose": true,
+  "preferredNotifChannel": "iterm2_with_bell",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
 }
