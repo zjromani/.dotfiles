@@ -1,9 +1,9 @@
 ---
-name: pr-watch
-description: Autonomous PR review loop. Triages review comments every 3 minutes via sub-agents — auto-fixes mechanical changes (renames, style, formatting), pushes back on structural ones, flags merge conflicts and always-human cases. Responds to every comment with the commit SHA that addresses it. Loops until the PR is approved + green or 45 minutes elapse. Never merges the PR itself. Invoke with `/loop /pr-watch [PR-number|URL]` in Claude Code for fully autonomous operation, or `/pr-watch [PR-number|URL]` for a single check cycle in Cursor.
+name: loop-pr-watch
+description: Autonomous PR review loop. Triages review comments every 3 minutes via sub-agents — auto-fixes mechanical changes (renames, style, formatting), pushes back on structural ones, flags merge conflicts and always-human cases. Responds to every comment with the commit SHA that addresses it. Loops until the PR is approved + green or 45 minutes elapse. Never merges the PR itself. Invoke with `/loop /loop-pr-watch [PR-number|URL]` in Claude Code for fully autonomous operation, or `/loop-pr-watch [PR-number|URL]` for a single check cycle in Cursor.
 ---
 
-# pr-watch
+# loop-pr-watch
 
 Autonomous PR review loop. Handles the mechanical back-and-forth of a GitHub PR review so you only get interrupted for judgment calls.
 
@@ -21,12 +21,12 @@ Autonomous PR review loop. Handles the mechanical back-and-forth of a GitHub PR 
 ## Invocation
 
 ```
-/pr-watch [PR-number | PR-url]
+/loop-pr-watch [PR-number | PR-url]
 ```
 
-**Claude Code (recommended):** Invoke as `/loop /pr-watch [PR]` for a self-paced loop that checks every 3 minutes. The skill calls `ScheduleWakeup(180)` to continue and omits the call to stop.
+**Claude Code (recommended):** Invoke as `/loop /loop-pr-watch [PR]` for a self-paced loop that checks every 3 minutes. The skill calls `ScheduleWakeup(180)` to continue and omits the call to stop.
 
-**Cursor / manual:** Invoke `/pr-watch [PR]` directly for one check cycle. At the end it prints next-step instructions if not done.
+**Cursor / manual:** Invoke `/loop-pr-watch [PR]` directly for one check cycle. At the end it prints next-step instructions if not done.
 
 ---
 
@@ -40,7 +40,7 @@ gh pr view --json number,headRefName,baseRefName,title,body,url
 gh repo view --json nameWithOwner
 ```
 
-State file path: `/tmp/pr-watch-{PR-number}.json`
+State file path: `/tmp/loop-pr-watch-{PR-number}.json`
 
 **First run (no state file):** Initialize state:
 ```json
@@ -55,7 +55,7 @@ State file path: `/tmp/pr-watch-{PR-number}.json`
 ```
 
 Post opening comment on the PR:
-> "pr-watch started. Monitoring for 45 minutes. I'll auto-fix mechanical review comments and flag anything that needs human judgment. I will not merge this PR."
+> "loop-pr-watch started. Monitoring for 45 minutes. I'll auto-fix mechanical review comments and flag anything that needs human judgment. I will not merge this PR."
 
 **Subsequent runs:** Read state file, increment `iter`.
 
@@ -218,10 +218,10 @@ Add to `handled_ids`.
 
 Write updated state.json (incremented `iter`, updated `handled_ids`, `conflict_flagged`).
 
-**If in Claude Code loop context:** Call `ScheduleWakeup(delaySeconds=180, prompt="<<autonomous-loop-dynamic>>", reason="Next pr-watch check in 3 minutes")`.
+**If in Claude Code loop context:** Call `ScheduleWakeup(delaySeconds=180, prompt="<<autonomous-loop-dynamic>>", reason="Next loop-pr-watch check in 3 minutes")`.
 
 **If ScheduleWakeup is unavailable (Cursor or direct invocation):** Print:
-> "Check complete (iteration {iter}). Run /pr-watch {PR} again in 3 minutes to continue monitoring."
+> "Check complete (iteration {iter}). Run /loop-pr-watch {PR} again in 3 minutes to continue monitoring."
 
 ---
 
@@ -229,13 +229,13 @@ Write updated state.json (incremented `iter`, updated `handled_ids`, `conflict_f
 
 **Success:**
 ```
-pr-watch done — review approved and all checks passing.
+loop-pr-watch done — review approved and all checks passing.
 Handled {N} comments: {X} implemented, {Y} pushed back, {Z} escalated.
 ```
 
 **Timeout:**
 ```
-pr-watch timed out after 45 minutes.
+loop-pr-watch timed out after 45 minutes.
 Handled {N} comments: {X} implemented, {Y} pushed back, {Z} escalated.
 Still open: comment IDs {list} — requires human attention.
 ```
