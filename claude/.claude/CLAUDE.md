@@ -53,6 +53,7 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 
 ### Always ask first
 - Pushing to remote
-- Sending Slack messages or creating Jira tickets (confirm content first)
+- Sending Slack messages (confirm content first)
+- Creating or updating Jira/Linear tickets: act, then notify — no content confirmation needed
 - Any production system change (terraform apply, kubectl apply)
 - Force-pushing or amending published commits

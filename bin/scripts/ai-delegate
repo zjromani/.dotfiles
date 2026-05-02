@@ -25,9 +25,9 @@ fi
 
 echo "slug=$SLUG window=$WINDOW_NAME"
 
-# 1. Create Things task in "💻Computer" area (list-id), set for Today
-# Area ID obtained via: osascript -e 'tell application "Things3" to return id of first area whose name contains "Computer"'
-AI_DELEGATE_AREA_ID="R7E39pwL2sCAsbkrFYmvLm"
+# 1. Create Things task in "AI Delegate" area (list-id), set for Today
+# Area ID obtained via: osascript -e 'tell application "Things3" to return id of first area whose name contains "AI Delegate"'
+AI_DELEGATE_AREA_ID="127y7W1RsHg3zpeUPBXXGD"
 ENCODED_TITLE=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$SLUG")
 ENCODED_NOTES=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$URL")
 THINGS_URL="things:///add?title=${ENCODED_TITLE}&notes=${ENCODED_NOTES}&list-id=${AI_DELEGATE_AREA_ID}&when=today&tags=.work%2C.ai"
