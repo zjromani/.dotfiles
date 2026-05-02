@@ -31,7 +31,7 @@
 
 ## Asking vs. Acting
 - Local file edits, running tests, read ops: act, then report.
-- Pushing to remote, external API calls (Slack/Jira), production system changes: ask first.
+- External API calls (Slack/Jira), production system changes: ask first.
 - Never silently skip a step. If blocked, say so.
 
 ## Config System
@@ -51,9 +51,17 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 - Adding new dependencies
 - Making assumptions about ambiguous requirements (state the assumption)
 
+### Act without asking
+- Pushing to feature branches (not main/master)
+
 ### Always ask first
-- Pushing to remote
 - Sending Slack messages (confirm content first)
 - Creating or updating Jira/Linear tickets: act, then notify — no content confirmation needed
 - Any production system change (terraform apply, kubectl apply)
-- Force-pushing or amending published commits
+- Force-pushing, amending published commits, or pushing directly to main/master
+
+### Delegation
+- Prefer spawning sub-agents for any task that doesn't require main-context judgment. Preserve the main context window for decisions, synthesis, and coordination — not mechanical work.
+- When spawning multiple independent sub-agents, send them in a single message so they run in parallel.
+- For any coding or file-editing work done by a sub-agent, use `isolation: "worktree"` so changes are isolated and reviewable before merging.
+- Default to worktrees for all non-trivial coding work, even in the main agent. Keeps the working tree clean and makes changes easy to review or discard.
