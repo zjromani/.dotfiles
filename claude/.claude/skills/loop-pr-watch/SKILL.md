@@ -244,20 +244,28 @@ Still open: comment IDs {list} — requires human attention.
 
 ## Sub-agent Context Spec
 
-### Triage sub-agent prompt
+Both triage and fix sub-agents are spawned as `subagent_type: "pr-reviewer"`. The agent definition encodes Engine's stack standards, review style, the 4-gate rubric, and the pre-filter — do not re-embed those in the prompt.
 
-Include all of:
+### Triage sub-agent
+
+Spawn with `subagent_type: "pr-reviewer"`. Prompt must include:
+
+- **Mode**: "Operate in triage mode. Return JSON only."
 - **PR context**: PR title, description, base branch, PR URL
 - **Comment**: full comment body, commenter username, the file and line it references
-- **Diff**: the diff of the specific file(s) referenced in the comment (`gh api repos/{repo}/pulls/{PR}/files`)
-- **Session context**: any requirements, architecture decisions, constraints, or prior conversation context the main agent has — pass these verbatim so the sub-agent understands the intent behind the PR, not just the code
-- **The 4-gate rubric**: embed the full gate definitions and the worked examples table above
-- **The pre-filter list**: embed so the sub-agent can catch anything the pre-filter missed
-- **Output instruction**: "Return JSON only: `{\"decision\": \"implement|pushback|escalate\", \"gate_failed\": null|\"1\"|\"2\"|\"3\"|\"4\", \"reasoning\": \"one sentence\"}`"
+- **Diff**: diff of the specific file(s) referenced (`gh api repos/{repo}/pulls/{PR}/files`)
+- **Session context**: any requirements, architecture decisions, or constraints the main agent has — pass verbatim so the sub-agent understands the intent behind the PR
 
-### Fix sub-agent prompt
+Expected output (JSON only):
+```json
+{"decision": "implement|pushback|escalate", "gate_failed": null|"1"|"2"|"3"|"4", "reasoning": "one sentence"}
+```
 
-Include everything the triage sub-agent got, plus:
+### Fix sub-agent
+
+Spawn with `subagent_type: "pr-reviewer"`. Prompt must include everything the triage sub-agent got, plus:
+
+- **Mode**: "Operate in fix mode. Return the commit SHA only."
 - **Triage verdict**: the decision and reasoning from the triage sub-agent
 - **Branch**: current branch name and base branch
 - **Hard rules** (embed verbatim):
