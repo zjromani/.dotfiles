@@ -34,6 +34,16 @@ export NOTION_AREA_OF_FOCUS_ID="your-area-id"
 export GITHUB_REPO_URL="https://github.com/YourOrg/your-repo"
 ```
 
+## Git Hooks
+
+Run once after cloning to activate all repo hooks (secrets check, cursor-skills sync, ansible sync):
+
+```bash
+bin/scripts/install-hooks
+```
+
+This sets `core.hooksPath=hooks` locally — points git at the tracked `hooks/` directory.
+
 ## Git Identity
 
 Set per-machine (not tracked in dotfiles):

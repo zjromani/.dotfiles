@@ -102,7 +102,7 @@ Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` v
 
 **Adding a new skill**: drop a directory in `claude/.claude/skills/` — the Cursor symlink is created automatically. The git `post-merge` and `post-checkout` hooks call `bin/scripts/sync-cursor-skills` on every pull/branch switch. To sync manually: `bin/scripts/sync-cursor-skills`.
 
-**Fresh clone**: git hooks are not tracked in git and are NOT installed by Ansible. On a fresh clone, run `bin/scripts/sync-cursor-skills` once manually to bootstrap the hooks and Cursor symlinks. After that, the post-merge hook handles subsequent syncs automatically. Machines using `ansible-playbook update.yml` get `sync-cursor-skills` run as part of the playbook.
+**Fresh clone**: Run `bin/scripts/install-hooks` once to configure `core.hooksPath=hooks` for this repo — that activates all hooks (pre-commit, post-merge, post-checkout, pre-push). Then run `bin/scripts/sync-cursor-skills` to bootstrap the Cursor symlinks. Machines using `ansible-playbook update.yml` get both run as part of the playbook.
 
 ## Claude Instructions
 
