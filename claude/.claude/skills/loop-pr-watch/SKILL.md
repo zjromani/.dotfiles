@@ -15,6 +15,7 @@ Autonomous PR review loop. Handles the mechanical back-and-forth of a GitHub PR 
 - Never push if validation fails
 - One atomic commit per comment fix (independently revertable)
 - Always respond to a comment before or after the commit — never claim a fix without a SHA reference
+- **Always verify factual claims before implementing them** — if a comment asserts that a value, format, API contract, or behavior is wrong, independently confirm that claim (docs lookup, web search, test call) before making any change. If the claim cannot be verified or turns out to be incorrect, push back with evidence instead of implementing.
 
 ---
 
@@ -98,19 +99,26 @@ If `mergeable = CONFLICTED` and `state.conflict_flagged = false`:
 
 ---
 
-## Step 4 — Fetch unhandled review comments
+## Step 4 — Fetch unhandled comments
+
+Fetch all three comment surfaces — a real comment can appear on any of them:
 
 ```bash
-# Inline review comments (line-level):
+# 1. Inline review comments (line-level code annotations):
 gh api repos/{repo}/pulls/{PR}/comments
 
-# Review-level comments and CHANGES_REQUESTED reviews:
+# 2. Review-level comments and CHANGES_REQUESTED reviews:
 gh api repos/{repo}/pulls/{PR}/reviews
+
+# 3. Top-level PR conversation comments (issue comments — these are NOT returned by the pulls endpoints):
+gh api repos/{repo}/issues/{PR}/comments
 ```
 
-Filter to IDs not already in `state.handled_ids`. These are the comments to process this iteration.
+Merge results from all three sources. Filter to IDs not already in `state.handled_ids`. These are the comments to process this iteration.
 
 For `CHANGES_REQUESTED` reviews, collect both the review-level summary body and any inline comments from that review.
+
+> **Note:** Top-level PR conversation comments (endpoint 3) are GitHub "issue comments" — they do not appear in the pulls comments or reviews endpoints. Always fetch all three or you will silently miss them.
 
 ---
 
@@ -132,6 +140,25 @@ Route to **escalate** immediately if ANY of these match:
 - The comment belongs to a `CHANGES_REQUESTED` review AND is a review-level summary (not an inline code comment on a specific line)
 
 If escalate: post reply, add to `handled_ids`, move to next comment.
+
+### Factual claim check (before 4-gate triage)
+
+Before triaging, check whether the comment makes a **verifiable factual claim** — an assertion that a specific value, format, API contract, config key, or external behavior is wrong or must be a certain way.
+
+Examples of factual claims:
+- "This header name should be `X-Foo` not `X_Foo`"
+- "This API endpoint changed to `/v2/...`"
+- "This config key is deprecated"
+- "This default value causes [specific behavior]"
+
+If the comment makes a factual claim:
+1. **Verify it independently** — check official docs, run a test call, or web search. Do not take the commenter's word for it.
+2. If the claim is **confirmed**: proceed to 4-gate triage as normal.
+3. If the claim is **wrong or unverifiable**: push back immediately:
+   > "Checked this — [evidence that the claim is incorrect or can't be confirmed, e.g., 'the Datadog MCP docs show underscores, not hyphens: <link>']. Not implementing."
+   Add to `handled_ids` and move on.
+
+Bot comments (Dependabot, Cursor Bugbot, automated scanners) are especially likely to make incorrect factual claims — apply extra scrutiny.
 
 ### 4-Gate LLM triage
 
