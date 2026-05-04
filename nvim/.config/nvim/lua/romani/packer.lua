@@ -131,7 +131,7 @@ return require('packer').startup(function(use)
     end
   }
 
-  -- Zen/focus writing mode: centers buffer, hides UI chrome
+  -- Zen/focus writing mode: centers buffer, hides UI chrome, enables twilight + soft-wrap
   use {
     "folke/zen-mode.nvim",
     config = function()
@@ -145,12 +145,46 @@ return require('packer').startup(function(use)
           },
         },
         plugins = {
-          options = {
-            laststatus = 2,
-          },
+          options = { laststatus = 2 },
+          twilight = { enabled = true },
         },
+        on_open = function(_win)
+          vim.opt_local.wrap = true
+          vim.opt_local.linebreak = true
+        end,
+        on_close = function()
+          vim.opt_local.wrap = false
+        end,
       })
     end
+  }
+
+  -- Dims inactive paragraphs in zen mode (folke companion to zen-mode.nvim)
+  use {
+    'folke/twilight.nvim',
+    config = function()
+      require('twilight').setup({ context = 10, treesitter = true })
+    end,
+  }
+
+  -- Inline markdown rendering: visual headings, bullet icons, code block backgrounds
+  use {
+    'MeanderingProgrammer/render-markdown.nvim',
+    after = { 'nvim-treesitter' },
+    requires = { 'nvim-tree/nvim-web-devicons' },
+    ft = { 'markdown' },
+    config = function()
+      require('render-markdown').setup({})
+    end,
+  }
+
+  -- Easymotion-style jump labels: <leader><leader>k/j for line jumps, <leader><leader>w for words
+  use {
+    'smoka7/hop.nvim',
+    tag = '*',
+    config = function()
+      require('hop').setup({ keys = 'etovxqpdygfblzhckisuran' })
+    end,
   }
 
 end)
