@@ -2,7 +2,7 @@
 set -e
 
 TODAY=$(date +%Y-%m-%d)
-FILE="$HOME/flights/daily-brief/${TODAY}-brief.md"
+FILE="$HOME/flights/daily-brief/${TODAY}-morning-brief.md"
 WINDOW="$TODAY"
 
 mkdir -p "$HOME/flights/daily-brief"

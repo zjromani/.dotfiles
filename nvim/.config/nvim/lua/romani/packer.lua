@@ -131,51 +131,48 @@ return require('packer').startup(function(use)
     end
   }
 
-  -- Zen/focus writing mode: centers buffer, hides UI chrome, enables twilight + soft-wrap
+  -- Zen/focus writing mode: centers buffer, hides UI chrome, soft-wrap on
+  -- Twilight is intentionally disabled — it caused flicker and only highlighted
+  -- a portion of the file at a time, making zen mode feel broken.
   use {
     "folke/zen-mode.nvim",
     config = function()
       require("zen-mode").setup({
         window = {
-          width = 0.6,
+          width = 90,        -- absolute column width — matches typical prose line length
+          height = 1,        -- full height of the editor
           options = {
             signcolumn = "no",
+            number = false,
+            relativenumber = false,
+            cursorline = false,
+            cursorcolumn = false,
+            foldcolumn = "0",
+            list = false,
             colorcolumn = "",
-            foldcolumn = "2",
           },
         },
         plugins = {
-          options = { laststatus = 2 },
-          twilight = { enabled = true },
+          options = {
+            enabled = true,
+            laststatus = 0,
+          },
+          twilight = { enabled = false },
+          gitsigns = { enabled = false },
         },
         on_open = function(_win)
           vim.opt_local.wrap = true
           vim.opt_local.linebreak = true
+          vim.opt_local.breakindent = true
         end,
         on_close = function()
-          vim.opt_local.wrap = false
+          -- Restore wrap only if we're not in a filetype that wants it on
+          if vim.bo.filetype ~= "markdown" then
+            vim.opt_local.wrap = false
+          end
         end,
       })
     end
-  }
-
-  -- Dims inactive paragraphs in zen mode (folke companion to zen-mode.nvim)
-  use {
-    'folke/twilight.nvim',
-    config = function()
-      require('twilight').setup({ context = 10, treesitter = true })
-    end,
-  }
-
-  -- Inline markdown rendering: visual headings, bullet icons, code block backgrounds
-  use {
-    'MeanderingProgrammer/render-markdown.nvim',
-    after = { 'nvim-treesitter' },
-    requires = { 'nvim-tree/nvim-web-devicons' },
-    ft = { 'markdown' },
-    config = function()
-      require('render-markdown').setup({})
-    end,
   }
 
   -- Easymotion-style jump labels: <leader><leader>k/j for line jumps, <leader><leader>w for words
