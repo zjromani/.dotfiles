@@ -1,5 +1,5 @@
 -- block in normal/visual, beam in insert, horizontal bar in replace
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25-blinkwait300-blinkon200-blinkoff150,r-cr:hor20,o:hor50"
 
 vim.opt.nu = true
 vim.opt.relativenumber = false

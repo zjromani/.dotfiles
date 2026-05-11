@@ -47,5 +47,8 @@
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "model": "sonnet",
+  "worktree": {
+    "baseRef": "fresh"
+  }
 }
