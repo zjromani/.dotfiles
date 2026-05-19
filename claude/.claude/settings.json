@@ -38,6 +38,9 @@
       }
     ]
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true
   },

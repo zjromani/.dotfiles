@@ -139,7 +139,7 @@ return require('packer').startup(function(use)
     config = function()
       require("zen-mode").setup({
         window = {
-          width = 90,        -- absolute column width — matches typical prose line length
+          width = 80,        -- absolute column width — narrower = more side padding
           height = 1,        -- full height of the editor
           options = {
             signcolumn = "no",
