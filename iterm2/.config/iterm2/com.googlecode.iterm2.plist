@@ -28,16 +28,8 @@
 	<true/>
 	<key>Default Bookmark Guid</key>
 	<string>CF16B9C8-D1C4-475F-B706-CB1B893559C5</string>
-	<key>DimInactiveSplitPanes</key>
-	<false/>
-	<key>EnableDivisionView</key>
-	<true/>
-	<key>EnableProxyIcon</key>
-	<false/>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
-	<key>HideMenuBarInFullscreen</key>
-	<true/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
 	<key>New Bookmarks</key>
@@ -46,7 +38,7 @@
 			<key>ASCII Anti Aliased</key>
 			<true/>
 			<key>ASCII Ligatures</key>
-			<false/>
+			<true/>
 			<key>Ambiguous Double Width</key>
 			<false/>
 			<key>Ansi 0 Color</key>
@@ -301,7 +293,7 @@
 			<key>Guid</key>
 			<string>CF16B9C8-D1C4-475F-B706-CB1B893559C5</string>
 			<key>Horizontal Spacing</key>
-			<real>0.90000000000000002</real>
+			<real>0.92000000000000004</real>
 			<key>Idle Code</key>
 			<integer>0</integer>
 			<key>Jobs to Ignore</key>
@@ -456,7 +448,7 @@
 			<key>Use Tab Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<real>0.92000000000000004</real>
+			<real>1.02</real>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
@@ -502,18 +494,8 @@
 	<true/>
 	<key>SoundForEsc</key>
 	<false/>
-	<key>SplitPaneDimmingAmount</key>
-	<real>0.37761793922548531</real>
 	<key>TabStyleWithAutomaticOption</key>
-	<integer>6</integer>
-	<key>TabViewType</key>
-	<integer>0</integer>
-	<key>TerminalMargin</key>
-	<integer>0</integer>
-	<key>TerminalVMargin</key>
-	<integer>0</integer>
-	<key>UseBorder</key>
-	<false/>
+	<integer>5</integer>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>findMode_iTerm</key>
