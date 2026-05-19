@@ -21,10 +21,10 @@ claude mcp add --scope user --transport http \
   --header "Authorization: Bearer ${NOTION_API_KEY}" \
   -- notion https://api.notion.com/v1/mcp
 
-# Executive Circle — HTTP MCP, token from env
-if [ -z "$EXEC_CIRCLE_TOKEN" ]; then
-  echo "Error: EXEC_CIRCLE_TOKEN not set. Add it to ~/.zshenv_private and re-run."
-  exit 1
+# Executive Circle — HTTP MCP, token from env (optional — skip if not set)
+if [ -n "$EXEC_CIRCLE_TOKEN" ]; then
+  claude mcp add --scope user --transport http \
+    "executive-circle" "https://www.contentmasterpro.limited/api/mcp/subscriber/${EXEC_CIRCLE_TOKEN}"
+else
+  echo "Skipping executive-circle MCP: EXEC_CIRCLE_TOKEN not set."
 fi
-claude mcp add --scope user --transport http \
-  "executive-circle" "https://www.contentmasterpro.limited/api/mcp/subscriber/${EXEC_CIRCLE_TOKEN}"
