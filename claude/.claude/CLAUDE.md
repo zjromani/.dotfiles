@@ -56,15 +56,12 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 ### Act without asking
 
 - Reading files, running tests, formatting, committing local changes
+- Pushing to feature branches (not main/master)
 
 ### Act, then notify
 
 - Adding new dependencies
 - Making assumptions about ambiguous requirements (state the assumption)
-
-### Act without asking
-
-- Pushing to feature branches (not main/master)
 
 ### Always ask first
 
