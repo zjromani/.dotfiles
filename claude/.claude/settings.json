@@ -50,5 +50,6 @@
   "model": "sonnet",
   "worktree": {
     "baseRef": "fresh"
-  }
+  },
+  "teammateMode": "tmux"
 }
