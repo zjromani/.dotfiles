@@ -1,8 +1,10 @@
 atom/packages/vim-mode-plus/node_modules/**
 .DS_Store
 nvim/.config/nvim/plugin/packer_compiled.lua
-# Claude Code worktrees (runtime state, not config)
+# Claude Code runtime state (not config)
 .claude/worktrees/
+claude/.claude/backups/
+claude/.claude/mcp-needs-auth-cache.json
 # Machine-specific symlink created by ansible iterm2 task at runtime
 iterm2/.config/iterm2/AppSupport
 
