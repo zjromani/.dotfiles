@@ -48,7 +48,6 @@ return require('packer').startup(function(use)
   }
 
   use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})
-  use("nvim-treesitter/playground")
   use("theprimeagen/harpoon")
   use("mbbill/undotree")
   use("tpope/vim-fugitive")
@@ -58,8 +57,8 @@ return require('packer').startup(function(use)
   use {'williamboman/mason.nvim'}
   use {'williamboman/mason-lspconfig.nvim'}
 
-  -- Autocompletion
-  use { 'saghen/blink.cmp', tag = 'v0.*' }
+  -- Autocompletion (pre-built binary via tagged release)
+  use { 'saghen/blink.cmp', tag = 'v0.*', run = ':lua require("blink.cmp").download_release_artifact()' }
 
   -- Snippets
   use {'L3MON4D3/LuaSnip'}
