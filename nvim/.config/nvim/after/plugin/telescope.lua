@@ -20,7 +20,7 @@ require('telescope').setup({
 
 -- Use frecency for Ctrl+P: ranks files by recency + frequency of use
 vim.keymap.set('n', '<C-p>', function()
-  require('telescope').extensions.frecency.frecency()
+  require('telescope').extensions.frecency.frecency({ workspace = "CWD" })
 end, {})
 vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
 vim.keymap.set('n', '<leader><leader>g', builtin.lsp_references, {})
