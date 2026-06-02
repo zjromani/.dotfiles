@@ -14,6 +14,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet[1m]",
   "hooks": {
     "Stop": [
       {
@@ -44,15 +45,11 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
+  "teammateMode": "tmux",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "model": "sonnet",
-  "worktree": {
-    "baseRef": "fresh"
-  },
-  "teammateMode": "tmux"
+  "skipAutoPermissionPrompt": true
 }

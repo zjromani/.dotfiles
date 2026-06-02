@@ -9,7 +9,7 @@ if [[ "$1" == "--worktrees" ]]; then
   shopt -s nullglob
   home_dirs=(~/*/)
   shopt -u nullglob
-  search_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/work/*/)
+  search_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/flights/*/)
   for root in "${extra_roots[@]}"; do
     search_dirs+=("$root"/*/)
   done
@@ -57,7 +57,7 @@ fi
 shopt -s nullglob
 home_dirs=(~/*/)
 shopt -u nullglob
-base_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/work/*/)
+base_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/flights/*/)
 extra_dirs=()
 for root in "${extra_roots[@]}"; do
   extra_dirs+=("$root"/*/)
