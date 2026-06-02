@@ -41,9 +41,9 @@ fi
 mcp_add logrocket-members --scope user --transport http \
   logrocket-members https://mcp.logrocket.com/mcp/c8gpr6/members-client
 
-# Salesforce DX — local npx server (name must be hyphenated, no spaces allowed)
-mcp_add salesforce-dx --scope user \
-  salesforce-dx npx -y @salesforce/mcp --orgs DEFAULT_TARGET_ORG --toolsets orgs,metadata,data,users
+# Salesforce DX — local npx server (-- required so -y isn't parsed as a claude flag)
+mcp_add salesforce-dx --scope user salesforce-dx -- \
+  npx -y @salesforce/mcp --orgs DEFAULT_TARGET_ORG --toolsets orgs,metadata,data,users
 
 # Atlan — HTTP MCP, OAuth (browser re-auth required after)
 mcp_add atlan --scope user --transport http \
