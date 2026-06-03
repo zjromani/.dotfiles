@@ -17,4 +17,11 @@ claude/.claude/sessions/
 claude/.claude/shell-snapshots/
 # Machine-specific symlink created by ansible iterm2 task at runtime
 iterm2/.config/iterm2/AppSupport
+# Claude Code runtime files
+claude/.claude/.last-cleanup
+claude/.claude/.last-update-result.json
+# Cursor runtime state
+cursor/.cursor/plugins/
+cursor/.cursor/projects/
+cursor/.cursor/skills-cursor/
 
