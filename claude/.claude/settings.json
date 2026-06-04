@@ -45,7 +45,7 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
   "teammateMode": "tmux",

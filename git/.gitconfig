@@ -7,7 +7,7 @@
 [pull]
 	rebase = true
 [core]
-	hooksPath = /Users/zachromani/.dotfiles/git/.config/hooks
+	hooksPath = $HOME/.git-hooks
 [fetch]
 	pruneTags = true
 	prune = true
