@@ -164,11 +164,29 @@ return require('packer').startup(function(use)
           vim.opt_local.breakindent = true
           vim.opt_local.winbar = "%=%f  %=%m"
           vim.opt_local.scrolloff = 999
+          -- scrollEOF.nvim skips floating windows, so handle typewriter centering at EOF manually.
+          -- Mirrors scrollEOF's winrestview approach but works in zen-mode's floating window.
+          local buf = vim.api.nvim_get_current_buf()
+          local group = vim.api.nvim_create_augroup('ZenTypewriterEOF', { clear = true })
+          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+            group = group,
+            buffer = buf,
+            callback = function()
+              local win_height = vim.fn.winheight(0)
+              local half = math.floor(win_height / 2)
+              local win_cur_line = vim.fn.winline()
+              local distance_to_bottom = win_height - win_cur_line
+              if distance_to_bottom < half then
+                local view = vim.fn.winsaveview()
+                vim.fn.winrestview({ topline = view.topline + half - distance_to_bottom })
+              end
+            end,
+          })
         end,
         on_close = function()
+          pcall(vim.api.nvim_del_augroup_by_name, 'ZenTypewriterEOF')
           vim.opt_local.winbar = ""
           vim.opt_local.scrolloff = 8
-          -- Restore wrap only if we're not in a filetype that wants it on
           if vim.bo.filetype ~= "markdown" then
             vim.opt_local.wrap = false
           end
