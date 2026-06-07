@@ -163,9 +163,11 @@ return require('packer').startup(function(use)
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
           vim.opt_local.winbar = "%=%f  %=%m"
+          vim.opt_local.scrolloff = 999
         end,
         on_close = function()
           vim.opt_local.winbar = ""
+          vim.opt_local.scrolloff = 8
           -- Restore wrap only if we're not in a filetype that wants it on
           if vim.bo.filetype ~= "markdown" then
             vim.opt_local.wrap = false
@@ -173,6 +175,17 @@ return require('packer').startup(function(use)
         end,
       })
     end
+  }
+
+  -- Virtual blank lines at EOF so scrolloff=999 (typewriter mode) works on the last line
+  use {
+    'Aasim-A/scrollEOF.nvim',
+    config = function()
+      require('scrollEOF').setup({
+        insert_mode = true,
+        disabled_filetypes = { 'terminal', 'nofile', 'quickfix' },
+      })
+    end,
   }
 
   -- Easymotion-style jump labels: <leader><leader>k/j for line jumps, <leader><leader>w for words
