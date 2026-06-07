@@ -26,4 +26,6 @@ claude/.claude/.last-update-result.json
 cursor/.cursor/plugins/
 cursor/.cursor/projects/
 cursor/.cursor/skills-cursor/
+# Claude Code task runtime state
+claude/.claude/tasks/
 

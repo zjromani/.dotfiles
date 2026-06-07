@@ -9,8 +9,7 @@ return require('packer').startup(function(use)
 
 
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.5',
-    -- or                            , branch = '0.1.x',
+    'nvim-telescope/telescope.nvim', branch = 'master',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
@@ -163,8 +162,10 @@ return require('packer').startup(function(use)
           vim.opt_local.wrap = true
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
+          vim.opt_local.winbar = "%=%f  %=%m"
         end,
         on_close = function()
+          vim.opt_local.winbar = ""
           -- Restore wrap only if we're not in a filetype that wants it on
           if vim.bo.filetype ~= "markdown" then
             vim.opt_local.wrap = false
