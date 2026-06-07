@@ -164,26 +164,52 @@ return require('packer').startup(function(use)
           vim.opt_local.breakindent = true
           vim.opt_local.winbar = "%=%f  %=%m"
           vim.opt_local.scrolloff = 999
-          -- scrollEOF.nvim skips floating windows, so handle typewriter centering at EOF manually.
-          -- Mirrors scrollEOF's winrestview approach but works in zen-mode's floating window.
+          -- NeoVim's topline is clamped so it can never scroll past the last buffer line, which means
+          -- scrolloff=999 can't center the cursor when writing on the last line. winrestview tricks
+          -- don't bypass this clamp. The only reliable fix is real blank lines below the last content
+          -- line so NeoVim has actual content to scroll through.
           local buf = vim.api.nvim_get_current_buf()
+          local was_modified = vim.bo[buf].modified
+          local pad = math.floor(vim.fn.winheight(0) / 2)
+          local blank = {}
+          for _ = 1, pad do blank[#blank + 1] = '' end
+          vim.api.nvim_buf_set_lines(buf, -1, -1, false, blank)
+          vim.bo[buf].modified = was_modified
+          vim.b[buf].zen_pad = pad
+
           local group = vim.api.nvim_create_augroup('ZenTypewriterEOF', { clear = true })
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            group = group,
-            buffer = buf,
+          -- Strip padding before save so blank lines are never written to disk
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            group = group, buffer = buf,
             callback = function()
-              local win_height = vim.fn.winheight(0)
-              local half = math.floor(win_height / 2)
-              local win_cur_line = vim.fn.winline()
-              local distance_to_bottom = win_height - win_cur_line
-              if distance_to_bottom < half then
-                local view = vim.fn.winsaveview()
-                vim.fn.winrestview({ topline = view.topline + half - distance_to_bottom })
-              end
+              local p = vim.b.zen_pad
+              if not p then return end
+              local lc = vim.api.nvim_buf_line_count(0)
+              vim.api.nvim_buf_set_lines(0, lc - p, lc, false, {})
+            end,
+          })
+          -- Re-add padding after save so typewriter mode stays active
+          vim.api.nvim_create_autocmd('BufWritePost', {
+            group = group, buffer = buf,
+            callback = function()
+              local p = vim.b.zen_pad
+              if not p then return end
+              local lines = {}
+              for _ = 1, p do lines[#lines + 1] = '' end
+              vim.api.nvim_buf_set_lines(0, -1, -1, false, lines)
+              vim.bo.modified = false
             end,
           })
         end,
         on_close = function()
+          local p = vim.b.zen_pad
+          if p then
+            local was_modified = vim.bo.modified
+            local lc = vim.api.nvim_buf_line_count(0)
+            vim.api.nvim_buf_set_lines(0, lc - p, lc, false, {})
+            vim.bo.modified = was_modified
+            vim.b.zen_pad = nil
+          end
           pcall(vim.api.nvim_del_augroup_by_name, 'ZenTypewriterEOF')
           vim.opt_local.winbar = ""
           vim.opt_local.scrolloff = 8
