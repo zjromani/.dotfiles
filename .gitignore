@@ -28,4 +28,4 @@ cursor/.cursor/projects/
 cursor/.cursor/skills-cursor/
 # Claude Code task runtime state
 claude/.claude/tasks/
-
+claude/.claude/image-cache/
