@@ -163,73 +163,16 @@ return require('packer').startup(function(use)
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
           vim.opt_local.winbar = "%=%f  %=%m"
-          vim.opt_local.scrolloff = 999
-          -- NeoVim's topline is clamped so it can never scroll past the last buffer line, which means
-          -- scrolloff=999 can't center the cursor when writing on the last line. winrestview tricks
-          -- don't bypass this clamp. The only reliable fix is real blank lines below the last content
-          -- line so NeoVim has actual content to scroll through.
-          local buf = vim.api.nvim_get_current_buf()
-          local was_modified = vim.bo[buf].modified
-          local pad = math.floor(vim.fn.winheight(0) / 2)
-          local blank = {}
-          for _ = 1, pad do blank[#blank + 1] = '' end
-          vim.api.nvim_buf_set_lines(buf, -1, -1, false, blank)
-          vim.bo[buf].modified = was_modified
-          vim.b[buf].zen_pad = pad
-
-          local group = vim.api.nvim_create_augroup('ZenTypewriterEOF', { clear = true })
-          -- Strip padding before save so blank lines are never written to disk
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            group = group, buffer = buf,
-            callback = function()
-              local p = vim.b.zen_pad
-              if not p then return end
-              local lc = vim.api.nvim_buf_line_count(0)
-              vim.api.nvim_buf_set_lines(0, lc - p, lc, false, {})
-            end,
-          })
-          -- Re-add padding after save so typewriter mode stays active
-          vim.api.nvim_create_autocmd('BufWritePost', {
-            group = group, buffer = buf,
-            callback = function()
-              local p = vim.b.zen_pad
-              if not p then return end
-              local lines = {}
-              for _ = 1, p do lines[#lines + 1] = '' end
-              vim.api.nvim_buf_set_lines(0, -1, -1, false, lines)
-              vim.bo.modified = false
-            end,
-          })
         end,
         on_close = function()
-          local p = vim.b.zen_pad
-          if p then
-            local was_modified = vim.bo.modified
-            local lc = vim.api.nvim_buf_line_count(0)
-            vim.api.nvim_buf_set_lines(0, lc - p, lc, false, {})
-            vim.bo.modified = was_modified
-            vim.b.zen_pad = nil
-          end
-          pcall(vim.api.nvim_del_augroup_by_name, 'ZenTypewriterEOF')
           vim.opt_local.winbar = ""
-          vim.opt_local.scrolloff = 8
+          -- Restore wrap only if we're not in a filetype that wants it on
           if vim.bo.filetype ~= "markdown" then
             vim.opt_local.wrap = false
           end
         end,
       })
     end
-  }
-
-  -- Virtual blank lines at EOF so scrolloff=999 (typewriter mode) works on the last line
-  use {
-    'Aasim-A/scrollEOF.nvim',
-    config = function()
-      require('scrollEOF').setup({
-        insert_mode = true,
-        disabled_filetypes = { 'terminal', 'nofile', 'quickfix' },
-      })
-    end,
   }
 
   -- Easymotion-style jump labels: <leader><leader>k/j for line jumps, <leader><leader>w for words

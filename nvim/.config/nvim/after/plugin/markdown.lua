@@ -10,7 +10,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.breakindent = true
     vim.opt_local.textwidth = 0
     vim.opt_local.colorcolumn = ""
-    vim.opt_local.scrolloff = 999
 
     -- Traverse wrapped lines naturally in normal, visual, and insert modes
     local nv = { "n", "x" }
