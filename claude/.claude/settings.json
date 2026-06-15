@@ -14,7 +14,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "sonnet[1m]",
   "hooks": {
     "Stop": [
       {
@@ -46,6 +46,7 @@
     "lua-lsp@claude-plugins-official": true
   },
   "effortLevel": "high",
+  "skipWorkflowUsageWarning": true,
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
   "teammateMode": "tmux",

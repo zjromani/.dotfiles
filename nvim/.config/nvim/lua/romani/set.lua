@@ -34,3 +34,12 @@ vim.opt.colorcolumn = "80"
 -- markdown-preview: use light theme instead of inheriting colorscheme name
 vim.g.mkdp_theme = 'light'
 
+vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+  pattern = "*",
+  callback = function()
+    if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+      vim.cmd("silent! write")
+    end
+  end,
+})
+

@@ -74,6 +74,7 @@ return require('packer').startup(function(use)
     setup = function()
       vim.g.bullets_enabled_file_types = { "markdown" }
       vim.g.bullets_outline_levels = { "num", "abc", "std-" }
+      vim.g.bullets_renumber_on_change = 0
     end,
   }
 
@@ -112,7 +113,6 @@ return require('packer').startup(function(use)
     end,
   })
 
-  -- Format on save (markdown via prettier, triggered from after/plugin/markdown.lua)
   use {
     "stevearc/conform.nvim",
     config = function()
@@ -181,6 +181,51 @@ return require('packer').startup(function(use)
     tag = '*',
     config = function()
       require('hop').setup({ keys = 'etovxqpdygfblzhckisuran' })
+    end,
+  }
+
+  -- AI: in-editor chat, inline refactors, LSP/buffer context
+  use {
+    'olimorris/codecompanion.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('codecompanion').setup({
+        -- claude_code ACP adapter: requires `claude-agent-acp` binary + CLAUDE_CODE_OAUTH_TOKEN
+        -- Get token via: claude setup-token (uses existing Claude auth, no API key needed)
+        adapters = {
+          acp = {
+            claude_code = function()
+              return require('codecompanion.adapters').extend('claude_code', {
+                env = {
+                  CLAUDE_CODE_OAUTH_TOKEN = os.getenv('CLAUDE_CODE_OAUTH_TOKEN'),
+                },
+              })
+            end,
+          },
+        },
+        strategies = {
+          chat   = { adapter = 'claude_code' },
+          inline = { adapter = 'claude_code' },
+          agent  = { adapter = 'claude_code' },
+        },
+      })
+
+      vim.keymap.set({ 'n', 'v' }, '<leader>cc', '<cmd>CodeCompanionChat Toggle<cr>', { desc = 'Toggle AI chat' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>CodeCompanionActions<cr>',     { desc = 'AI actions' })
+      vim.keymap.set('v',          '<leader>ci', '<cmd>CodeCompanion<cr>',             { desc = 'Inline AI edit' })
+    end,
+  }
+
+  -- AI: bridges Claude Code CLI → Neovim diff viewer
+  use {
+    'coder/claudecode.nvim',
+    config = function()
+      require('claudecode').setup()
+      vim.keymap.set('n', '<leader>ct', '<cmd>ClaudeCode<cr>',     { desc = 'Toggle Claude Code pane' })
+      vim.keymap.set('v', '<leader>cS', '<cmd>ClaudeCodeSend<cr>', { desc = 'Send selection to Claude' })
     end,
   }
 

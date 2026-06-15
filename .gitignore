@@ -29,3 +29,6 @@ cursor/.cursor/skills-cursor/
 # Claude Code task runtime state
 claude/.claude/tasks/
 claude/.claude/image-cache/
+claude/.claude/ide/
+claude/.claude/plans/
+claude/.claude/stats-cache.json
