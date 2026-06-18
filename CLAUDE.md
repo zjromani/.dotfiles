@@ -48,7 +48,7 @@ When dotfiles are updated on one machine, sync to others:
    ```
 
 2. **Install/update dependencies** (not tracked in repo)
-   - Tmux catppuccin: `git clone https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin`
+   - Tmux: no plugin — status bar uses manual Tokyo Night hex config in `.tmux.conf`
    - Nvim plugins: `nvim +PackerSync`
 
 3. **Reload configs**
@@ -62,7 +62,7 @@ When dotfiles are updated on one machine, sync to others:
 External dependencies (plugins, themes) not tracked in this repo:
 
 - **Starship**: `brew install starship` - Cross-shell prompt
-- **Tmux Plugins**: `~/.config/tmux/plugins/catppuccin/` - Install via git clone
+- **Tmux Plugins**: `~/.config/tmux/plugins/tokyo-night-tmux/` - Install via git clone
 - **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer (Catppuccin theme + lualine)
 - **Nerd Font**: JetBrains Mono Nerd Font - Set in iTerm2 (Settings > Profiles > Text > Font)
 - **When adding dependencies**: Update `~/me/ansible` to automate installation

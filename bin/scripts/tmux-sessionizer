@@ -86,7 +86,7 @@ session=$(
         echo "flights"
         # Directories from cache
         cat "$CACHE_FILE"
-    } | fzf --no-sort --tiebreak=index --height=40%
+    } | awk '!seen[$0]++' | fzf --no-sort --tiebreak=index --height=40%
 )
 
 [ -z "$session" ] && exit 0
