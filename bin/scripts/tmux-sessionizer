@@ -54,29 +54,38 @@ if [[ -n "$SESSIONIZER_EXTRA_DIRS" ]]; then
   IFS=' ' read -r -a extra_roots <<< "$SESSIONIZER_EXTRA_DIRS"
 fi
 
-shopt -s nullglob
-home_dirs=(~/*/)
-shopt -u nullglob
-base_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/flights/*/)
-extra_dirs=()
-for root in "${extra_roots[@]}"; do
-  extra_dirs+=("$root"/*/)
-done
-dirs=("${base_dirs[@]}" "${extra_dirs[@]}")
-shopt -u nullglob
+CACHE_FILE="${TMPDIR:-/tmp}/tmux-sessionizer-dirs-$USER"
 
-# Exclude numeric-only sessions (e.g. "0", the temp sessionizer popup session)
-existing_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep -vE '^[0-9]+$')
+_build_dirs() {
+  shopt -s nullglob
+  local home_dirs=(~/*/)
+  local me_dirs=(~/me/*/)
+  local flights_dirs=(~/flights/*/)
+  local extra_dirs=()
+  for root in "${extra_roots[@]}"; do
+    local root_dirs=("$root"/*/)
+    extra_dirs+=("${root_dirs[@]}")
+  done
+  shopt -u nullglob
+  printf '%s\n' "${home_dirs[@]%/}" ~/.dotfiles "${me_dirs[@]%/}" "${flights_dirs[@]%/}" "${extra_dirs[@]%/}" \
+    | grep -vE "/(Downloads|Documents|Music|Movies|Pictures|Desktop|Library|Public|Applications|Dropbox|\.Trash)"
+}
+
+# Seed cache on first run; always refresh in background for next invocation
+if [[ ! -f "$CACHE_FILE" ]]; then
+  _build_dirs > "$CACHE_FILE"
+fi
+{ _build_dirs > "$CACHE_FILE.tmp" && mv "$CACHE_FILE.tmp" "$CACHE_FILE"; } &>/dev/null &
+disown
 
 session=$(
     {
+        # Active sessions first for quick navigation
+        tmux list-sessions -F "#{session_name}" 2>/dev/null | grep -vE '^[0-9]+$'
         # Short aliases for quick navigation (type the alias name to jump directly)
         echo "flights"
-        # Directories before sessions so they appear first
-        printf '%s\n' "${dirs[@]%/}" \
-            | grep -vE "/(Downloads|Documents|Music|Movies|Pictures|Desktop|Library|Public|Applications|Dropbox|\.Trash)"
-        # Existing named sessions at the bottom
-        [ -n "$existing_sessions" ] && printf '%s\n' "$existing_sessions"
+        # Directories from cache
+        cat "$CACHE_FILE"
     } | fzf --no-sort --tiebreak=index --height=40%
 )
 
