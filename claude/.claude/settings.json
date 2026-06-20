@@ -46,11 +46,11 @@
     "lua-lsp@claude-plugins-official": true
   },
   "effortLevel": "high",
-  "skipWorkflowUsageWarning": true,
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
   "teammateMode": "tmux",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true
 }
