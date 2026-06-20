@@ -62,7 +62,7 @@ When dotfiles are updated on one machine, sync to others:
 External dependencies (plugins, themes) not tracked in this repo:
 
 - **Starship**: `brew install starship` - Cross-shell prompt
-- **Tmux Plugins**: `~/.config/tmux/plugins/tokyo-night-tmux/` - Install via git clone
+- **Tmux**: No plugin — theme is manual Tokyo Night hex config in `tmux/.tmux.conf`
 - **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer (Catppuccin theme + lualine)
 - **Nerd Font**: JetBrains Mono Nerd Font - Set in iTerm2 (Settings > Profiles > Text > Font)
 - **When adding dependencies**: Update `~/me/ansible` to automate installation
