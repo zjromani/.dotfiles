@@ -18,9 +18,20 @@ require('telescope').setup({
   },
 })
 
--- Use frecency for Ctrl+P: ranks files by recency + frequency of use
+local function git_root()
+  local root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  if vim.v.shell_error ~= 0 then return nil end
+  return root
+end
+
+-- Ctrl+P: search from git project root, fall back to CWD if not in a repo
 vim.keymap.set('n', '<C-p>', function()
-  require('telescope').extensions.frecency.frecency({ workspace = "CWD" })
+  local root = git_root()
+  if root then
+    builtin.find_files({ cwd = root, hidden = true })
+  else
+    builtin.find_files({ hidden = true })
+  end
 end, {})
 vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
 vim.keymap.set('n', '<leader><leader>g', builtin.lsp_references, {})
