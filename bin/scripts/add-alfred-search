@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+# Usage: add-alfred-search "<keyword>" "<url>"
+# Adds a custom web search entry to Alfred (Dropbox-synced, cross-machine).
+# Keyword is also used as the display title.
+# Use {query} in URL for searchable entries, or omit for direct navigation.
+
+import sys
+import os
+import plistlib
+import uuid
+import subprocess
+
+PREFS = os.path.expanduser(
+    "~/Library/CloudStorage/Dropbox/Alfred/Alfred.alfredpreferences/"
+    "preferences/features/websearch/prefs.plist"
+)
+
+
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: add-alfred-search <keyword> <url>", file=sys.stderr)
+        print("  keyword: descriptive name, e.g. 'datadog k8s overview'", file=sys.stderr)
+        print("  url:     target URL, use {query} for search entries", file=sys.stderr)
+        sys.exit(1)
+
+    keyword = sys.argv[1].strip()
+    url = sys.argv[2].strip()
+
+    with open(PREFS, "rb") as f:
+        data = plistlib.load(f)
+
+    for entry in data.values():
+        if isinstance(entry, dict) and entry.get("keyword") == keyword:
+            print(f"Error: keyword '{keyword}' already exists → {entry.get('url')}", file=sys.stderr)
+            sys.exit(1)
+
+    data[str(uuid.uuid4()).upper()] = {
+        "enabled": True,
+        "keyword": keyword,
+        "text": keyword,
+        "url": url,
+    }
+
+    tmp = PREFS + ".tmp"
+    with open(tmp, "wb") as f:
+        plistlib.dump(data, f, fmt=plistlib.FMT_BINARY)
+    os.rename(tmp, PREFS)
+
+    subprocess.run(["killall", "Alfred"], capture_output=True)
+    subprocess.run(["open", "-a", "Alfred 5"], capture_output=True)
+
+    nav_or_search = "search" if "{query}" in url else "bookmark"
+    print(f"Added {nav_or_search}: '{keyword}' → {url}")
+
+
+if __name__ == "__main__":
+    main()
