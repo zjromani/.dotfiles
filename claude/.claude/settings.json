@@ -1,6 +1,5 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN": "1"
   },
   "permissions": {
@@ -14,7 +13,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet[1m]",
   "hooks": {
     "Stop": [
       {
@@ -46,10 +44,12 @@
     "lua-lsp@claude-plugins-official": true
   },
   "effortLevel": "high",
+  "tui": "fullscreen",
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
   "teammateMode": "tmux",
   "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "skipWorkflowUsageWarning": true
