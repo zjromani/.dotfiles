@@ -25,6 +25,15 @@ vim.api.nvim_create_autocmd("FileType", {
 
     vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", { buffer = buf, desc = "Toggle markdown preview" })
 
+    -- Visual paste: if clipboard holds a URL, wrap selection as [text](url); else normal paste
+    vim.keymap.set('x', 'p', function()
+      local url = vim.fn.getreg('+')
+      if url:match('^https?://') then
+        return 'c[<C-r>"](' .. url .. ')<Esc>'
+      end
+      return 'p'
+    end, { buffer = buf, expr = true, noremap = true, silent = true, desc = 'Paste URL as markdown link' })
+
     -- Defer so these win over any plugin FileType handlers (including markdown.nvim on_attach)
     vim.schedule(function()
       vim.opt_local.conceallevel = 0
