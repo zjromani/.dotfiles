@@ -113,6 +113,13 @@ return require('packer').startup(function(use)
     end,
   })
 
+  -- In-buffer markdown rendering: styled headings, bullets, tables, code blocks
+  use {
+    'MeanderingProgrammer/render-markdown.nvim',
+    ft = { 'markdown' },
+    requires = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+  }
+
   use {
     "stevearc/conform.nvim",
     config = function()
