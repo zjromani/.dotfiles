@@ -26,6 +26,8 @@ claude/.claude/.last-update-result.json
 cursor/.cursor/plugins/
 cursor/.cursor/projects/
 cursor/.cursor/skills-cursor/
+cursor/.cursor/plans/
+
 # Claude Code task runtime state
 claude/.claude/tasks/
 claude/.claude/image-cache/
@@ -33,3 +35,7 @@ claude/.claude/ide/
 claude/.claude/plans/
 claude/.claude/stats-cache.json
 claude/.claude/teams/
+claude/.claude/daemon.log
+claude/.claude/daemon/
+claude/.claude/jobs/
+
