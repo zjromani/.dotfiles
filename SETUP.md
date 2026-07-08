@@ -12,17 +12,14 @@ export JIRA_API_TOKEN="your-jira-api-token"
 export JIRA_PROJECT_KEY="YOUR-PROJECT"          # default: BOOK
 export JIRA_TEAM_ID="your-team-uuid"
 
-# Jira — additional teams (required for sapi-release-notes-last-seven-days)
+# Jira — additional teams (required for sapi-release-notes-last-seven-days, booking-release-notes-last-seven-days, six-month-review)
 export JIRA_BOOKING_TEAM_ID="..."
-export JIRA_CONTENT_TEAM_ID="..."               # also required for jira-add-content
+export JIRA_CONTENT_TEAM_ID="..."
 export JIRA_BLUE_TEAM_ID="..."
 export JIRA_GREEN_TEAM_ID="..."
 export JIRA_PRICING_TEAM_ID="..."
 export JIRA_PRICING_TEAM_ID_2="..."
 export JIRA_GREEN_TEAM_ASSIGNEES="accountId1,accountId2"
-
-# Jira — optional overrides
-export JIRA_READY_FOR_DEV_TRANSITION_ID="171"   # default: 171
 
 # Notion
 export NOTION_PROJECT_SECRET="your-notion-token"
