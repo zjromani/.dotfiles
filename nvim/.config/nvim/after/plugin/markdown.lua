@@ -24,6 +24,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("i", "<Up>", "<C-o>gk", { buffer = buf, silent = true })
 
     vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", { buffer = buf, desc = "Toggle markdown preview" })
+    vim.keymap.set("n", "<leader>mr", "<cmd>RenderMarkdown toggle<CR>", { buffer = buf, desc = "Toggle markdown rendering" })
 
     -- Visual paste: if clipboard holds a URL, wrap selection as [text](url); else normal paste
     vim.keymap.set('x', 'p', function()

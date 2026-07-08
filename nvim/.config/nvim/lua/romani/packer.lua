@@ -118,6 +118,31 @@ return require('packer').startup(function(use)
     'MeanderingProgrammer/render-markdown.nvim',
     ft = { 'markdown' },
     requires = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('render-markdown').setup({
+        enabled = false,
+        render_modes = { 'n', 'v', 'c' },
+        anti_conceal = { enabled = false },
+        heading = {
+          icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+        },
+        code = {
+          sign = false,
+          width = 'block',
+          border = 'thin',
+        },
+        bullet = {
+          icons = { '●', '○', '◆', '◇' },
+        },
+        checkbox = {
+          unchecked = { icon = '󰄱 ' },
+          checked   = { icon = '󰱒 ' },
+        },
+        link = {
+          hyperlink = '󰌹 ',
+        },
+      })
+    end,
   }
 
   use {
