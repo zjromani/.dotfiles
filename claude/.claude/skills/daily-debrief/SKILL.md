@@ -11,7 +11,7 @@ Call `Krisp:date_time` with timezone `America/Denver` to get today's date and da
 For all other days: current calendar day only.
 ---
 ## Step 2 — Gather meeting data
-Run these Krisp calls (can be parallel):
+Spawn one `data-collector` subagent (`subagent_type: "data-collector"`) with the resolved date scope from Step 1 (today's date, or the Friday–Monday range on a Monday) and this exact job — it has no access to this file, so pass the scope and calls literally:
 1. `Krisp:list_activities` — enumerate all activities in scope
 2. `Krisp:search_meetings` — get all meetings in scope
 3. For each meeting: `Krisp:get_multiple_documents` — pull full transcript/summary/notes
