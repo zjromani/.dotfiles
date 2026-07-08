@@ -18,19 +18,25 @@ require('telescope').setup({
   },
 })
 
+-- Resolve the git root from the current buffer's directory, not Neovim's
+-- global :pwd — in a large workspace without autochdir, :pwd stays wherever
+-- Neovim was launched from and drifts away from whatever file you're editing.
 local function git_root()
-  local root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  local dir = vim.fn.expand('%:p:h')
+  if dir == '' then dir = vim.fn.getcwd() end
+  local root = vim.fn.systemlist({ 'git', '-C', dir, 'rev-parse', '--show-toplevel' })[1]
   if vim.v.shell_error ~= 0 then return nil end
   return root
 end
 
--- Ctrl+P: search from git project root, fall back to CWD if not in a repo
+-- Ctrl+P: search from git project root, fall back to the buffer's directory if not in a repo
 vim.keymap.set('n', '<C-p>', function()
   local root = git_root()
   if root then
     builtin.find_files({ cwd = root, hidden = true })
   else
-    builtin.find_files({ hidden = true })
+    local dir = vim.fn.expand('%:p:h')
+    builtin.find_files({ cwd = dir ~= '' and dir or nil, hidden = true })
   end
 end, {})
 vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})

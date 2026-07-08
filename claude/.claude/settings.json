@@ -45,6 +45,7 @@
   },
   "effortLevel": "high",
   "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true,
   "verbose": true,
   "preferredNotifChannel": "iterm2_with_bell",
   "teammateMode": "tmux",
@@ -52,5 +53,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "skipWorkflowUsageWarning": true
+  "model": "sonnet"
 }

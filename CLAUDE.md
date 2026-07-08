@@ -65,6 +65,7 @@ External dependencies (plugins, themes) not tracked in this repo:
 - **Tmux**: No plugin — theme is manual Tokyo Night hex config in `tmux/.tmux.conf`
 - **Neovim Plugins**: `~/.local/share/nvim/site/pack/packer/` - Managed by Packer (Catppuccin theme + lualine)
 - **Nerd Font**: JetBrains Mono Nerd Font - Set in iTerm2 (Settings > Profiles > Text > Font)
+- **fd**: `brew install fd` (macOS) / `apt install fd-find` (Linux) - required by Neovim's Telescope `find_files` picker (Ctrl+P); without it, file search silently fails
 - **When adding dependencies**: Update `~/me/ansible` to automate installation
 
 ## Before Committing
