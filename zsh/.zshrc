@@ -226,3 +226,6 @@ eval "$(starship init zsh)"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# opencode
+export PATH=/Users/zach.romani/.opencode/bin:$PATH
