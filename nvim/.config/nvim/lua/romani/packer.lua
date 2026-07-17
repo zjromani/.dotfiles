@@ -167,9 +167,20 @@ return require('packer').startup(function(use)
   use {
     "folke/zen-mode.nvim",
     config = function()
+      -- iTerm2 proprietary escape code to switch profiles. Under tmux this must be
+      -- wrapped in a passthrough envelope (ESC doubled) or tmux swallows it — also
+      -- requires `set -g allow-passthrough on` in tmux.conf. Harmless no-op elsewhere.
+      local function iterm_set_profile(name)
+        local code = "\27]1337;SetProfile=" .. name .. "\7"
+        if vim.env.TMUX then
+          code = "\27Ptmux;" .. code:gsub("\27", "\27\27") .. "\27\\"
+        end
+        vim.api.nvim_ui_send(code)
+      end
+
       require("zen-mode").setup({
         window = {
-          width = 80,        -- absolute column width — narrower = more side padding
+          width = 100,        -- absolute column width — narrower = more side padding
           height = 1,        -- full height of the editor
           options = {
             signcolumn = "no",
@@ -190,17 +201,35 @@ return require('packer').startup(function(use)
           twilight = { enabled = false },
           gitsigns = { enabled = false },
         },
-        on_open = function(_win)
+        on_open = function(win)
           vim.opt_local.wrap = true
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
           vim.opt_local.winbar = "%=%f  %=%m"
+
+          -- Bigger font + looser line spacing while focused (iTerm2 "Zen" profile)
+          iterm_set_profile("Zen")
+
+          -- Render markdown (hide **/##/etc markup) only inside zen mode —
+          -- normal editing keeps raw syntax visible (see markdown.lua)
+          local buf = vim.api.nvim_win_get_buf(win)
+          if vim.bo[buf].filetype == "markdown" then
+            vim.wo[win].conceallevel = 3
+            vim.wo[win].concealcursor = "nc"
+            vim.cmd("RenderMarkdown enable")
+          end
         end,
         on_close = function()
           vim.opt_local.winbar = ""
           -- Restore wrap only if we're not in a filetype that wants it on
           if vim.bo.filetype ~= "markdown" then
             vim.opt_local.wrap = false
+          end
+
+          iterm_set_profile("Default")
+
+          if vim.bo.filetype == "markdown" then
+            vim.cmd("RenderMarkdown disable")
           end
         end,
       })
