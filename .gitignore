@@ -16,6 +16,7 @@ claude/.claude/remote-settings.json
 claude/.claude/sessions/
 claude/.claude/shell-snapshots/
 claude/.claude/telemetry/
+claude/.claude/daemon*
 
 # Machine-specific symlink created by ansible iterm2 task at runtime
 iterm2/.config/iterm2/AppSupport
