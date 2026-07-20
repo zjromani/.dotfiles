@@ -39,4 +39,8 @@ claude/.claude/teams/
 claude/.claude/daemon.log
 claude/.claude/daemon/
 claude/.claude/jobs/
+claude/.claude/gh-pr-status-cache.json
+
+# Python cache
+**/__pycache__/
 

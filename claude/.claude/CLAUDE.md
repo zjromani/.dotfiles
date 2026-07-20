@@ -70,6 +70,8 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 - Any production system change (terraform apply, kubectl apply)
 - Force-pushing, amending published commits, or pushing directly to main/master
 
+**Exception — fixed-template automated notifications:** a small allowlist of deterministic, template-driven Slack posts (no free-text judgment call) may be sent without a content-confirmation round-trip. Currently: the flights workspace's post-`gh pr create` PR notification to `#dev-flights-prs` (see `flights-ai-workspace/AGENTS.md`). Anything with judgment-shaped content (wording, tone, what to include) still asks first.
+
 ### Delegation
 
 - Prefer spawning sub-agents for any task that doesn't require main-context judgment. Preserve the main context window for decisions, synthesis, and coordination — not mechanical work.

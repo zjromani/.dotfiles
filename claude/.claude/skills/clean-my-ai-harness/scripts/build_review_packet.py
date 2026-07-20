@@ -102,8 +102,8 @@ RECOMMENDATION_FIELDS = frozenset({
 })
 
 PRIVATE_PATH_PATTERNS = (
-    re.compile(r"(?i)(?<![A-Za-z0-9:/])/(?:[A-Za-z0-9._~-]+/)+[A-Za-z0-9._~-]+"),
-    re.compile(r"(?i)(?<![A-Za-z0-9:/])/(?:Users|home|root|private|tmp|var|Volumes|mnt|opt|etc|srv|Library|Applications|System|workspace|workspaces|data)\b"),
+    re.compile(r"(?i)(?<![A-Za-z0-9_;:/])/(?:[A-Za-z0-9._~-]+/)+[A-Za-z0-9._~-]+"),
+    re.compile(r"(?i)(?<![A-Za-z0-9_;:/])/(?:Users|home|root|private|tmp|var|Volumes|mnt|opt|etc|srv|Library|Applications|System|workspace|workspaces|data)\b"),
     re.compile(r"(?i)(?<![A-Za-z0-9])~/(?:[^\s<>\"'|]*)?"),
     re.compile(r"(?i)\b[A-Z]:[\\/][^\s<>\"'|]*"),
     re.compile(r"(?i)(?<![\\])\\\\[^\\\s]+\\[^\s<>\"'|]*"),
