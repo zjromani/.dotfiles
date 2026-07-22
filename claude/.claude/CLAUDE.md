@@ -47,6 +47,12 @@
 - Write to source locations, not symlink destinations. See ~/.dotfiles/CLAUDE.md.
 - After config changes: stow -R claude
 
+## Notion
+
+- Notion database schema, relationships, and read/write rules live in `~/.claude/NOTION.md` (source: `claude/.claude/NOTION.md`) — consult it before any Notion query or write.
+- Standing rule: always read a page/data source before writing to it; prefer appending new content over overwriting.
+- Notion writes follow "act, then notify" — no permission prompt required.
+
 ## Role Context
 
 Engineering Director managing multiple engineering teams. Director-level workflows (team reviews, goal-setting, stakeholder comms, team health) are first-class — not secondary to engineering tasks.
