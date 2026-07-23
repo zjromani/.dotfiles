@@ -148,7 +148,38 @@ When a task hands you a Notion page URL (a Project, Resource, etc.), treat that 
 - **Always, at the end of any work on a Project:** post a top-level comment with the current status and next step — not just on handoff/pause. This is unconditional, not a judgment call, so a future session (or you, next week) can always resume from the page alone.
 - This is in addition to, not instead of, normal property updates (`Status`, `Due`) — properties track state, comments track narrative history.
 
-## 6. Example Prompts
+## 6. Linking Standard — Always Link Back to Origin
+
+**Constitutional rule: every Notion write must carry enough links that the user can navigate back to where the work started, without depending on this conversation still existing.** This applies on top of — not instead of — the global `CLAUDE.md` "Evidence & Linking" rule, specialized for Notion.
+
+Any time content is added to Notion (appended page blocks, a comment, a Resource note) as a result of AI-assisted work, include:
+
+1. **External references.** If the content is derived from or discusses an external source — a GitHub commit/PR/issue, a Slack thread, a doc, an article, an email — link the actual URL inline, next to the claim it supports. Never summarize a source without linking it.
+2. **Claude Code session — resume command + transcript link, always both.** Any Notion page or comment written during a Claude Code CLI session gets, at the top of the page (or top of the comment for incremental updates), a fenced code block with the literal resume command:
+
+   ```
+   claude --resume <session-id>
+   ```
+
+   If the session was given a display name (`-n/--name`), also show the name form, since `--resume` accepts either a session ID directly or a search term that opens the `/resume` picker filtered to it:
+
+   ```
+   claude --resume "<session-name>"   # opens the /resume picker filtered to this name
+   ```
+
+   Directly below, add the transcript link using the same ID already emitted in git commit trailers (`Claude-Session:` footer): `Session transcript: https://claude.ai/code/session_<id>`.
+
+   These two are complementary, not redundant: the resume command re-enters the live CLI conversation from any terminal; the transcript link opens a read-only browser view. Neither depends on the terminal multiplexer (tmux, screen, or otherwise) still being alive — the resume command works from a brand-new shell on the same machine, and the transcript link works from any device. If no session ID is available in the current context, omit rather than fabricate one.
+
+   **Do not substitute** `claude-cli://` links or `--remote-control` links for this purpose — verified against this machine's Claude Code install on 2026-07-23: `claude-cli://<path>?q=<prompt>` is a real registered scheme, but it starts a *new* session pre-filled with a prompt and cannot target a past session's UUID, and the installed handler app bundle looked incomplete when tested (declares an executable that isn't present in the bundle). `--remote-control` is a real flag for live browser/mobile control of a session, but the link only works while that session's process is still running and dies once the terminal closes — same fragility as a raw tmux pane reference, just remote. Both remain fine for other uses (quick-launch runbook links, phone-driven babysitting of an active run) but are not a substitute for the resume command above.
+3. **Notion-to-Notion back-references.** If the write is itself a continuation of prior work on another Notion page (a related Project, a source Resource), link that page's URL too, per Section 5's `https://app.notion.com/p/<hex-id>` convention.
+
+Where this lands in existing content:
+- **Comments** (Section 3 "Comments" pattern, Section 5 status comments): resume command + transcript link go at the top of the comment body; other links inline where they support a claim.
+- **New page content**: resume command + transcript link go at the very top of the page, before any other content; source links inline in the relevant paragraph/bullet.
+- **Does not apply** to pure property updates (`Status`, `Due`, checkboxes) with no accompanying narrative — there's nothing to link back to.
+
+## 7. Example Prompts
 
 - "Mark the car inspection project done and log a resource note under Auto." → read Project page → update `Status` to `done` → append a Resource linked to the `Auto` Area of Focus. (MCP: `API-patch-page` + `API-post-page`; REST: `PATCH /pages/{id}` + `POST /pages`)
 - "What's on this week's goals that's still not-started?" → query current Week's `Project Goals` relation, filter Projects by `Status` in `{next-up, waiting-for}`. (MCP: `API-query-data-source`; REST: `POST /data_sources/{id}/query`)
