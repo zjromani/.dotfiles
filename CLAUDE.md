@@ -98,6 +98,7 @@ All skills live in `claude/.claude/skills/`. Cursor skills are symlinks pointing
 | `zach-editor` | Edit text into Zach's voice |
 | `one-way-door-review` | Architecture review prioritizing irreversible decisions |
 | `elia-go-faster-review` | Speed-lens execution review |
+| `expert-mode` | Unfiltered, rigorous expert-persona answers — no hedging or praise |
 
 Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` via relative symlinks.
 
