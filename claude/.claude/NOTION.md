@@ -58,6 +58,22 @@ Areas of     Resources    Tags        Audiences
 
 Projects sit at the center: linked to a Quarter and a Week (time), an Area of Focus, Tags, Resources, and an Audience. Resources link back to Project / Area of Focus / Tags / Audiences. Tags are the cross-cutting hub — a car-maintenance Project surfaces under the "My Car" Tag even without a direct field for it. Agendas link only to Audiences.
 
+### Project Page Structure (body convention)
+
+Every Project page follows the same top-to-bottom body shape so any session — human or agent — can read
+it the same way:
+
+1. **Problem Statement / Goal comes first.** A Project always opens with what it's trying to solve or
+   achieve (`## Problem Statement / Goal`), high-level, a few sentences. If unknown, use the literal
+   placeholder `_Unclear — to be filled in._` rather than inventing one.
+2. Body / working notes in the middle.
+3. **`## General next steps` comes last.** Every Project ends with this section — the running list of what
+   to do next. If empty, a single placeholder bullet.
+
+A newly created Project defaults to **`Status: next-up`**. Agent-created pages additionally carry an
+Origin / Session block at the very top (see §6). Mechanics of how a conversation becomes a Project live in
+the `notion-sync` skill; this section defines only the required shape.
+
 ## 3. API Interaction Model
 
 **Standing rule — always read before writing, prefer append over replace.**
@@ -178,6 +194,23 @@ Where this lands in existing content:
 - **Comments** (Section 3 "Comments" pattern, Section 5 status comments): resume command + transcript link go at the top of the comment body; other links inline where they support a claim.
 - **New page content**: resume command + transcript link go at the very top of the page, before any other content; source links inline in the relevant paragraph/bullet.
 - **Does not apply** to pure property updates (`Status`, `Due`, checkboxes) with no accompanying narrative — there's nothing to link back to.
+
+### Conversation-origin standard (Projects created/linked from an AI session)
+
+When a Project is created from — or linked to — an AI conversation, record enough about the session's
+origin that the work is traceable back to how it started, independent of the chat. In addition to the
+resume command + transcript link above, capture these four fields in a top-of-page **Origin / Session**
+callout, in this order:
+
+- **AI system** — `Claude Code`, `Cursor`, etc.
+- **Model** — e.g. `claude-opus-4-8`.
+- **Session name** — the session's `-n/--name`, if one was set.
+- **Session ID** — the `<id>` from `https://claude.ai/code/session_<id>`.
+
+Also write the transcript URL into the Project's `Link` property so it's queryable. Any field that can't
+be read from context is written `Unclear` — never fabricated (and with no session ID, omit the resume
+command per the rule above). The `notion-sync` skill implements this; this section defines the required
+payload and placement.
 
 ## 7. Example Prompts
 

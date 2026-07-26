@@ -15,6 +15,17 @@
   },
   "model": "opus[1m]",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[notion-sync] Run /notion-sync to track this session as a Notion project.'"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",

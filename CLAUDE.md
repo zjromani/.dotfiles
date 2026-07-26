@@ -99,6 +99,7 @@ All skills live in `claude/.claude/skills/`. Cursor skills are symlinks pointing
 | `one-way-door-review` | Architecture review prioritizing irreversible decisions |
 | `elia-go-faster-review` | Speed-lens execution review |
 | `expert-mode` | Unfiltered, rigorous expert-persona answers — no hedging or praise |
+| `notion-sync` | Sync a conversation to a Notion Project (create or link) with session-origin metadata |
 
 Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` via relative symlinks.
 
