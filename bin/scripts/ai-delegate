@@ -4,6 +4,8 @@
 #   url:  source link (Slack, email, etc.) — defaults to clipboard if omitted
 #
 # Creates a Things3 task set for Today + opens a 3-pane tmux layout with Claude.
+# Seeds the session with /investigate, which auto-tracks it to Notion via
+# notion-sync (see that skill).
 # Logs to ~/.ai-delegate.log for later lookup.
 
 if [[ $# -lt 1 ]]; then
@@ -59,7 +61,9 @@ WORK_DIR="$HOME/flights"
 tmux new-window -t "${CURRENT_SESSION}:" -n "$WINDOW_NAME" -c "$WORK_DIR"
 tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "claude" Enter
 
-# After Claude initializes: rename session + set random color + seed with clipboard context via /investigate
+# After Claude initializes: rename session + set random color + seed with clipboard
+# context via /investigate. The investigate skill always defaults to notion-sync
+# (auto-creates a Notion Project to track the session).
 (
   COLORS=(red blue green yellow purple orange pink cyan)
   RANDOM_COLOR="${COLORS[RANDOM % ${#COLORS[@]}]}"

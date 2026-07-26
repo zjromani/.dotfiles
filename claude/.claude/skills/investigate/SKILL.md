@@ -10,6 +10,9 @@ This is the "get started" skill. The goal is to understand the context quickly, 
 - Message starts with `/investigate` followed by context
 - User says "look into this", "investigate this", "check this out" with context attached
 
+Every investigate session **always defaults to notion-sync** — a Notion Project is created to track it
+(see Step 3.5). This includes Alfred-triggered `ai-delegate` runs and manual `/investigate` pastes.
+
 ## Behavior (execute in order)
 
 ### Step 1 — Identify context type
@@ -33,6 +36,16 @@ Do the minimum to understand what this is actually about. One tool call, maybe t
 - What domain/system it touches (which repo, which team, which feature)
 - What the apparent question or problem is
 
+### Step 3.5 — Auto-track to Notion (always)
+Now that you understand the context (Step 3), invoke the **notion-sync** skill to create a Notion Project
+that tracks this session — titled from what you just learned, not the raw URL. This runs automatically on
+every investigate session; do not ask permission (Notion writes are "act, then notify" per NOTION.md).
+notion-sync captures the origin metadata (AI system, model, session ID, resume command) so the work is
+resumable from Notion alone.
+
+After it creates the Project, note the Project URL in one line, then continue to Step 4. Do the tracking
+before asking questions — a delegate session is fire-and-forget, so it must be captured even if Zach steps away.
+
 ### Step 4 — Ask 2-3 targeted follow-up questions
 Questions must be specific to what you found — not generic "what do you want me to do?" Questions should unlock the actual investigation path. Examples by context type:
 
@@ -55,7 +68,8 @@ Questions must be specific to what you found — not generic "what do you want m
 End with one line: "Ready to dig in — answer those and I'll get started."
 
 ## What NOT to Do
-- Don't start writing code or making changes before questions are answered
+- Don't start writing code or making changes before questions are answered (creating the Notion tracking
+  Project in Step 3.5 is the one allowed exception)
 - Don't ask more than 3 questions
 - Don't summarize the context at length — brief statement, then questions
 - Don't say "Great context!" or add filler before the questions
