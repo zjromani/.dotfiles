@@ -90,7 +90,7 @@ No `NOTION_API_KEY` is set there, so no MCP server is registered. Use a personal
 | Resource | Endpoints |
 |---|---|
 | Pages | `GET/POST /pages`, `PATCH /pages/{id}`, `GET /pages/{id}/properties/{property_id}` |
-| Databases / data sources | `GET /databases/{id}`, `POST /data_sources/{id}/query`, `PATCH /data_sources/{id}` |
+| Databases / data sources | `GET /databases/{id}`, `PATCH /databases/{id}` (database-level attrs, e.g. `icon` — see Section 8), `POST /data_sources/{id}/query`, `PATCH /data_sources/{id}` |
 | Blocks | `GET /blocks/{id}`, `GET /blocks/{id}/children`, `PATCH /blocks/{id}/children` (append), `PATCH /blocks/{id}`, `DELETE /blocks/{id}` |
 | Comments | `GET /comments?block_id={id}`, `POST /comments` — works on **both pages and blocks** |
 | Search | `POST /search` |
@@ -189,22 +189,27 @@ Where this lands in existing content:
 
 ## 8. Visual Icon Policy
 
-Every database, top-level page, and page template gets a colored emoji icon (the native colorable icon library isn't exposed via API). One emoji per functional category, reused consistently:
+Every database, top-level page, and page template gets an emoji icon. Notion's native icon library *does* read back over the API — a database using one returns `"icon": {"type": "icon", "icon": {"name": "briefcase", "color": "gray"}}` on `GET` — but only the `emoji`, `external`, `file`, and `custom_emoji` icon types are documented as writable, and writing an `{"type": "icon", ...}` payload has not been tested here. Use emoji until that's verified. One emoji per functional category, reused consistently:
 
 | Category | Emoji | Sub-items / templates |
 |---|---|---|
-| Time / Quarters / Weeks | ⏳ / 📆 / 🗓️ | — |
-| Home / Work (nav) | 🏠 / 💼 | — |
+| Time (parent wiki page) | ⏳ | — |
+| Quarters | 📆 | — |
+| Weeks | 🗓️ | — |
+| Home (top-level page) | 🏠 | — |
+| Work (Area of Focus) | 💼 | — |
 | Agendas | 🗒️ | — |
 | Areas of Focus | 🧭 | — |
 | Projects | 🚀 | Initiative 🏔️, Milestone 🏁, Travel ✈️, Study 📘, Tech Study 💻, Weekly Goal 🎯, Repeating Task 🔁 |
 | Resources | 🗂️ | Interview 🎙️, Tech Design 🛠️, Budget 💰 |
 | Tags | 🏷️ | — |
-| Audiences | 🎙️ | — |
+| Audiences | 👥 | — |
 
-**Rule for new pages/templates.** Match the closest existing category's emoji before inventing a new one. Sub-items inherit the parent category's emoji.
+**Rule for new pages/templates.** Match the closest existing category's emoji before inventing a new one. Sub-items and templates listed in the table use their own emoji; anything not listed inherits the parent category's. If you do invent a new emoji, add its row to this table in the same change.
 
-**Rule for agent writes.** When creating a new database, top-level page, or page template, set an icon at creation time using this mapping — don't leave default/no icon. For database-level icons specifically, use the REST `PATCH /databases/{id}` endpoint, not the MCP tool's icon field — it silently no-ops on multi-data-source databases (verified 2026-07-26).
+**Scope.** This covers containers only — databases, top-level pages, and page templates. Individual database rows (a single Project, Resource, or Agenda) do not get icons. Forward-only: don't retrofit icons onto existing pages unless asked.
+
+**Rule for agent writes.** When creating a new database, top-level page, or page template, set an icon at creation time using this mapping — don't leave default/no icon. For database-level icons specifically, use the REST `PATCH /databases/{id}` endpoint, not the MCP tool's icon field — on the databases tested it returned success without changing the icon (2026-07-26).
 
 ```bash
 curl -X PATCH https://api.notion.com/v1/databases/{database_id} \
@@ -213,4 +218,4 @@ curl -X PATCH https://api.notion.com/v1/databases/{database_id} \
   -d '{"icon": {"type": "emoji", "emoji": "🚀"}}'
 ```
 
-Per Section 3's standing rule, a 200 is not confirmation — `GET /databases/{id}` afterward and check `.icon` actually changed before moving on.
+Read the database first (`GET /databases/{id}`) per Section 3's standing rule. After the PATCH, a 200 is *not* confirmation — `GET` again and check `.icon` actually changed before moving on. Several of the emoji above carry a `U+FE0F` variation selector (🗓️ 🗒️ 🏔️ ✈️ 🗂️ 🎙️ 🛠️ 🏷️); multi-codepoint emoji are the likeliest to be normalized or rejected, which is what the read-back catches.
