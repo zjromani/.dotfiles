@@ -186,3 +186,31 @@ Where this lands in existing content:
 - "Add a new Agenda item for my 1:1 with [Audience] about Q3 planning." → search Audiences for `[Audience]` → create Agenda row linked to it. (MCP: `API-post-search` + `API-post-page`; REST: `POST /data_sources/{agendas_id}/query` search + `POST /pages`)
 - "Create a Resource under the 'Golf' tag linking this article." → search Tags for `Golf` (create if absent) → read Resources data source → append new Resource row linking the Tag. (MCP: `API-post-search` + `API-post-page`; REST: search query + `POST /pages`)
 - Given `https://app.notion.com/p/<project-id>`, "keep working on this" → read the page + comment thread first → do the work → log progress as a comment before ending. (MCP: `API-retrieve-page-markdown` + `API-retrieve-a-comment` + `API-create-a-comment`; REST: `GET /pages/{id}` + `GET /comments?block_id={id}` + `POST /comments`)
+
+## 8. Visual Icon Policy
+
+Every database, top-level page, and page template gets a colored emoji icon (the native colorable icon library isn't exposed via API). One emoji per functional category, reused consistently:
+
+| Category | Emoji | Sub-items / templates |
+|---|---|---|
+| Time / Quarters / Weeks | ⏳ / 📆 / 🗓️ | — |
+| Home / Work (nav) | 🏠 / 💼 | — |
+| Agendas | 🗒️ | — |
+| Areas of Focus | 🧭 | — |
+| Projects | 🚀 | Initiative 🏔️, Milestone 🏁, Travel ✈️, Study 📘, Tech Study 💻, Weekly Goal 🎯, Repeating Task 🔁 |
+| Resources | 🗂️ | Interview 🎙️, Tech Design 🛠️, Budget 💰 |
+| Tags | 🏷️ | — |
+| Audiences | 🎙️ | — |
+
+**Rule for new pages/templates.** Match the closest existing category's emoji before inventing a new one. Sub-items inherit the parent category's emoji.
+
+**Rule for agent writes.** When creating a new database, top-level page, or page template, set an icon at creation time using this mapping — don't leave default/no icon. For database-level icons specifically, use the REST `PATCH /databases/{id}` endpoint, not the MCP tool's icon field — it silently no-ops on multi-data-source databases (verified 2026-07-26).
+
+```bash
+curl -X PATCH https://api.notion.com/v1/databases/{database_id} \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2022-06-28" -H "Content-Type: application/json" \
+  -d '{"icon": {"type": "emoji", "emoji": "🚀"}}'
+```
+
+Per Section 3's standing rule, a 200 is not confirmation — `GET /databases/{id}` afterward and check `.icon` actually changed before moving on.
