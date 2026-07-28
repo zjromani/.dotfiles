@@ -101,7 +101,11 @@ API-patch-page { page_id, properties: { "Status": {...} } }   # property update
 
 ### Work machine — no MCP, raw REST
 
-No `NOTION_API_KEY` is set there, so no MCP server is registered. Use a personal integration token (all requests need `Authorization: Bearer $NOTION_API_KEY` + `Notion-Version: 2022-06-28`) directly against `https://api.notion.com/v1`. Full endpoint inventory (all cursor-paginated where they list things):
+No `NOTION_API_KEY` is set there, so no MCP server is registered. Use a personal integration token (all requests need `Authorization: Bearer $NOTION_API_KEY` + a `Notion-Version` header) directly against `https://api.notion.com/v1`.
+
+**Version header matters.** `/data_sources/*` endpoints require `Notion-Version: 2025-09-03` — under `2022-06-28` they fail with `400 invalid_request_url` (verified 2026-07-26). Everything else in the table below works under either. Default to `2025-09-03`.
+
+Full endpoint inventory (all cursor-paginated where they list things):
 
 | Resource | Endpoints |
 |---|---|
@@ -240,9 +244,50 @@ Every database, top-level page, and page template gets an emoji icon. Notion's n
 
 **Rule for new pages/templates.** Match the closest existing category's emoji before inventing a new one. Sub-items and templates listed in the table use their own emoji; anything not listed inherits the parent category's. If you do invent a new emoji, add its row to this table in the same change.
 
-**Scope.** This covers containers only — databases, top-level pages, and page templates. Individual database rows (a single Project, Resource, or Agenda) do not get icons. Forward-only: don't retrofit icons onto existing pages unless asked.
+**Scope.** Containers — databases, top-level pages, page templates — always get an icon. So does **every Project row, without exception.**
 
-**Rule for agent writes.** When creating a new database, top-level page, or page template, set an icon at creation time using this mapping — don't leave default/no icon. For database-level icons specifically, use the REST `PATCH /databases/{id}` endpoint, not the MCP tool's icon field — on the databases tested it returned success without changing the icon (2026-07-26).
+### An icon describes subject matter, never state
+
+**This is the load-bearing rule of this section.** A Project's icon says *what the project is about* and nothing else. It is assigned once, at creation, from the subject palette below, and it never changes again.
+
+Specifically, and without exception:
+
+- **`Status` is not an input to icon choice.** A `done` project and an `in-progress` project about the same subject carry the same icon.
+- **Icons are not added, removed, or swapped when status changes.** Nothing about a project moving to `in-progress`, `done`, `won't-do`, or `some-day-maybe` touches its icon. There is no lifecycle rule here and none may be added.
+- **Every Project gets one regardless of status** — including `done`, `missed`, and `some-day-maybe`. Scoping a backfill to "live" projects makes icon *presence* encode status, which is the same error in a different shape.
+- **Icons are not priority, urgency, or progress signals.** Those are `Priority`, `Urgent`, `Until`, and `Status`, which already exist and already render in views.
+
+If you ever find yourself reading `Status` while deciding an icon, stop — the answer is wrong.
+
+### Subject palette for Project rows
+
+| Emoji | Subject |
+|---|---|
+| 💻 | Engineering and technical work — services, APIs, data, tooling, infra, automation |
+| 🤝 | Team and people management — 1:1s, calibration, OKRs, org, leveling, feedback |
+| 🎙️ | Hiring and interviews — candidates, screens, debriefs, onboarding |
+| 🛠️ | Tech design and architecture docs |
+| 📘 | Books and reading |
+| ✈️ | Travel — trips, flights, hotels, visas, passports |
+| 💰 | Money — reimbursements, refunds, taxes, accounts, subscriptions |
+| 🏠 | Home and property — repairs, yard, organization, appliances |
+| 🚗 | Car and vehicle |
+| ⛳ | Golf |
+| 👶 | Family and kids |
+| 🏋️ | Health and fitness |
+| 🏔️ | Initiative — a Project with sub-items and no stronger subject |
+| 🏁 | Milestone |
+| 🚀 | Everything else |
+
+Assigning a Project's emoji:
+
+1. **Never overwrite an existing emoji or custom image.** Emoji already on a Project are deliberate — as of 2026-07-26 the database carried 106 distinct hand-picked ones plus 106 uploaded images. Only fill in rows with no icon or a generic native default (`folder`, `checklist`, `reorder`, `calendar`).
+2. **Two native defaults carry real signal** and translate directly: `gradebook` → 📘, `passport` → ✈️. Treat them as the user's own prior classification and let them win over keyword guesses.
+3. **Work vocabulary outranks personal vocabulary.** `Flights` and `Cars` are team names, not travel and vehicles; `booking`, `rate`, `supply`, and `pricing` are product domains. Classify anything work-flavoured as 💻/🤝/🎙️/🛠️ before the personal categories get a chance at it.
+4. **A Project with sub-items is an Initiative** → 🏔️, unless a stronger subject applies (a book with reading sub-items is still 📘).
+5. **Everything else gets 🚀.** Roughly a third of projects land here and that's fine — a generic name genuinely has no subject. Don't invent an emoji outside this table to make one row more expressive; if a whole new *subject* appears, add a row here in the same change.
+
+**Rule for agent writes.** When creating a new database, top-level page, page template, **or Project row**, set an icon at creation time from the tables above — don't leave default/no icon, and don't defer it to a later status change. This applies to the `notion-sync` skill and anything else that creates Projects. For database-level icons specifically, use the REST `PATCH /databases/{id}` endpoint, not the MCP tool's icon field — on the databases tested it returned success without changing the icon (2026-07-26).
 
 ```bash
 curl -X PATCH https://api.notion.com/v1/databases/{database_id} \
