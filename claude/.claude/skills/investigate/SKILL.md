@@ -1,3 +1,8 @@
+---
+name: investigate
+description: Entry point for delegated async investigations — primes Claude on raw context (a URL, Slack link, raw text block, code snippet, or meeting notes), does minimal research, then asks 2-3 targeted questions and waits before doing real work. Use when the first message is context to look into, or the user says "look into this", "investigate this", "check this out", or runs /investigate. Auto-tracks the session to Notion.
+---
+
 # Investigate
 
 Entry point for delegated async tasks. Fires when Zach provides raw context — a URL, Slack link, text block, code snippet, or meeting notes — and wants Claude primed to investigate before any real work begins.

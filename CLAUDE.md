@@ -88,20 +88,7 @@ Both work and personal accounts use these via symlink.
 
 ### Skills (shared between Claude and Cursor)
 
-All skills live in `claude/.claude/skills/`. Cursor skills are symlinks pointing back:
-
-| Skill | Description |
-|-------|-------------|
-| `commit` | Atomic git commits with past-tense messages |
-| `pr` | GitHub pull requests with summary + test plan |
-| `review` | Code review with severity calibration |
-| `zach-editor` | Edit text into Zach's voice |
-| `one-way-door-review` | Architecture review prioritizing irreversible decisions |
-| `elia-go-faster-review` | Speed-lens execution review |
-| `expert-mode` | Unfiltered, rigorous expert-persona answers — no hedging or praise |
-| `notion-sync` | Sync a conversation to a Notion Project (create or link) with session-origin metadata |
-
-Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` via relative symlinks.
+All skills live in `claude/.claude/skills/`. Cursor symlinks (`cursor/.cursor/skills/*`) point to `claude/.claude/skills/*` via relative symlinks.
 
 **Adding a new skill**: drop a directory in `claude/.claude/skills/` — the Cursor symlink is created automatically. The git `post-merge` and `post-checkout` hooks call `bin/scripts/sync-cursor-skills` on every pull/branch switch. To sync manually: `bin/scripts/sync-cursor-skills`.
 
