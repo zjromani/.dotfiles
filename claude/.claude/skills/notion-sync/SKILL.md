@@ -10,13 +10,30 @@ obeys (Project body structure, default status, origin-linking standard) live in 
 (source `claude/.claude/NOTION.md`). Read that file's Sections 5, 6, and "Project Page Structure" before
 writing. Reference implementation for Notion writes: `claude/.claude/skills/daily-debrief/SKILL.md`.
 
-**Projects data source:** `e751bb01-362f-498f-b2b4-aa2e55f081f8`
+**Projects database:** `aeed7f6e-20c3-4f80-8bf0-b1e555003360` (data source id `e751bb01-362f-498f-b2b4-aa2e55f081f8`)
 **Areas of Focus data source:** `7e49eef0-a274-45f1-b2b3-e678ef004ac4`
 **Weeks data source:** `7dd17d1f-1cf3-4281-8f86-96f4f14db33b`
 **Tags data source:** `32ff8ed6-2b1b-49c9-b7cb-c542a69541d3`
 
 Canonical tool names are the `mcp__notion__API-*` set (per NOTION.md §3). On a work machine with no MCP,
 use the equivalent REST endpoints from NOTION.md §3.
+
+**Known issue — data-source endpoints are unusable:** `API-query-data-source` and
+`API-retrieve-a-data-source` both fail with `400 invalid_request_url` for every data source ID tested
+(Projects, Tags), even though the IDs themselves are valid. Confirmed via `API-retrieve-a-database`, which
+works and reports back the same data-source IDs recorded above. This is a client-side malformed-request
+error (not an auth/permissions response), so it points at the tool wrapper's handling of the newer
+multi-source endpoint shape rather than the Notion integration's grants. Until it's fixed, use the
+**database-id path** everywhere below instead of the data-source path:
+- Read/verify a database: `API-retrieve-a-database { database_id }`.
+- Query/match existing pages: there is no working query-by-database tool — use `API-post-search { query }`
+  (title search) and filter the results client-side to `parent.database_id == "aeed7f6e-..."`. `API-post-search`
+  responses can be very large (property schemas are verbose); if a call reports a huge result, save it to a
+  file and grep for the title/id fields rather than reading it inline.
+- Create a page: `API-post-page` with `parent: { database_id: "aeed7f6e-20c3-4f80-8bf0-b1e555003360" }`
+  (NOT `data_source_id` — that parent shape depends on the same broken code path).
+- `API-list-data-source-templates` also takes a data-source id and is unverified under this bug; if it
+  fails, fall back to the built-in body per Step 3a without blocking.
 
 ---
 
@@ -34,23 +51,50 @@ session started. Each field is read from context or explicitly marked `Unclear` 
 | **resume command** | `claude --resume <session-id>` (+ `claude --resume "<name>"` when a name is set) | omit if no session ID |
 | **transcript link** | `Session transcript: https://claude.ai/code/session_<id>` | omit if no session ID |
 
-Build the **Origin / Session** block once, as a Notion callout, in this fixed field order:
+Build the **Origin / Session** block once, in this fixed field order. **Do not use a blockquote (`>`)
+and do not nest a fenced code block inside anything** — this MCP server's markdown→block converter turns
+each `>`-prefixed line into its own separate quote block instead of one multi-line callout, and mangles
+fenced code nested inside one (confirmed: renders as a stack of one-line quotes plus stray backtick lines).
+Use a plain bold header line, a plain bullet list, and inline code (single backticks) for the resume
+commands instead:
 
 ```
-> **Origin / Session**
-> - AI system: <Claude Code | Cursor | Unclear>
-> - Model: <model | Unclear>
-> - Session name: <name | Unclear>
-> - Session ID: <id | Unclear>
->
-> ```
-> claude --resume <session-id>
-> claude --resume "<session-name>"   # only if a name is set
-> ```
-> Session transcript: https://claude.ai/code/session_<id>
+**Origin / Session**
+- AI system: <Claude Code | Cursor | Unclear>
+- Model: <model | Unclear>
+- Session name: <name | Unclear>
+- Session ID: <id | Unclear>
+- Resume: `claude --resume <session-id>` (or `claude --resume "<session-name>"` when a name is set)
+- Session transcript: https://claude.ai/code/session_<id>
 ```
 
 The transcript URL is also written to the Project's `Link` property so it is queryable.
+
+---
+
+## Step 1b — Capture source links (every run, never skip)
+
+Every external resource link that was pasted into the conversation as context, or that was explicitly
+fetched as primary source material, gets synced to the page — not just summarized around. This includes
+Slack permalinks, Google Drive/Docs/Sheets/Slides links, Jira/Linear/Confluence links, Figma links, or any
+other URL Zach shared or the agent fetched to do the work. Do not include incidental links that only appear
+*inside* fetched content (e.g. a hyperlink quoted from within a doc) — only the top-level sources the
+conversation was actually built on.
+
+Render as a `## Source Links` section, one bullet per link, in the order they appeared in the conversation:
+
+```
+## Source Links
+- <short label> — <url>
+```
+
+**Idempotency is per-URL, not per-session-ID:** on every sync (create or link), diff the links gathered
+this run against what's already in the `## Source Links` section (if the section doesn't exist yet, create
+it) and append only the URLs not already present. This means a link-path re-sync must still check for and
+add new source links even when the Origin block is already there and gets skipped — source links and the
+Origin block are independent idempotency checks, not one combined check.
+
+Position: after `## Problem Statement / Goal`, before `## Notes` (see updated body order in Step 3a).
 
 ---
 
@@ -72,21 +116,23 @@ Never link on a guess — ambiguity always resolves to create-new-with-candidate
 
 ## Step 3a — Create path
 
-**Read first:** query the Projects data source (confirm it's reachable) before creating.
+**Read first:** `API-retrieve-a-database { database_id: "aeed7f6e-20c3-4f80-8bf0-b1e555003360" }` (confirm
+reachable) before creating.
 
 **Template selection (deterministic):** call `mcp__notion__API-list-data-source-templates` on the Projects
-data source. Infer the conversation nature as a single lowercase keyword (e.g. `research`, `engineering`,
+data source ID. Infer the conversation nature as a single lowercase keyword (e.g. `research`, `engineering`,
 `design`, `planning`). If exactly one template name contains that keyword → create the page from that
 template, then fill the sections below into it. Otherwise → use the built-in body below. If listing
-templates fails, fall back to the built-in body (do not block).
+templates fails (including the known data-source bug above), fall back to the built-in body (do not block).
 
 **Body order (top → bottom) — matches NOTION.md "Project Page Structure":**
-1. The **Origin / Session** callout from Step 1.
+1. The **Origin / Session** block from Step 1 (plain bold header + bullets, no blockquote).
 2. `## Problem Statement / Goal` — 1–2 sentences summarized from the conversation if there is enough
    content (summarization of present data is allowed); otherwise the literal placeholder
    `_Unclear — to be filled in._`.
-3. `## Notes` — working context, if any; omit the section if empty.
-4. `## General next steps` — concrete next steps if inferable, else a single placeholder bullet
+3. `## Source Links` from Step 1b — omit the section only if there were genuinely no source links this run.
+4. `## Notes` — working context, if any; omit the section if empty.
+5. `## General next steps` — concrete next steps if inferable, else a single placeholder bullet
    `- [ ] _To be determined._`. This section is always last.
 
 **Properties:**
@@ -95,11 +141,12 @@ templates fails, fall back to the built-in body (do not block).
 - `Link`: the transcript URL (omit if no session ID).
 - `Area of Focus`: link **only** an exact existing match (default "Work" on a work machine); else leave blank.
 - `Tags`: link **only** exact existing Tag pages. **Never auto-create Tags** — leave blank rather than pollute.
-- `Week`: link the current active Week — query the Weeks data source for the row whose `Active` formula is
-  true, then link it (Projects related to a Week appear in weekly goals). Skill default; skip if no active
-  Week is found. To disable, remove this line.
+- `Week`: link the current active Week — find the row whose `Active` formula is true (subject to the same
+  data-source query bug above; use `API-post-search` filtered to the Weeks database if a direct query
+  fails), then link it (Projects related to a Week appear in weekly goals). Skill default; skip if no
+  active Week is found. To disable, remove this line.
 
-Create via `mcp__notion__API-post-page` with `parent: { data_source_id: "e751bb01-362f-498f-b2b4-aa2e55f081f8" }`.
+Create via `mcp__notion__API-post-page` with `parent: { database_id: "aeed7f6e-20c3-4f80-8bf0-b1e555003360" }`.
 All relation properties are passed as JSON-array strings of full `https://app.notion.com/p/<hex-id>` URLs
 (a bare ID silently fails to link — see daily-debrief and NOTION.md §3).
 
@@ -109,10 +156,13 @@ All relation properties are passed as JSON-array strings of full `https://app.no
 
 1. **Read before write** (NOTION.md §5): `mcp__notion__API-retrieve-page-markdown` for the page body **and**
    `mcp__notion__API-retrieve-a-comment { block_id: <page_id> }` for the running comment thread.
-2. **Idempotency (session-ID keyed):** if this session ID already appears anywhere in the page body or
-   comments, do **not** re-add the Origin block — skip straight to Step 4. This is what keeps re-runs from
-   duplicating metadata.
-3. Otherwise, fill only what's missing, in place, without overwriting existing content:
+2. **Idempotency (session-ID keyed, Origin block only):** if this session ID already appears anywhere in
+   the page body or comments, do **not** re-add the Origin block. This check is independent of Source
+   Links — do it, then still run the Source Links check below, before moving to Step 4.
+3. **Source Links (per-URL keyed, every run, regardless of the Origin check above):** collect every source
+   link per Step 1b and diff against the page body. Append any URL not already present to `## Source Links`
+   (create the section, right after `## Problem Statement / Goal`, if it doesn't exist yet).
+4. Otherwise, fill in what's missing, in place, without overwriting existing content:
    - If the page has no Origin block, append it (via `API-update-page-markdown`, append-only).
    - If the `Link` property is empty, set it to the transcript URL (`API-patch-page`).
    - Do not touch `Status`, `Problem Statement`, or `General next steps` on the link path unless Zach
@@ -135,6 +185,15 @@ Session transcript: https://claude.ai/code/session_<id>
 ```
 
 Read the existing thread first (already done on the link path) so the comment doesn't repeat prior logs.
+
+**Known issue — comment API returns 403 (integration capability, not an MCP bug):** `API-create-a-comment`
+(and `API-retrieve-a-comment`) can return `403 restricted_resource: Insufficient permissions for this
+endpoint`. This is a Notion API authorization response, not a transport/tool bug — it means the Notion
+integration behind these tools has not been granted comment read/insert capability (a toggle on the
+integration itself in Notion's settings, separate from content read/update). That capability is granted
+per-integration, not per-database, so treat this as failing everywhere, not just on the Projects database.
+If comment creation 403s, do not block or drop the log — append the same comment body as a paragraph under
+`## Notes` in the page instead (via `API-update-page-markdown`, `update_content`), and say so in the note.
 If no session ID is available, omit the resume/transcript lines rather than fabricate them.
 
 ---
