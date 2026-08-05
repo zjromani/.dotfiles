@@ -27,6 +27,23 @@ The Ansible playbook will:
 - Configure iTerm2 to load preferences from dotfiles
 - Set up zsh with your configuration
 
+### Director Harness (work machine)
+
+Global tier = this repo. Director + team tiers are **not** stowed here.
+
+`~/director-harness/` must stay **thin** (symlinks + regenerable skill stubs only). Bootstrap from zach:
+
+```bash
+mkdir -p ~/director-harness && cd ~/director-harness
+gh repo clone HotelEngine/zach-ai-workspace
+gh repo clone HotelEngine/flights-ai-workspace
+gh repo clone HotelEngine/cars-ai-workspace
+cd ~ && gh repo clone HotelEngine/agent-skills-collection
+cd ~/director-harness/zach-ai-workspace && bash setup.sh && bash clone-repos.sh
+```
+
+Cursor: `director.code-workspace` in that repo. Claude/agent CLI: `--workspace ~/director-harness`. Skill opt-in: `/zach-work.sync-repos` or `/zach-work.harness-digest`.
+
 ### Manual Stow (if not using Ansible)
 
 If you prefer to stow packages manually:

@@ -6,7 +6,8 @@
     "allow": [
       "Bash(*)",
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "mcp__*"
     ],
     "deny": [
       "Bash(git rebase*)"
@@ -75,5 +76,6 @@
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "enableAllProjectMcpServers": true
 }
