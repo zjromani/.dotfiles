@@ -45,18 +45,18 @@ session started. Each field is read from context or explicitly marked `Unclear` 
 | Field | Source | If unavailable |
 |---|---|---|
 | **AI system** | The harness in use — `Claude Code`, `Cursor`, etc. | `Unclear` |
-| **model** | Environment/system context (e.g. `claude-opus-4-8`) | `Unclear` |
+| **model** | Environment/system context (e.g. `claude-opus-4-8`, `Cursor Grok 4.5`) | `Unclear` |
 | **conversation / session name** | The session `-n/--name` if one was set | `Unclear` |
-| **session ID** | The transcript URL in context: `https://claude.ai/code/session_<id>` → `<id>` | `Unclear` — and omit the resume command entirely (NOTION.md §6: omit rather than fabricate) |
-| **resume command** | `claude --resume <session-id>` (+ `claude --resume "<name>"` when a name is set) | omit if no session ID |
-| **transcript link** | `Session transcript: https://claude.ai/code/session_<id>` | omit if no session ID |
+| **session ID** | Claude: transcript URL `https://claude.ai/code/session_<id>` → `<id>`. Cursor: agent transcript UUID from the current conversation's transcript path (e.g. `…/agent-transcripts/<uuid>/<uuid>.jsonl` → `<uuid>`). | `Unclear` — and omit the resume/transcript lines entirely (NOTION.md §6: omit rather than fabricate) |
+| **resume command** | Claude only: `claude --resume <session-id>` (+ `claude --resume "<name>"` when a name is set) | omit if no Claude session ID |
+| **transcript link** | Claude only: `Session transcript: https://claude.ai/code/session_<id>` | omit if no Claude session ID |
 
-Build the **Origin / Session** block once, in this fixed field order. **Do not use a blockquote (`>`)
-and do not nest a fenced code block inside anything** — this MCP server's markdown→block converter turns
-each `>`-prefixed line into its own separate quote block instead of one multi-line callout, and mangles
-fenced code nested inside one (confirmed: renders as a stack of one-line quotes plus stray backtick lines).
-Use a plain bold header line, a plain bullet list, and inline code (single backticks) for the resume
-commands instead:
+Build the **Origin / Session** block once per sync run, in this fixed field order. **Do not use a
+blockquote (`>`) and do not nest a fenced code block inside anything** — this MCP server's
+markdown→block converter turns each `>`-prefixed line into its own separate quote block instead of one
+multi-line callout, and mangles fenced code nested inside one (confirmed: renders as a stack of
+one-line quotes plus stray backtick lines). Use a plain bold header line, a plain bullet list, and
+inline code (single backticks) for the resume commands instead:
 
 ```
 **Origin / Session**
@@ -68,7 +68,18 @@ commands instead:
 - Session transcript: https://claude.ai/code/session_<id>
 ```
 
-The transcript URL is also written to the Project's `Link` property so it is queryable.
+Omit the Resume and Session transcript bullets when the AI system is not Claude Code, or when no
+session ID is available. For Cursor, still include AI system / Model / Session name / Session ID
+(using the agent transcript UUID when known).
+
+**Always record the current session.** Every sync run must write this Origin block for *this*
+conversation — create path puts it at the top of a new page; link path appends it even when earlier
+sessions (other AI systems or prior chats) already have Origin blocks on the page. Multiple Origin
+blocks stacked at the top are expected and correct. A page that started in Claude Code and later
+continues in Cursor should carry both Origin blocks so either session remains discoverable from Notion.
+
+On create, the Claude transcript URL (when present) is also written to the Project's `Link` property
+so it is queryable. On link, only fill `Link` if it is empty — never overwrite an existing transcript.
 
 ---
 
@@ -90,9 +101,8 @@ Render as a `## Source Links` section, one bullet per link, in the order they ap
 
 **Idempotency is per-URL, not per-session-ID:** on every sync (create or link), diff the links gathered
 this run against what's already in the `## Source Links` section (if the section doesn't exist yet, create
-it) and append only the URLs not already present. This means a link-path re-sync must still check for and
-add new source links even when the Origin block is already there and gets skipped — source links and the
-Origin block are independent idempotency checks, not one combined check.
+it) and append only the URLs not already present. Source Links and Origin blocks are independent
+idempotency checks — always run both.
 
 Position: after `## Problem Statement / Goal`, before `## Notes` (see updated body order in Step 3a).
 
@@ -156,15 +166,27 @@ All relation properties are passed as JSON-array strings of full `https://app.no
 
 1. **Read before write** (NOTION.md §5): `mcp__notion__API-retrieve-page-markdown` for the page body **and**
    `mcp__notion__API-retrieve-a-comment { block_id: <page_id> }` for the running comment thread.
-2. **Idempotency (session-ID keyed, Origin block only):** if this session ID already appears anywhere in
-   the page body or comments, do **not** re-add the Origin block. This check is independent of Source
-   Links — do it, then still run the Source Links check below, before moving to Step 4.
+2. **Always append this session's Origin block** (session-ID keyed idempotency only):
+   - If this run's session ID is known **and** already appears anywhere in the page body or comments,
+     do **not** re-add the Origin block (same session re-sync).
+   - Otherwise **always append** a new Origin block for the current AI session — even when Origin
+     blocks from other sessions/AI systems already exist. Do not treat "page already has an Origin
+     block" as a reason to skip.
+   - **Placement:** insert the new Origin block immediately after the last existing Origin block
+     (header + its bullets), and before `## Problem Statement / Goal`. If there is no Origin block
+     yet, insert it at the top of the page body. Via REST: `PATCH /blocks/{page_id}/children` with
+     `after` set to the last Origin bullet's block id (or omit `after` / use the first content block
+     as anchor when inserting at top). Via MCP: `API-update-page-markdown` append-only only works if
+     it can target that position; otherwise use the blocks API.
+   - If session ID is `Unclear`, still append once per sync run, but include enough of the Origin
+     fields (AI system, model, local timestamp in the Step 4 comment) that a duplicate is obvious on
+     a same-day re-run; do not invent an ID.
 3. **Source Links (per-URL keyed, every run, regardless of the Origin check above):** collect every source
    link per Step 1b and diff against the page body. Append any URL not already present to `## Source Links`
    (create the section, right after `## Problem Statement / Goal`, if it doesn't exist yet).
-4. Otherwise, fill in what's missing, in place, without overwriting existing content:
-   - If the page has no Origin block, append it (via `API-update-page-markdown`, append-only).
-   - If the `Link` property is empty, set it to the transcript URL (`API-patch-page`).
+4. Fill in what's missing, in place, without overwriting existing content:
+   - If the `Link` property is empty and this run has a Claude transcript URL, set it
+     (`API-patch-page`). Never overwrite a non-empty `Link`.
    - Do not touch `Status`, `Problem Statement`, or `General next steps` on the link path unless Zach
      explicitly asks — those are the human's.
 
@@ -201,9 +223,11 @@ If no session ID is available, omit the resume/transcript lines rather than fabr
 ## Determinism & no-fabrication rules
 
 - Fixed field order in the Origin block; fixed `next-up` status; `Problem Statement / Goal` first and
-  `General next steps` last, always.
+  `General next steps` last, always. Origin blocks stack at the top (one per distinct session).
 - Create-vs-link and template selection are rule-based (Steps 2 and 3a) — identical inputs, identical branch.
-- Idempotent on session ID: no duplicate Origin blocks or redundant comments across re-runs.
+- **Always append the current session's Origin** on create and on link. Idempotent only on the same
+  session ID: re-running sync for the *same* conversation must not duplicate that Origin; a different
+  AI system or different conversation must add a new Origin block even if others already exist.
 - Link only exact existing Tags / Areas of Focus; never auto-create them.
 - Never invent model, session ID, name, or AI system — read from context or write `Unclear` and omit the
   resume command.
