@@ -9,7 +9,7 @@ if [[ "$1" == "--worktrees" ]]; then
   shopt -s nullglob
   home_dirs=(~/*/)
   shopt -u nullglob
-  search_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/flights/*/)
+  search_dirs=("${home_dirs[@]}" ~/.dotfiles ~/me/*/ ~/director-harness/*/)
   for root in "${extra_roots[@]}"; do
     search_dirs+=("$root"/*/)
   done
@@ -60,14 +60,14 @@ _build_dirs() {
   shopt -s nullglob
   local home_dirs=(~/*/)
   local me_dirs=(~/me/*/)
-  local flights_dirs=(~/flights/*/)
+  local harness_dirs=(~/director-harness/*/)
   local extra_dirs=()
   for root in "${extra_roots[@]}"; do
     local root_dirs=("$root"/*/)
     extra_dirs+=("${root_dirs[@]}")
   done
   shopt -u nullglob
-  printf '%s\n' "${home_dirs[@]%/}" ~/.dotfiles "${me_dirs[@]%/}" "${flights_dirs[@]%/}" "${extra_dirs[@]%/}" \
+  printf '%s\n' "${home_dirs[@]%/}" ~/.dotfiles "${me_dirs[@]%/}" "${harness_dirs[@]%/}" "${extra_dirs[@]%/}" \
     | grep -vE "/(Downloads|Documents|Music|Movies|Pictures|Desktop|Library|Public|Applications|Dropbox|\.Trash)"
 }
 
@@ -83,7 +83,7 @@ session=$(
         # Active sessions first for quick navigation
         tmux list-sessions -F "#{session_name}" 2>/dev/null | grep -vE '^[0-9]+$'
         # Short aliases for quick navigation (type the alias name to jump directly)
-        echo "flights"
+        echo "director-harness"
         # Directories from cache
         cat "$CACHE_FILE"
     } | awk '!seen[$0]++' | fzf --no-sort --tiebreak=index --height=40%
@@ -93,7 +93,7 @@ session=$(
 
 # Resolve short aliases to full paths
 case "$session" in
-  flights) session="$HOME/flights" ;;
+  director-harness|flights) session="$HOME/director-harness" ;;
 esac
 
 session_name=$(basename "$session")

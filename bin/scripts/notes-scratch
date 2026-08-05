@@ -2,21 +2,21 @@
 set -e
 
 TODAY=$(date +%Y-%m-%d)
-FILE="$HOME/flights/daily-brief/${TODAY}-morning-brief.md"
+FILE="$HOME/director-harness/daily-brief/${TODAY}-morning-brief.md"
 WINDOW="$TODAY"
 
-mkdir -p "$HOME/flights/daily-brief"
+mkdir -p "$HOME/director-harness/daily-brief"
 [ -f "$FILE" ] || touch "$FILE"
 
 if tmux has-session -t daily-brief 2>/dev/null; then
   if ! tmux select-window -t "daily-brief:$WINDOW" 2>/dev/null; then
-    tmux new-window -t daily-brief -n "$WINDOW" -c "$HOME/flights/daily-brief"
+    tmux new-window -t daily-brief -n "$WINDOW" -c "$HOME/director-harness/daily-brief"
     tmux send-keys -t "daily-brief:$WINDOW" "nvim + '$FILE'" Enter
     tmux select-window -t "daily-brief:$WINDOW"
   fi
   tmux switch-client -t "daily-brief:$WINDOW"
 else
-  tmux new-session -d -s daily-brief -n "$WINDOW" -c "$HOME/flights/daily-brief"
+  tmux new-session -d -s daily-brief -n "$WINDOW" -c "$HOME/director-harness/daily-brief"
   tmux send-keys -t "daily-brief:$WINDOW" "nvim + '$FILE'" Enter
   tmux switch-client -t daily-brief
 fi

@@ -2,7 +2,7 @@
 # Usage: exec-circle-query <query text>
 #
 # Searches the Executive Circle newsletter archive via MCP and streams
-# results into a new tmux window in the flights session.
+# results into a new tmux window in the director-harness session.
 
 QUERY="$*"
 
@@ -11,8 +11,10 @@ if [[ -z "$QUERY" ]]; then
   exit 1
 fi
 
-# Resolve tmux session: prefer 'flights', then current, then most recently attached
-if tmux has-session -t "flights" 2>/dev/null; then
+# Resolve tmux session: prefer 'director-harness' (legacy 'flights' still accepted), then current, then most recently attached
+if tmux has-session -t "director-harness" 2>/dev/null; then
+  SESSION="director-harness"
+elif tmux has-session -t "flights" 2>/dev/null; then
   SESSION="flights"
 elif [[ -n "${TMUX:-}" ]]; then
   SESSION=$(tmux display-message -p '#S')
@@ -27,7 +29,7 @@ fi
 
 WINDOW_NAME="exec-circle"
 
-WORK_DIR="$HOME/flights"
+WORK_DIR="$HOME/director-harness"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/work"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"

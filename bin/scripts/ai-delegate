@@ -35,10 +35,13 @@ ENCODED_NOTES=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(s
 THINGS_URL="things:///add?title=${ENCODED_TITLE}&notes=${ENCODED_NOTES}&list-id=${AI_DELEGATE_AREA_ID}&when=today&tags=.work%2C.ai"
 /usr/bin/open "$THINGS_URL" && echo "Things: task created" || echo "Things: FAILED"
 
-# 2. Tmux: prefer 'flights' session, fall back to most recently attached
-if tmux has-session -t "flights" 2>/dev/null; then
+# 2. Tmux: prefer 'director-harness' session (legacy 'flights' still accepted), fall back to most recently attached
+if tmux has-session -t "director-harness" 2>/dev/null; then
+  CURRENT_SESSION="director-harness"
+  echo "tmux: using director-harness session"
+elif tmux has-session -t "flights" 2>/dev/null; then
   CURRENT_SESSION="flights"
-  echo "tmux: using flights session"
+  echo "tmux: using legacy flights session"
 elif [[ -n "${TMUX:-}" ]]; then
   CURRENT_SESSION=$(tmux display-message -p '#S')
   echo "tmux: using current session $CURRENT_SESSION"
@@ -52,7 +55,7 @@ else
   echo "tmux: using most recent session $CURRENT_SESSION"
 fi
 
-WORK_DIR="$HOME/flights"
+WORK_DIR="$HOME/director-harness"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/work"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"
