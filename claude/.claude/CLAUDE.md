@@ -62,7 +62,8 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 ### Act without asking
 
 - Reading files, running tests, formatting, committing local changes
-- Pushing to feature branches (not main/master)
+- Pushing to feature branches on **shared/team** repos (not their default branch)
+- On **personal repos** (`~/.dotfiles`, `zach-ai-workspace`): commit and push to the default branch (`master` / `main`) — trunk-based; no feature branch or PR
 
 ### Act, then notify
 
@@ -74,7 +75,9 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 - Sending Slack messages (confirm content first)
 - Creating or updating Jira/Linear tickets: act, then notify — no content confirmation needed
 - Any production system change (terraform apply, kubectl apply)
-- Force-pushing, amending published commits, or pushing directly to main/master
+- Force-pushing, amending published commits, or pushing directly to main/master on **shared/team** product repos
+
+**Exception — personal harness repos:** `~/.dotfiles` and `zach-ai-workspace` are Zach-only. Push to their default branch without asking. Do not open PRs or leave topic branches. Prefer a short-lived worktree if another agent may collide; land on trunk ASAP. See `~/.dotfiles/CLAUDE.md` and `zach-ai-workspace/AGENTS.md`.
 
 **Exception — fixed-template automated notifications:** a small allowlist of deterministic, template-driven Slack posts (no free-text judgment call) may be sent without a content-confirmation round-trip. Currently: the flights workspace's post-`gh pr create` PR notification to `#dev-flights-prs` (see `flights-ai-workspace/AGENTS.md`). Anything with judgment-shaped content (wording, tone, what to include) still asks first.
 
@@ -82,6 +85,6 @@ Engineering Director managing multiple engineering teams. Director-level workflo
 
 - Prefer spawning sub-agents for any task that doesn't require main-context judgment. Preserve the main context window for decisions, synthesis, and coordination — not mechanical work.
 - When spawning multiple independent sub-agents, send them in a single message so they run in parallel.
-- For any coding or file-editing work done by a sub-agent, use `isolation: "worktree"` so changes are isolated and reviewable before merging.
-- Default to worktrees for all non-trivial coding work, even in the main agent. Keeps the working tree clean and makes changes easy to review or discard.
+- For coding/file-editing on **shared/team** repos, use `isolation: "worktree"` so changes are isolated before merging via PR.
+- On **personal repos** (`.dotfiles`, `zach-ai-workspace`), worktrees are fine for concurrency safety, but merge/push to the default branch immediately — do not hold branches or open PRs.
 - **Never use `subagent_type: "fork"` when the user asks for a "sub agent"/ "sub-agent".** Fork inherits the full conversation context — it does NOT save context, it duplicates it. The point of a sub-agent is to keep noisy tool output OUT of the main context window. Use a fresh agent (`general-purpose` or a more specific type) with a self-contained prompt instead. Only use `fork` for the model's own internal research forking (open-ended side-questions the model itself decides to offload), never as the default delegation mechanism when the user explicitly requests a sub-agent.

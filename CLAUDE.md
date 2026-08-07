@@ -2,6 +2,18 @@
 
 Personal dotfiles managed with GNU Stow. Each top-level directory is a stow package.
 
+## Git — trunk-based (this repo)
+
+This repo is Zach-only. **Commit and push straight to `master`.** Do not create feature branches or open PRs — orphaned agent branches are how changes get lost after a machine sync.
+
+| Do | Don't |
+|----|--------|
+| Work on `master` (or a short-lived worktree that lands on `master` immediately) | `git checkout -b …` then leave the branch sitting |
+| `git commit` → `git push origin master` | Open a PR “for review” on personal config |
+| Prefer a **worktree** when another agent might collide on the same checkout | Hold long-lived topic branches |
+
+Same rule for `zach-ai-workspace` (`main`). Shared team repos still use branch + PR.
+
 ## Structure
 
 ```
