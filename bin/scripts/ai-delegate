@@ -3,10 +3,12 @@
 #   slug: short task name → becomes tmux window name + Things task title
 #   url:  source link (Slack, email, etc.) — defaults to clipboard if omitted
 #
-# Creates a Things3 task set for Today + opens a 3-pane tmux layout with Claude.
+# Creates a Things3 task set for Today + opens a tmux window running Cursor Agent.
 # Seeds the session with /investigate, which auto-tracks it to Notion via
 # notion-sync (see that skill).
 # Logs to ~/.ai-delegate.log for later lookup.
+
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: ai-delegate <slug> [url]" >&2
@@ -60,26 +62,29 @@ WORK_DIR="$HOME/director-harness"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME/me"
 [[ -d "$WORK_DIR" ]] || WORK_DIR="$HOME"
 
-# New window: single pane running Claude
+# New window: single pane running Cursor Agent
 tmux new-window -t "${CURRENT_SESSION}:" -n "$WINDOW_NAME" -c "$WORK_DIR"
-tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "claude" Enter
+tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" \
+  "agent --workspace '${WORK_DIR}' --trust --approve-mcps" Enter
 
-# After Claude initializes: rename session + set random color + seed with clipboard
-# context via /investigate. The investigate skill always defaults to notion-sync
-# (auto-creates a Notion Project to track the session).
+# Once the TUI input box renders: rename the chat to match the tmux window, then
+# seed with clipboard context via /investigate. The investigate skill always
+# defaults to notion-sync (auto-creates a Notion Project to track the session).
 (
-  COLORS=(red blue green yellow purple orange pink cyan)
-  RANDOM_COLOR="${COLORS[RANDOM % ${#COLORS[@]}]}"
-  sleep 5
-  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/rename ${WINDOW_NAME}" Enter
-  sleep 3
-  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "/color ${RANDOM_COLOR}" Enter
-  sleep 3
-  # Use paste-buffer -p (no bracketed paste) so Claude receives it as typed, not pasted
+  PANE="${CURRENT_SESSION}:${WINDOW_NAME}.0"
+  for i in $(seq 1 60); do
+    tmux capture-pane -t "$PANE" -p 2>/dev/null | grep -q "▀▀▀" && break
+    sleep 0.5
+  done
+  tmux send-keys -t "$PANE" -l "/rename ${WINDOW_NAME}"
+  sleep 0.3
+  tmux send-keys -t "$PANE" Enter
+  sleep 2
+  # Use paste-buffer -p (no bracketed paste) so the agent receives it as typed, not pasted
   printf '/investigate %s' "${URL}" | tmux load-buffer -
-  tmux paste-buffer -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" -p
+  tmux paste-buffer -t "$PANE" -p
   sleep 0.5
-  tmux send-keys -t "${CURRENT_SESSION}:${WINDOW_NAME}.0" "" Enter
+  tmux send-keys -t "$PANE" "" Enter
 ) &
 
 # 3. Log

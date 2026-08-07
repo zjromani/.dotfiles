@@ -1,0 +1,12 @@
+{
+  "Profiles": [
+    {
+      "Name": "Zen",
+      "Guid": "9805745e-7f26-4e75-83f3-1dfedfa7b2d1",
+      "Dynamic Profile Parent Name": "Default",
+      "Normal Font": "JetBrainsMonoNFM-Regular 18",
+      "Vertical Spacing": 1.35,
+      "Horizontal Spacing": 1.0
+    }
+  ]
+}

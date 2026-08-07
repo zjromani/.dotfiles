@@ -124,6 +124,12 @@ return require('packer').startup(function(use)
         render_modes = { 'n', 'v', 'c' },
         anti_conceal = { enabled = false },
         heading = {
+          sign = false,
+          border = true,
+          border_virtual = true,
+          width = 'block',
+          left_pad = 1,
+          right_pad = 2,
           icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
         },
         code = {
@@ -180,7 +186,7 @@ return require('packer').startup(function(use)
 
       require("zen-mode").setup({
         window = {
-          width = 100,        -- absolute column width — narrower = more side padding
+          width = 88,        -- absolute column width — narrower = more side padding
           height = 1,        -- full height of the editor
           options = {
             signcolumn = "no",
@@ -191,6 +197,7 @@ return require('packer').startup(function(use)
             foldcolumn = "0",
             list = false,
             colorcolumn = "",
+            scrolloff = 5,
           },
         },
         plugins = {
@@ -205,6 +212,7 @@ return require('packer').startup(function(use)
           vim.opt_local.wrap = true
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
+          vim.opt_local.scrolloff = 5
           vim.opt_local.winbar = "%=%f  %=%m"
 
           -- Bigger font + looser line spacing while focused (iTerm2 "Zen" profile)

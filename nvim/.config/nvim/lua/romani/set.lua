@@ -31,8 +31,9 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
--- markdown-preview: use light theme instead of inheriting colorscheme name
+-- markdown-preview: light theme + prose CSS (larger type, open leading, ~65ch measure)
 vim.g.mkdp_theme = 'light'
+vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/css/markdown-preview.css")
 
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
   pattern = "*",

@@ -117,6 +117,15 @@ iTerm2 preferences are stored in `iterm2/.config/iterm2/com.googlecode.iterm2.pl
 
 No manual import/export needed - iTerm2 is configured to load preferences from `~/.config/iterm2/`.
 
+**Zen Dynamic Profile** (larger font + looser line spacing for nvim `,z` zen mode) lives in `iterm2/.config/iterm2/DynamicProfiles/zen.json`. iTerm only loads Dynamic Profiles from Application Support, so after pull/stow, ensure this symlink exists:
+
+```bash
+ln -sf ~/.dotfiles/iterm2/.config/iterm2/DynamicProfiles/zen.json \
+  ~/Library/Application\ Support/iTerm2/DynamicProfiles/zen.json
+```
+
+The profile should appear as **Zen** in iTerm2 (Profiles list). Neovim zen mode switches to it automatically and restores **Default** on exit.
+
 ### Tmux
 
 Tmux configuration includes:
