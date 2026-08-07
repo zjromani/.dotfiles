@@ -41,6 +41,10 @@ claude/.claude/daemon/
 claude/.claude/jobs/
 claude/.claude/gh-pr-status-cache.json
 
+# npx skills CLI artifacts (skills live in claude/.claude/skills/)
+.agents/
+skills-lock.json
+
 # Python cache
 **/__pycache__/
 
